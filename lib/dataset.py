@@ -13,7 +13,7 @@ from lib.utils import pad_sequences
 # https://huggingface.co/datasets/super_glue
 
 
-def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32):
+def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32, custom_sentencepiece = None):
 
 	#load dataset
 	if dataset_name == "imdb":
@@ -133,17 +133,18 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 			for s in aux:
 				f.write(s)
 
-	if not os.path.exists("./stpiece/m_" + dataset_name + ".model"):
+	if not os.path.exists("./stpiece/m_" + dataset_name + ".model") and custom_sentencepiece is None:
 		#Train tokenizer
 		spm.SentencePieceTrainer.train(input="./stpiece/train_ds_" + dataset_name + ".txt", model_prefix="./stpiece/m_" + dataset_name, max_sentence_length = 100000000 ,vocab_size=vocab_size)
-
+	elif custom_sentencepiece is not None:
+		dataset_name = custom_sentencepiece
 
 	#Load tokenizer
 	sp = spm.SentencePieceProcessor(model_file="./stpiece/m_" + dataset_name + ".model")
 
-	print(f'Dictionary size {sp.get_piece_size()}')
-	# print(f'Vocabulary: {[sp.id_to_piece(id) for id in range(sp.get_piece_size())]}')
-	print(f'Encoding results:  {sp.encode("this is a phrase that could be commonly found", out_type=str)} -> {sp.encode("this is a phrase that could be commonly found")}')
+	# print(f'Dictionary size {sp.get_piece_size()}')
+	# # print(f'Vocabulary: {[sp.id_to_piece(id) for id in range(sp.get_piece_size())]}')
+	# print(f'Encoding results:  {sp.encode("this is a phrase that could be commonly found", out_type=str)} -> {sp.encode("this is a phrase that could be commonly found")}')
 
 	train_tokens = list(map(lambda t: [1] + sp.encode(t)[:max_length - 2] + [2], text_train))
 	test_tokens = list(map(lambda t: [1] + sp.encode(t)[:max_length - 2] + [2], text_test))

@@ -8,7 +8,7 @@ from lib import modelv0
 from lib import modelv7
 from lib import modelv8
 from lib import modelv9
-
+from lib import modelv10
 
 from lib import utils
 
@@ -41,8 +41,8 @@ train_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATAS
 print("Model initialization:")
 #initialize model
 # classifier = modelv0.ClassifierV0(VOCAB_SIZE, MAX_LENGTH, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, N_LABELS)
-# classifier = modelv7.ClassifierV7(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
-classifier = modelv9.ClassifierV9(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
+classifier = modelv7.ClassifierV7(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
+#classifier = modelv9.ClassifierV9(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 classifier.to(device)
