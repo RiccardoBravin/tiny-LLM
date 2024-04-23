@@ -1,84 +1,108 @@
+from colors import ATTRIBUTES, FOREGROUND_COLORS, RESET
+
+
+import BERTs.BERT_Eff_Enc_Gray as BERT
+from BERTs.LLM import BERTLM
+from trainer import BERTTrainer
+import BERTdataset
+from utils import model_size, train_sp
+
+from datasets import load_dataset
+
+
 import torch
+import tqdm
 
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
-
-
-from lib import modelv0
-from lib import modelv7
-from lib import modelv8
-from lib import modelv9
+from torch.utils.data import DataLoader
+import datetime
 
 
-from lib import utils
-
-from lib.dataset import dataset_importer
-from lib import utils
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 VOCAB_SIZE = 512*8
 BATCH_SIZE = 32
-
-REDUCED_EMBEDDING_DIM = 16
-EMBED_DIM = 128
-NUM_HEADS = 8
-FORWARD_EXPANSION = 0.1
-MAX_LENGTH = 512
-LAYERS = 1
+SENTENCE_LEN = 512
 
 
+tokens = {
+    "pad":0,
+    "bos":1,
+    "eos":2,
+    "unk":3,
+    "mask":4
+}
+    
+print(f"{ATTRIBUTES['Bold']}Loading dataset...{RESET}")
+dataset = load_dataset("Open-Orca/OpenOrca", cache_dir="./orca_madonna", trust_remote_code=True, split=['train[:2%]', 'train[80%:81%]', 'train[90%:91%]'])
+
+#dataset is composed of a dictionary containig train, validation and test
+#each of them is a list of dictionaries containing the following keys: ['id', 'system_prompt', 'question', 'response']
+
+# Now you have train, validation and test datasets
+train_data = dataset[0]
+validation_data = dataset[1]
+test_data = dataset[2]
 
 
-########################################################################################
-print("Loading dataset:")
+sp = train_sp(train_data, VOCAB_SIZE, tokens)
 
-#'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp"
-DATASET = "imdb"
+print(f"{ATTRIBUTES['Bold']}Tokenizing data...{RESET}")
+print("\tTrain dataset")
+train_data_tokenized = list(zip(sp.encode(train_data["question"]), sp.encode(train_data["response"])))
+print("\tValidation dataset")
+val_data_tokenized = list(zip(sp.encode(validation_data["question"]), sp.encode(validation_data["response"])))
+print("\tTest dataset")
+test_data_tokenized = list(zip(sp.encode(test_data["question"]), sp.encode(test_data["response"])))
+#average length of tokenized sentences
+print(f"Average length of tokenized sentences: {sum([len(x[0]) + len(x[1]) for x in train_data_tokenized])/len(train_data_tokenized)}")
 
-train_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
+#################################################################################################################################
+print(f"{ATTRIBUTES['Bold']}Building dataset...{RESET}")
 
+train_data = BERTdataset.BERTDataset(train_data_tokenized, special_tokens=tokens, seq_len=SENTENCE_LEN)
+train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True, pin_memory=True)
 
-########################################################################################
-print("Model initialization:")
-#initialize model
-# classifier = modelv0.ClassifierV0(VOCAB_SIZE, MAX_LENGTH, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, N_LABELS)
-# classifier = modelv7.ClassifierV7(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
-classifier = modelv9.ClassifierV9(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
+valid_data = BERTdataset.BERTDataset(val_data_tokenized, special_tokens=tokens, seq_len=SENTENCE_LEN)
+valid_loader = DataLoader(valid_data, batch_size=BATCH_SIZE, shuffle=True, pin_memory=True)
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-classifier.to(device)
-print(f"Model initialized on {device}")
+#################################################################################################################################
+print(f"{ATTRIBUTES['Bold']}Building BERT model...{RESET}")
 
+bert_model = BERT.BERT(
+  vocab_size=VOCAB_SIZE,
+  d_model=128,
+  n_layers=6,
+  heads=8,
+  sentence_length=SENTENCE_LEN,
+  dropout=0.1
+)
 
-print("Model parameters:")
+bert_lm = BERTLM(bert_model, VOCAB_SIZE)
+bert_lm = bert_lm.to(device)
+
+print("BERT model parameters without classifier:")
 #print all model parameters with names
-for name, param in classifier.named_parameters():
+for name, param in bert_model.named_parameters():
 	print(f"{name}: {param.nelement()}")
-
 #print the model size
-utils.print_model_size(classifier)
+print(model_size(bert_model))
 
 
+#################################################################################################################################
+print(f"{ATTRIBUTES['Bold']}Training BERT model...{RESET}")
+bert_trainer = BERTTrainer(bert_lm, train_loader, valid_loader, device=device, log_freq=len(train_loader)//5)
+epochs = 5
 
-########################################################################################
-print("Starting training")
-
-EPOCHS = 20
-LR = 2e-4
-
-utils.trainer(classifier, train_dataloader, LR, EPOCHS)
-
-########################################################################################
-print("Starting evaluation")
-predicted = utils.evaluator(classifier, test_dataloader)
-
-print(classification_report(label_test, predicted))
-
-conf_matrix = confusion_matrix(label_test, predicted)
-
-print("Confusion matrix:\n", conf_matrix)
+for epoch in range(epochs):
+  print(f"{FOREGROUND_COLORS['Green']}", end="")
+  bert_trainer.train(epoch)
+  print(f"{FOREGROUND_COLORS['BrightBlue']}", end="")
+  bert_trainer.test(epoch)
+  print(f"{RESET}")
 
 
-########################################################################################
-#save model
-# t_string = "./models/transformer_v7_" + str(REDUCED_EMBEDDING_DIM) + "_" + str(EMBED_DIM) + "_" + str(FORWARD_EXPANSION) + "_" + str(LAYERS) + "_" + str(VOCAB_SIZE) + "_" + str(MAX_LENGTH) + "_" + str(BATCH_SIZE) + "_" + str(EPOCHS) + "_" + str(DATASET) + ".pt"
-# torch.save(classifier.state_dict(), t_string)
+#################################################################################################################################
+print(f"{ATTRIBUTES['Bold']}Saving BERT model...{RESET}")
+timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+torch.save(bert_lm.state_dict(), "./models/bert_lm_" + str(bert_lm.bert.d_model) + "_" + str(bert_lm.bert.n_layers) + "_" + str(VOCAB_SIZE) + "_" + timestamp + ".pth")
+torch.save(bert_model.state_dict(), "./models/bert_model_" + str(bert_model.d_model) + "_" + str(bert_model.n_layers) + "_" + str(VOCAB_SIZE) + "_" + timestamp + ".pth")
