@@ -8,25 +8,38 @@ from lib.utils import pad_sequences
 # embedder con posizionale in base 3 e upscaling del token embedding conncatenato al posizionale
 # efficient attention con swiglu
 # fully connected con max pooling (circa)
+# redone positional embedding to make nearer positions nearer in the embedding space
 
 
-def base_3_conversion(number):
-		# Funzione per la conversione di un numero in base 10 in base 3
-		quotient, remainder = divmod(number,3)
-		result = [remainder]
-		while quotient > 0:
-				quotient, remainder = divmod(quotient,3)
-				result.append(remainder)  # Inserisci il resto all'inizio della lista
-		return result
+def n_ary_gray_code(n, base = 3):
+    # n x n**3 list 
+    gray = [[0] * n for _ in range(base**n)]
+    for j in range(n):
+        i = 0
+        val = 0
+        invert = True
+        while i < base**n:
+            for k in range(base**j):
+                # print(i+k)
+                gray[i+k][j] = val
+            
+            i += base**j
+            
+            
+            if  invert:
+                val += 1
+            else:
+                val -= 1
+            
+            if val == base:
+                invert = not invert
+                val = base - 1
+            elif val == -1:
+                invert = not invert
+                val = 0
 
-def base_3_list(n):
-		# Funzione per ottenere una lista di liste dei numeri da 0 a 9 convertiti in base 3
-		result = []
-		for num in range(n):
-				converted_num = base_3_conversion(num)
-				result.append(converted_num)
-		return result
 
+    return gray
 
 class Embedding(nn.Module):
 	def __init__(self, vocab_size, max_length, embed_dim, reduced_embed = 16, dropout=0.1):
@@ -36,8 +49,8 @@ class Embedding(nn.Module):
 		self.word_embed = nn.Embedding(vocab_size, reduced_embed)
 		self.expand_layer = nn.Linear(reduced_embed + log_len, embed_dim)
 
-		base_3_representation = base_3_list(max_length)
-		self.pos_embed = torch.tensor(pad_sequences(base_3_representation, maxlen=log_len, truncating="post", padding="post", dtype="int")) -1 
+		base_3_representation = n_ary_gray_code(log_len, base=3)[:max_length]
+		self.pos_embed = torch.tensor(base_3_representation) - 1 
 		self.dropout = nn.Dropout(dropout)
 
 	def forward(self, x):
@@ -45,10 +58,12 @@ class Embedding(nn.Module):
 		device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 		word_embeddings = self.word_embed(x)
-		pos_embeddings = self.pos_embed.unsqueeze(0).repeat(x.size(0), 1, 1).to(device)
+		pos_embeddings = self.pos_embed.unsqueeze(0).repeat(batch_size, 1, 1).to(device)
 		embedding_red = torch.cat((word_embeddings, pos_embeddings), dim = 2)
 		embedding = self.expand_layer(embedding_red)
-		return self.dropout(embedding)
+		return self.dropout(embedding) 
+
+
 	
 
 class EfficientAttention(nn.Module):
@@ -111,18 +126,25 @@ class TransformerEncoder(nn.Module):
 		return out
 	
 
-class ClassifierV8(nn.Module):
+class MLPLLM(nn.Module):
 	def __init__(self, vocab_size, max_length, red_embed_dim, embed_dim, num_heads, forward_expansion, layers, out_labels):
-			super(ClassifierV8, self).__init__()
+			super(MLPLLM, self).__init__()
 
 			self.embedder = Embedding(vocab_size, max_length, embed_dim, red_embed_dim)
-			self.encoder = nn.Sequential(*[TransformerEncoder(embed_dim, num_heads, forward_expansion) for _ in range(layers)])
+			#self.encoder = nn.Sequential(*[TransformerEncoder(embed_dim, num_heads, forward_expansion) for _ in range(layers)])
+			self.l1 = nn.Linear(embed_dim, embed_dim)
+			self.l2 = nn.Linear(max_length, max_length)
 			self.fc = nn.Linear(embed_dim, out_labels)
-
+			self.af = nn.ReLU()
 	def forward(self, x):
 		embedding = self.embedder(x)
-		encoding = self.encoder(embedding)
-		compact_encoding = encoding.max(dim=1)[0]
+		x = self.l1(embedding)
+		x = self.af(x)
+		x = self.l2(x.transpose(1,2))
+		x = self.af(x)
+		x = x.transpose(1,2)
+		
+		compact_encoding = x.max(dim=1)[0]
 		out = self.fc(compact_encoding)
 		return torch.sigmoid(out)
 	

@@ -1,0 +1,52 @@
+MODEL: MLPLLM
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+              precision    recall  f1-score   support
+
+           0       0.78      0.75      0.77       428
+           1       0.77      0.80      0.78       444
+
+    accuracy                           0.78       872
+   macro avg       0.78      0.77      0.77       872
+weighted avg       0.78      0.78      0.78       872
+
+Confusion matrix:
+[[321 107]
+ [ 89 355]]
+
+*******************************************
+
+MODEL: MLPLLM
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+              precision    recall  f1-score   support
+
+           0       0.78      0.76      0.77       428
+           1       0.78      0.79      0.78       444
+
+    accuracy                           0.78       872
+   macro avg       0.78      0.78      0.78       872
+weighted avg       0.78      0.78      0.78       872
+
+Confusion matrix:
+[[327 101]
+ [ 93 351]]
+
+*******************************************
+

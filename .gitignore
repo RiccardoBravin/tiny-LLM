@@ -3,3 +3,5 @@ virtualenv
 test.prof
 silicone_dataset
 stpiece
+**/__pycache__
+lib/__pycache__

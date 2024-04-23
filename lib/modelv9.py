@@ -20,6 +20,7 @@ def n_ary_gray_code(n, base = 3):
         invert = True
         while i < base**n:
             for k in range(base**j):
+                # print(i+k)
                 gray[i+k][j] = val
             
             i += base**j
@@ -125,9 +126,9 @@ class TransformerEncoder(nn.Module):
 		return out
 	
 
-class Classifier(nn.Module):
+class ClassifierV9(nn.Module):
 	def __init__(self, vocab_size, max_length, red_embed_dim, embed_dim, num_heads, forward_expansion, layers, out_labels):
-			super(Classifier, self).__init__()
+			super(ClassifierV9, self).__init__()
 
 			self.embedder = Embedding(vocab_size, max_length, embed_dim, red_embed_dim)
 			self.encoder = nn.Sequential(*[TransformerEncoder(embed_dim, num_heads, forward_expansion) for _ in range(layers)])

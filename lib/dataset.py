@@ -115,6 +115,71 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 		label_test = test_data.to_dict()["label"]
 
 		N_LABELS = len(set(label_train))
+	elif dataset_name == "news":
+		dataset = load_dataset("ag_news")
+		
+		train_data = dataset['train']
+		test_data = dataset['test']
+
+		text_train = train_data.to_dict()["text"]
+		label_train = train_data.to_dict()["label"]
+
+		text_test = test_data.to_dict()["text"]
+		label_test = test_data.to_dict()["label"]
+
+		N_LABELS = len(set(label_train))
+
+	elif dataset_name == "trec_coarse":
+		dataset = load_dataset("trec")
+
+		train_data = dataset['train']
+		test_data = dataset['test']
+
+		text_train = train_data.to_dict()["text"]
+		label_train = train_data.to_dict()["coarse_label"]
+
+		text_test = test_data.to_dict()["text"]
+		label_test = test_data.to_dict()["coarse_label"]
+
+		N_LABELS = len(set(label_train)) 
+	elif dataset_name == "bull":
+		#read csv file and import data
+		
+		import csv
+
+		data_dict = {}
+		text = []
+		label = []
+		with open('./cyberbullying/cyberbullying_tweets.csv', mode ='r')as file:
+		
+			reader = csv.reader(file)		
+			next(reader)  # Skip the header row
+			for row in reader:
+				text.append(row[0])
+				label.append(row[1])
+		# Create a mapping of labels to integers
+		label_mapping = {label: i for i, label in enumerate(set(label))}
+		print(label_mapping)
+
+		# Transform the labels to integers
+		label = [label_mapping[l] for l in label]
+
+		#shuffle text and label in the same way
+		combined = list(zip(text, label))
+		random.shuffle(combined)
+		text[:], label[:] = zip(*combined)
+		
+		text_train = text[:len(label)//10 * 9]
+		label_train = label[:len(label)//10 * 9]
+
+		text_test = text[len(label)//10 * 9 + 1: ]
+		label_test = label[len(label)//10 * 9 + 1: ]
+
+		N_LABELS = len(set(label))
+	
+	else:
+		raise ValueError("Dataset not found")
+
 
 	assert len(text_train) == len(label_train)
 	assert len(text_test) == len(label_test)
@@ -133,19 +198,18 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 			for s in aux:
 				f.write(s)
 
-	if not os.path.exists("./stpiece/m_" + dataset_name + "_dic_sz_" + str(vocab_size) + ".model") and custom_sentencepiece is None:
+	if not os.path.exists("./stpiece/m_" + dataset_name + ".model") and custom_sentencepiece is None:
 		#Train tokenizer
-		spm.SentencePieceTrainer.train(input="./stpiece/train_ds_" + dataset_name + ".txt", model_prefix="./stpiece/m_" + dataset_name + "_dic_sz_" + str(vocab_size), max_sentence_length = 100000000 ,vocab_size=vocab_size)
+		spm.SentencePieceTrainer.train(input="./stpiece/train_ds_" + dataset_name + ".txt", model_prefix="./stpiece/m_" + dataset_name, max_sentence_length = 100000000 ,vocab_size=vocab_size)
 	elif custom_sentencepiece is not None:
 		dataset_name = custom_sentencepiece
 
 	#Load tokenizer
-	sp = spm.SentencePieceProcessor(model_file="./stpiece/m_" + dataset_name + "_dic_sz_" + str(vocab_size) + ".model")
+	sp = spm.SentencePieceProcessor(model_file="./stpiece/m_" + dataset_name + ".model")
 
 	# print(f'Dictionary size {sp.get_piece_size()}')
 	# # print(f'Vocabulary: {[sp.id_to_piece(id) for id in range(sp.get_piece_size())]}')
 	# print(f'Encoding results:  {sp.encode("this is a phrase that could be commonly found", out_type=str)} -> {sp.encode("this is a phrase that could be commonly found")}')
-	#print(f'Encoding results:  {sp.encode(text_train[6], out_type=str)[:max_length-2]}')
 
 	train_tokens = list(map(lambda t: [1] + sp.encode(t)[:max_length - 2] + [2], text_train))
 	test_tokens = list(map(lambda t: [1] + sp.encode(t)[:max_length - 2] + [2], text_test))

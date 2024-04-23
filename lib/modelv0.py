@@ -18,7 +18,7 @@ class Embedding(nn.Module):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     positions = torch.arange(0, seq_length).expand(batch_size, seq_length).to(device)
     embedding = self.word_embed(x) + self.pos_embed(positions)
-    #print(embedding.shape)
+    print(embedding.shape)
     return self.dropout(embedding)
   
 
@@ -44,11 +44,18 @@ class MHSelfAttention(nn.Module):
     batch_size = x.shape[0]
     sentence_len = x.shape[1]
 
-    queries = self.w_queries(x).reshape(batch_size, sentence_len, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+    queries = self.w_queries(x).reshape(
+        batch_size, sentence_len, self.num_heads, self.head_dim).permute(
+            0, 2, 1, 3)
 
-    keys = self.w_keys(x).reshape(batch_size, sentence_len, self.num_heads, self.head_dim).permute(0, 2, 3, 1)
+    keys = self.w_keys(x).reshape(
+        batch_size, sentence_len, self.num_heads, self.head_dim).permute(
+            0, 2, 3, 1)
 
-    values = self.w_values(x).reshape(batch_size, sentence_len, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+
+    values = self.w_values(x).reshape(
+        batch_size, sentence_len, self.num_heads, self.head_dim).permute(
+            0, 2, 1, 3)
 
     attention_scores = torch.einsum('bijk,bikl->bijl', queries, keys)
     attention_dist = torch.softmax(attention_scores /
@@ -84,9 +91,9 @@ class TransformerEncoder(nn.Module):
 
     return out
   
-class Classifier(nn.Module):
+class ClassifierV0(nn.Module):
   def __init__(self, vocab_size, max_length, embed_dim, num_heads, forward_expansion, out_labels):
-      super(Classifier, self).__init__()
+      super(ClassifierV0, self).__init__()
 
       self.embedder = Embedding(vocab_size, max_length, embed_dim)
       self.encoder = TransformerEncoder(embed_dim, num_heads, forward_expansion)

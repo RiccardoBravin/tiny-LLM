@@ -1,0 +1,52 @@
+MODEL: ClassifierV9
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+              precision    recall  f1-score   support
+
+           0       0.79      0.80      0.79       428
+           1       0.81      0.79      0.80       444
+
+    accuracy                           0.80       872
+   macro avg       0.80      0.80      0.80       872
+weighted avg       0.80      0.80      0.80       872
+
+Confusion matrix:
+[[343  85]
+ [ 93 351]]
+
+*******************************************
+
+MODEL: ClassifierV9
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+              precision    recall  f1-score   support
+
+           0       0.80      0.76      0.78       428
+           1       0.78      0.82      0.80       444
+
+    accuracy                           0.79       872
+   macro avg       0.79      0.79      0.79       872
+weighted avg       0.79      0.79      0.79       872
+
+Confusion matrix:
+[[327 101]
+ [ 82 362]]
+
+*******************************************
+

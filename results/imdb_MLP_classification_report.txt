@@ -1,0 +1,52 @@
+MODEL: MLPLLM
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+              precision    recall  f1-score   support
+
+           0       0.82      0.81      0.82     12500
+           1       0.81      0.82      0.82     12500
+
+    accuracy                           0.82     25000
+   macro avg       0.82      0.82      0.82     25000
+weighted avg       0.82      0.82      0.82     25000
+
+Confusion matrix:
+[[10139  2361]
+ [ 2238 10262]]
+
+*******************************************
+
+MODEL: MLPLLM
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+              precision    recall  f1-score   support
+
+           0       0.80      0.82      0.81     12500
+           1       0.82      0.80      0.81     12500
+
+    accuracy                           0.81     25000
+   macro avg       0.81      0.81      0.81     25000
+weighted avg       0.81      0.81      0.81     25000
+
+Confusion matrix:
+[[10252  2248]
+ [ 2523  9977]]
+
+*******************************************
+
