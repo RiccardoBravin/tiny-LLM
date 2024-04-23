@@ -44,11 +44,18 @@ class MHSelfAttention(nn.Module):
     batch_size = x.shape[0]
     sentence_len = x.shape[1]
 
-    queries = self.w_queries(x).reshape(batch_size, sentence_len, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+    queries = self.w_queries(x).reshape(
+        batch_size, sentence_len, self.num_heads, self.head_dim).permute(
+            0, 2, 1, 3)
 
-    keys = self.w_keys(x).reshape(batch_size, sentence_len, self.num_heads, self.head_dim).permute(0, 2, 3, 1)
+    keys = self.w_keys(x).reshape(
+        batch_size, sentence_len, self.num_heads, self.head_dim).permute(
+            0, 2, 3, 1)
 
-    values = self.w_values(x).reshape(batch_size, sentence_len, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+
+    values = self.w_values(x).reshape(
+        batch_size, sentence_len, self.num_heads, self.head_dim).permute(
+            0, 2, 1, 3)
 
     attention_scores = torch.einsum('bijk,bikl->bijl', queries, keys)
     attention_dist = torch.softmax(attention_scores /

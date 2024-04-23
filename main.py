@@ -22,7 +22,7 @@ REDUCED_EMBEDDING_DIM = 16
 EMBED_DIM = 128
 NUM_HEADS = 8
 FORWARD_EXPANSION = 0.1
-MAX_LENGTH = 512
+MAX_LENGTH = 128
 LAYERS = 1
 
 
@@ -32,7 +32,7 @@ LAYERS = 1
 print("Loading dataset:")
 
 #'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp"
-DATASET = "imdb"
+DATASET = "race"
 
 train_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 

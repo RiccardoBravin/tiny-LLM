@@ -47,7 +47,7 @@ def trainer(model, train_dataloader, lr, epochs):
 
 			token_ids, masks, labels = tuple(t.to(device) for t in batch_data)
 
-			_, logits = model(token_ids, masks)
+			logits = model(token_ids)
 
 			batch_loss = criterion(logits, labels)
 			train_loss += batch_loss.item()
@@ -85,7 +85,7 @@ def evaluator(model, test_dataloader):
 
 			token_ids, masks, labels = tuple(t.to(device) for t in batch_data)
 
-			_, logits = model(token_ids, masks)
+			logits = model(token_ids)
 			loss = criterion(logits, labels)
 			avg_loss += loss.item()
 			numpy_logits = logits.cpu().detach()

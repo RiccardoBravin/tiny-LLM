@@ -133,14 +133,14 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 			for s in aux:
 				f.write(s)
 
-	if not os.path.exists("./stpiece/m_" + dataset_name + "_dic_sz_" + str(vocab_size) + ".model") and custom_sentencepiece is None:
+	if not os.path.exists("./stpiece/m_" + dataset_name + ".model") and custom_sentencepiece is None:
 		#Train tokenizer
-		spm.SentencePieceTrainer.train(input="./stpiece/train_ds_" + dataset_name + ".txt", model_prefix="./stpiece/m_" + dataset_name + "_dic_sz_" + str(vocab_size), max_sentence_length = 100000000 ,vocab_size=vocab_size)
+		spm.SentencePieceTrainer.train(input="./stpiece/train_ds_" + dataset_name + ".txt", model_prefix="./stpiece/m_" + dataset_name, max_sentence_length = 100000000 ,vocab_size=vocab_size)
 	elif custom_sentencepiece is not None:
 		dataset_name = custom_sentencepiece
 
 	#Load tokenizer
-	sp = spm.SentencePieceProcessor(model_file="./stpiece/m_" + dataset_name + "_dic_sz_" + str(vocab_size) + ".model")
+	sp = spm.SentencePieceProcessor(model_file="./stpiece/m_" + dataset_name + ".model")
 
 	# print(f'Dictionary size {sp.get_piece_size()}')
 	# # print(f'Vocabulary: {[sp.id_to_piece(id) for id in range(sp.get_piece_size())]}')
