@@ -5,3 +5,5 @@ models
 orca_madonna
 silicone_dataset
 stpiece
+BERTs/__pycache__
+__pycache__
