@@ -3,6 +3,7 @@ import torch
 import tqdm
 
 from sklearn.metrics import matthews_corrcoef
+import datetime
 
 
 class ScheduledOptim():
@@ -46,6 +47,7 @@ class BERTTrainer:
         self.model = model
         self.train_data = train_dataloader
         self.test_data = test_dataloader
+        self.timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
         # Setting the Adam optimizer with hyper-param
         self.optim = torch.optim.Adam(self.model.parameters(), lr=lr, betas=betas, weight_decay=weight_decay)
@@ -139,3 +141,12 @@ class BERTTrainer:
             avg_loss_lm={round(avg_loss_lm / len(data_iter), 3)}, \
             total_acc={round(total_correct * 100.0 / total_element, 3)}"
         ) 
+
+        #print the same also on a file with in the name containing a timestamp
+        with open(f"./logs/training_logs_{self.timestamp}.txt", "a") as f:
+            f.write(
+                f"EP{epoch}, {mode}: \
+                avg_loss_next={round(avg_loss_next / len(data_iter), 3)}, \
+                avg_loss_lm={round(avg_loss_lm / len(data_iter), 3)}, \
+                total_acc={round(total_correct * 100.0 / total_element, 3)}\n"
+            )

@@ -20,7 +20,7 @@ import datetime
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 VOCAB_SIZE = 512*8
-BATCH_SIZE = 32
+BATCH_SIZE = 128
 SENTENCE_LEN = 512
 
 
@@ -33,16 +33,13 @@ tokens = {
 }
     
 print(f"{ATTRIBUTES['Bold']}Loading dataset...{RESET}")
-dataset = load_dataset("Open-Orca/OpenOrca", cache_dir="./orca_madonna", trust_remote_code=True, split=['train[:2%]', 'train[80%:81%]', 'train[90%:91%]'])
+dataset = load_dataset("Open-Orca/OpenOrca", cache_dir="./orca_madonna", trust_remote_code=True, split=['train[:10%]', 'train[80%:81%]', 'train[90%:91%]'])
 
 #dataset is composed of a dictionary containig train, validation and test
 #each of them is a list of dictionaries containing the following keys: ['id', 'system_prompt', 'question', 'response']
-
-# Now you have train, validation and test datasets
 train_data = dataset[0]
 validation_data = dataset[1]
 test_data = dataset[2]
-
 
 sp = train_sp(train_data, VOCAB_SIZE, tokens)
 
@@ -71,7 +68,7 @@ print(f"{ATTRIBUTES['Bold']}Building BERT model...{RESET}")
 bert_model = BERT.BERT(
   vocab_size=VOCAB_SIZE,
   d_model=128,
-  n_layers=6,
+  n_layers=4,
   heads=8,
   sentence_length=SENTENCE_LEN,
   dropout=0.1
