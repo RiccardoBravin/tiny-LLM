@@ -14,8 +14,8 @@ from utils import model_size
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 VOCAB_SIZE = 512*8
-BATCH_SIZE = 128
-SENTENCE_LEN = 64
+BATCH_SIZE = 32
+SENTENCE_LEN = 512
 
 
 tokens = {
@@ -26,8 +26,6 @@ tokens = {
     "mask":4
 }
 
-
-    
 
  
 print(f"{ATTRIBUTES['Bold']}Importing sentencepiece processor...{RESET}")
@@ -77,13 +75,13 @@ print(f"{ATTRIBUTES['Bold']}Loading model...{RESET}")
 bert_model = BERT.BERT(
   vocab_size=VOCAB_SIZE,
   d_model=128,
-  n_layers=2,
+  n_layers=4,
   heads=8,
   sentence_length=SENTENCE_LEN,
   dropout=0.1
 )
 
-bert_model.load_state_dict(torch.load("./models/bert_model_gray_128_2_4096_avg_loss_1_34.pth"))
+bert_model.load_state_dict(torch.load("./models/bert_model_gray_wiki_128_2_4096_avg_loss_1_34.pth"))
 
 class BERT_classifier(torch.nn.Module):
     def __init__(self, bert_model, num_classes, freeze_bert = True):
@@ -115,9 +113,9 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 criterion = torch.nn.CrossEntropyLoss()
 criterion.to(device);
 
-optimizer = torch.optim.Adam(bert_classifier.parameters(), lr=2e-4)
+optimizer = torch.optim.Adam(bert_classifier.parameters(), lr=5e-5)
 
-for epoch in range(40):  
+for epoch in range(2):  
     bert_classifier.train()
     train_loss_avg = 0
     train_loss = 0
