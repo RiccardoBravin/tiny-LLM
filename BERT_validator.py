@@ -31,7 +31,7 @@ tokens = {
 print(f"{ATTRIBUTES['Bold']}Importing sentencepiece processor...{RESET}")
 #import sentencepiece model
 sp = spm.SentencePieceProcessor()
-sp.load("./stpiece/m_silicone_dicsz_4096.model")
+sp.load("./stpiece/m_orca_dictsz_4096.model")
 
 
 print(f"{ATTRIBUTES['Bold']}Loading dataset...{RESET}")
@@ -81,7 +81,7 @@ bert_model = BERT.BERT(
   dropout=0.1
 )
 
-bert_model.load_state_dict(torch.load("./models/bert_model_gray_wiki_128_2_4096_avg_loss_1_34.pth"))
+bert_model.load_state_dict(torch.load("./models/bert_model_gray_wiki_128_4_4096_20240423_153737.pth"))
 
 class BERT_classifier(torch.nn.Module):
     def __init__(self, bert_model, num_classes, freeze_bert = True):
@@ -96,7 +96,8 @@ class BERT_classifier(torch.nn.Module):
         self.softmax = torch.nn.LogSoftmax(dim=-1)
         
     def forward(self, x):
-        x = self.model(x, None)
+        mask = (x != 0).int()
+        x = self.model(x, mask)
         x = self.ff(torch.nn.functional.tanh(x[:, 0]))
         return self.softmax(self.classifier(torch.nn.functional.tanh(x)))
     
@@ -113,9 +114,9 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 criterion = torch.nn.CrossEntropyLoss()
 criterion.to(device);
 
-optimizer = torch.optim.Adam(bert_classifier.parameters(), lr=5e-5)
+optimizer = torch.optim.Adam(bert_classifier.parameters(), lr=2e-4)
 
-for epoch in range(2):  
+for epoch in range(5):  
     bert_classifier.train()
     train_loss_avg = 0
     train_loss = 0
