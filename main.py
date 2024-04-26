@@ -33,7 +33,7 @@ LAYERS = 1
 print("Loading dataset:")
 
 #'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
-DATASET = "sst2"
+DATASET = "imdb"
 
 train_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 

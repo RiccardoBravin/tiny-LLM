@@ -213,6 +213,7 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 
 	train_tokens = list(map(lambda t: [1] + sp.encode(t)[:max_length - 2] + [2], text_train))
 	test_tokens = list(map(lambda t: [1] + sp.encode(t)[:max_length - 2] + [2], text_test))
+	print(f"The average token length is {np.mean(list(map(len, train_tokens)))}")
 
 	train_tokens_ids = pad_sequences(train_tokens, maxlen = max_length, truncating="post", padding="post", dtype="int")
 	test_tokens_ids = pad_sequences(test_tokens, maxlen = max_length, truncating="post", padding="post", dtype="int")
