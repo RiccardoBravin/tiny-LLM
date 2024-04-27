@@ -220,3 +220,108 @@ Confusion matrix:
 *********************************************************************************************************************************
 
 
+MODEL: ClassifierV9
+DATASET: bull
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 64
+LAYERS: 4
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 1.1823315660158793
+              precision    recall  f1-score   support
+
+           0       0.97      0.96      0.96       788
+           1       0.58      0.73      0.64       783
+           2       0.57      0.52      0.54       792
+           3       0.92      0.79      0.85       804
+           4       0.94      0.94      0.94       825
+           5       0.97      0.95      0.96       778
+
+    accuracy                           0.81      4770
+   macro avg       0.82      0.81      0.82      4770
+weighted avg       0.83      0.81      0.82      4770
+
+Confusion matrix:
+[[755   9  11   1   6   6]
+ [  3 571 181  22   3   3]
+ [  8 311 413  29  28   3]
+ [  2  71  88 634   6   3]
+ [  2  15  25   2 777   4]
+ [  9  13  10   4   6 736]]
+
+*******************************************
+
+MODEL: ClassifierV9
+DATASET: bull
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 64
+LAYERS: 4
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 1.1730657013257344
+              precision    recall  f1-score   support
+
+           0       0.96      0.96      0.96       807
+           1       0.95      0.95      0.95       799
+           2       0.94      0.92      0.93       812
+           3       0.92      0.82      0.86       847
+           4       0.60      0.75      0.66       758
+           5       0.58      0.52      0.55       747
+
+    accuracy                           0.82      4770
+   macro avg       0.82      0.82      0.82      4770
+weighted avg       0.83      0.82      0.82      4770
+
+Confusion matrix:
+[[772  12   4   3   9   7]
+ [  7 759   7   4   8  14]
+ [ 13   9 744   5  12  29]
+ [ 10   4   7 694  51  81]
+ [  2   2   3  33 565 153]
+ [  4   9  25  19 302 388]]
+
+*******************************************
+
+MODEL: ClassifierV9
+DATASET: bull
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 64
+LAYERS: 4
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 1.179348680973053
+              precision    recall  f1-score   support
+
+           0       0.53      0.62      0.57       769
+           1       0.97      0.96      0.96       798
+           2       0.63      0.50      0.56       804
+           3       0.91      0.95      0.93       812
+           4       0.94      0.97      0.96       803
+           5       0.87      0.84      0.85       784
+
+    accuracy                           0.81      4770
+   macro avg       0.81      0.81      0.81      4770
+weighted avg       0.81      0.81      0.81      4770
+
+Confusion matrix:
+[[478  10 185  38  11  47]
+ [  8 766   3  11   5   5]
+ [320   9 406  12  18  39]
+ [ 23   2   3 769  11   4]
+ [  6   4   6   6 781   0]
+ [ 67   2  44   9   6 656]]
+
+*******************************************
+

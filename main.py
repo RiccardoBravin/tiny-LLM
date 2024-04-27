@@ -23,7 +23,7 @@ REDUCED_EMBEDDING_DIM = 16
 EMBED_DIM = 128
 NUM_HEADS = 8
 FORWARD_EXPANSION = 0.5
-MAX_LENGTH = 512
+MAX_LENGTH = 64
 LAYERS = 4
 
 
@@ -33,7 +33,7 @@ LAYERS = 4
 print("Loading dataset:")
 
 #'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
-DATASET = "imdb"
+DATASET = "sst2"
 
 train_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 
@@ -63,7 +63,7 @@ utils.print_model_size(classifier)
 ########################################################################################
 print("Starting training")
 
-EPOCHS = 20
+EPOCHS = 10
 LR = 2e-4
 
 utils.trainer(classifier, train_dataloader, LR, EPOCHS)

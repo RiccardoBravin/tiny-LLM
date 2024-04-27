@@ -195,3 +195,65 @@ Confusion matrix:
 
 *********************************************************************************************************************************
 
+MODEL: ClassifierV9
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 128
+LAYERS: 4
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 0.8286573355939207
+              precision    recall  f1-score   support
+
+           0       0.93      0.90      0.91      1900
+           1       0.93      0.98      0.95      1900
+           2       0.89      0.86      0.88      1900
+           3       0.88      0.89      0.88      1900
+
+    accuracy                           0.91      7600
+   macro avg       0.91      0.91      0.91      7600
+weighted avg       0.91      0.91      0.91      7600
+
+Confusion matrix:
+[[1713   57   73   57]
+ [  17 1853   16   14]
+ [  56   38 1643  163]
+ [  60   36  121 1683]]
+
+*******************************************
+
+MODEL: ClassifierV9
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 128
+LAYERS: 4
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 0.8299697707681095
+              precision    recall  f1-score   support
+
+           0       0.90      0.92      0.91      1900
+           1       0.94      0.97      0.96      1900
+           2       0.90      0.83      0.87      1900
+           3       0.87      0.89      0.88      1900
+
+    accuracy                           0.90      7600
+   macro avg       0.90      0.90      0.90      7600
+weighted avg       0.90      0.90      0.90      7600
+
+Confusion matrix:
+[[1755   49   45   51]
+ [  25 1848   10   17]
+ [  92   48 1584  176]
+ [  71   22  117 1690]]
+
+*******************************************
+
