@@ -53,3 +53,173 @@ Confusion matrix:
 #################################################################################################################################
 
 *********************************************************************************************************************************
+
+MODEL: ClassifierV9
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+              precision    recall  f1-score   support
+
+           0       0.88      0.80      0.84     12500
+           1       0.82      0.89      0.85     12500
+
+    accuracy                           0.85     25000
+   macro avg       0.85      0.85      0.85     25000
+weighted avg       0.85      0.85      0.85     25000
+
+Confusion matrix:
+[[ 9981  2519]
+ [ 1328 11172]]
+
+*******************************************
+
+MODEL: ClassifierV9
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 0.45285789992498315
+              precision    recall  f1-score   support
+
+           0       0.85      0.86      0.86     12500
+           1       0.86      0.85      0.85     12500
+
+    accuracy                           0.85     25000
+   macro avg       0.85      0.85      0.85     25000
+weighted avg       0.85      0.85      0.85     25000
+
+Confusion matrix:
+[[10761  1739]
+ [ 1901 10599]]
+
+
+
+*********************************************************************************************************************************
+
+#################################################################################################################################
+
+*********************************************************************************************************************************
+
+MODEL: ClassifierV9
+DATASET: imdb
+VOCAB_SIZE: 16384
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 0.46052591575076207
+              precision    recall  f1-score   support
+
+           0       0.83      0.86      0.85     12500
+           1       0.86      0.82      0.84     12500
+
+    accuracy                           0.84     25000
+   macro avg       0.85      0.84      0.84     25000
+weighted avg       0.85      0.84      0.84     25000
+
+Confusion matrix:
+[[10812  1688]
+ [ 2195 10305]]
+
+*******************************************
+
+MODEL: ClassifierV9
+DATASET: imdb
+VOCAB_SIZE: 16384
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 25
+
+Avg loss: 0.45720319522311315
+              precision    recall  f1-score   support
+
+           0       0.83      0.87      0.85     12500
+           1       0.86      0.83      0.85     12500
+
+    accuracy                           0.85     25000
+   macro avg       0.85      0.85      0.85     25000
+weighted avg       0.85      0.85      0.85     25000
+
+Confusion matrix:
+[[10881  1619]
+ [ 2152 10348]]
+
+MODEL: ClassifierV9
+DATASET: imdb
+VOCAB_SIZE: 16384
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 0.456365924814473
+              precision    recall  f1-score   support
+
+           0       0.86      0.84      0.85     12500
+           1       0.85      0.86      0.85     12500
+
+    accuracy                           0.85     25000
+   macro avg       0.85      0.85      0.85     25000
+weighted avg       0.85      0.85      0.85     25000
+
+Confusion matrix:
+[[10547  1953]
+ [ 1752 10748]]
+
+*******************************************
+
+MODEL: ClassifierV9
+DATASET: imdb
+VOCAB_SIZE: 16384
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 0.45934174150762047
+              precision    recall  f1-score   support
+
+           0       0.84      0.86      0.85     12500
+           1       0.85      0.84      0.84     12500
+
+    accuracy                           0.85     25000
+   macro avg       0.85      0.85      0.85     25000
+weighted avg       0.85      0.85      0.85     25000
+
+Confusion matrix:
+[[10713  1787]
+ [ 2049 10451]]
+
+*********************************************************************************************************************************
+
+#################################################################################################################################
+
+*********************************************************************************************************************************
+

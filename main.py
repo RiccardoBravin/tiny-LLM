@@ -16,7 +16,7 @@ from lib import utils
 from lib.dataset import dataset_importer
 from lib import utils
 
-VOCAB_SIZE = 512*8
+VOCAB_SIZE = 512*32
 BATCH_SIZE = 32
 
 REDUCED_EMBEDDING_DIM = 16
@@ -43,7 +43,7 @@ print("Model initialization:")
 #initialize model
 # classifier = modelv0.ClassifierV0(VOCAB_SIZE, MAX_LENGTH, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, N_LABELS)
 # classifier = modelv7.ClassifierV7(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
-classifier = MLPLLM.MLPLLM(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
+classifier = modelv9.ClassifierV9(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 classifier.to(device)
@@ -70,7 +70,7 @@ utils.trainer(classifier, train_dataloader, LR, EPOCHS)
 
 ########################################################################################
 print("Starting evaluation")
-predicted = utils.evaluator(classifier, test_dataloader)
+predicted, avg_loss = utils.evaluator(classifier, test_dataloader)
 
 print(classification_report(label_test, predicted))
 
@@ -81,7 +81,7 @@ print("Confusion matrix:\n", conf_matrix)
 
 ########################################################################################
 #save the classification report in a file for later use specifying the dataset, model hyperparameters
-with open(f"results/{DATASET}_MLP_classification_report.txt", "a") as f:
+with open(f"results/{DATASET}_classification_report.txt", "a") as f:
 	f.write(f"MODEL: {classifier.__class__.__name__}\n")
 	f.write(f"DATASET: {DATASET}\n")
 	f.write(f"VOCAB_SIZE: {VOCAB_SIZE}\n")
@@ -92,6 +92,7 @@ with open(f"results/{DATASET}_MLP_classification_report.txt", "a") as f:
 	f.write(f"REDUCED_EMBEDDING_DIM: {REDUCED_EMBEDDING_DIM}\n")
 	f.write(f"LR: {LR}\n")
 	f.write(f"EPOCHS: {EPOCHS}\n\n")
+	f.write(f"Avg loss: {avg_loss}\n")
 	f.write(classification_report(label_test, predicted))
 	f.write("\n")
 	f.write("Confusion matrix:\n")

@@ -94,4 +94,4 @@ def evaluator(model, test_dataloader):
 	print("average loss: ", avg_loss / len(test_dataloader))
 	print()
 
-	return predicted.tolist();
+	return predicted.tolist(), avg_loss / len(test_dataloader);
