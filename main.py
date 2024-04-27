@@ -16,7 +16,7 @@ from lib import utils
 from lib.dataset import dataset_importer
 from lib import utils
 
-VOCAB_SIZE = 512*32
+VOCAB_SIZE = 512*8
 BATCH_SIZE = 32
 
 REDUCED_EMBEDDING_DIM = 16
@@ -24,7 +24,7 @@ EMBED_DIM = 128
 NUM_HEADS = 8
 FORWARD_EXPANSION = 0.5
 MAX_LENGTH = 512
-LAYERS = 1
+LAYERS = 4
 
 
 
