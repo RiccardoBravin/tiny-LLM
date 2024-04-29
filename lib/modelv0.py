@@ -18,7 +18,7 @@ class Embedding(nn.Module):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     positions = torch.arange(0, seq_length).expand(batch_size, seq_length).to(device)
     embedding = self.word_embed(x) + self.pos_embed(positions)
-    print(embedding.shape)
+    #print(embedding.shape)
     return self.dropout(embedding)
   
 

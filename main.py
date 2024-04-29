@@ -16,15 +16,19 @@ from lib import utils
 from lib.dataset import dataset_importer
 from lib import utils
 
-VOCAB_SIZE = 512*8
+# import os
+
+# os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+
+VOCAB_SIZE = 512*4
 BATCH_SIZE = 32
 
 REDUCED_EMBEDDING_DIM = 16
 EMBED_DIM = 128
 NUM_HEADS = 8
-FORWARD_EXPANSION = 0.5
-MAX_LENGTH = 64
-LAYERS = 4
+FORWARD_EXPANSION = 4
+MAX_LENGTH =512
+LAYERS = 1
 
 
 
@@ -33,7 +37,7 @@ LAYERS = 4
 print("Loading dataset:")
 
 #'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
-DATASET = "sst2"
+DATASET = "imdb"
 
 train_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 
@@ -41,9 +45,9 @@ train_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATAS
 ########################################################################################
 print("Model initialization:")
 #initialize model
-# classifier = modelv0.ClassifierV0(VOCAB_SIZE, MAX_LENGTH, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, N_LABELS)
+classifier = modelv0.ClassifierV0(VOCAB_SIZE, MAX_LENGTH, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, N_LABELS)
 # classifier = modelv7.ClassifierV7(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
-classifier = modelv9.ClassifierV9(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
+#classifier = modelv9.ClassifierV9(VOCAB_SIZE, MAX_LENGTH, REDUCED_EMBEDDING_DIM, EMBED_DIM, NUM_HEADS, FORWARD_EXPANSION, LAYERS, N_LABELS)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 classifier.to(device)
@@ -63,7 +67,7 @@ utils.print_model_size(classifier)
 ########################################################################################
 print("Starting training")
 
-EPOCHS = 10
+EPOCHS = 20
 LR = 2e-4
 
 utils.trainer(classifier, train_dataloader, LR, EPOCHS)
