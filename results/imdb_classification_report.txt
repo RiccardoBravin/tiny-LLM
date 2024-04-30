@@ -315,3 +315,57 @@ Confusion matrix:
 *********************************************************************************************************************************
 
 
+MODEL: ClassifierV0
+DATASET: imdb
+VOCAB_SIZE: 2048
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 0.4709314845711984
+              precision    recall  f1-score   support
+
+           0       0.81      0.88      0.84     12500
+           1       0.87      0.79      0.83     12500
+
+    accuracy                           0.83     25000
+   macro avg       0.84      0.83      0.83     25000
+weighted avg       0.84      0.83      0.83     25000
+
+Confusion matrix:
+[[10987  1513]
+ [ 2648  9852]]
+
+*******************************************
+
+MODEL: ClassifierV0
+DATASET: imdb
+VOCAB_SIZE: 2048
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 0.4632325842404914
+              precision    recall  f1-score   support
+
+           0       0.84      0.85      0.84     12500
+           1       0.85      0.83      0.84     12500
+
+    accuracy                           0.84     25000
+   macro avg       0.84      0.84      0.84     25000
+weighted avg       0.84      0.84      0.84     25000
+
+Confusion matrix:
+[[10661  1839]
+ [ 2093 10407]]
+
+*******************************************
+
