@@ -35,15 +35,18 @@ sp.load("./stpiece/m_orca_dictsz_4096.model")
 
 
 print(f"{ATTRIBUTES['Bold']}Loading dataset...{RESET}")
-dataset = load_dataset("imdb")
+dataset = load_dataset("trec")#imdb, ag_news, trec
 train_data = dataset['train']
 test_data = dataset['test']
 
 text_train = train_data.to_dict()["text"]
-label_train = train_data.to_dict()["label"]
+#label_train = train_data.to_dict()["label"]
+label_train = train_data.to_dict()["coarse_label"]
+
 
 text_test = test_data.to_dict()["text"]
-label_test = test_data.to_dict()["label"]
+#label_test = test_data.to_dict()["label"]
+label_test = test_data.to_dict()["coarse_label"]
 
 N_LABELS = len(set(label_train))
 
@@ -114,7 +117,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 criterion = torch.nn.CrossEntropyLoss()
 criterion.to(device);
 
-optimizer = torch.optim.Adam(bert_classifier.parameters(), lr=2e-4)
+optimizer = torch.optim.Adam(bert_classifier.parameters(), lr=10e-4)
 
 for epoch in range(5):  
     bert_classifier.train()
