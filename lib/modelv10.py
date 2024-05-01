@@ -9,7 +9,8 @@ from lib.utils import pad_sequences
 # efficient attention con swiglu
 # fully connected con max pooling (circa)
 # redone positional embedding to make nearer positions nearer in the embedding space
-
+# changed layernorm to RMS norm and swapped positions of normalization wrt original transformer
+#REALLY BADDDDDD 
 
 def n_ary_gray_code(n, base = 3):
     # n x n**3 list 
@@ -38,6 +39,7 @@ def n_ary_gray_code(n, base = 3):
                 val = 0
 
     return gray
+
 
 class Embedding(nn.Module):
 	def __init__(self, vocab_size, max_length, embed_dim, reduced_embed = 16, dropout=0.1):
@@ -68,10 +70,7 @@ class EfficientAttention(nn.Module):
 	def __init__(self, embed_dim, num_heads):
 		super(EfficientAttention, self).__init__()
 		self.embed_dim = embed_dim
-		# self.num_heads = num_heads
-		# self.head_dim = embed_dim // num_heads
-
-		# assert (self.num_heads*self.head_dim == self.embed_dim),'embed size must be divisible by number of heads'
+		
 
 		self.w_queries = nn.Linear(self.embed_dim, self.embed_dim, bias=False)
 		self.w_output = nn.Linear(self.embed_dim, self.embed_dim, bias=False)
@@ -104,38 +103,41 @@ class TransformerEncoder(nn.Module):
 		self.norm1 = nn.LayerNorm(embed_dim)
 		self.norm2 = nn.LayerNorm(embed_dim)
 
-		self.fc_up1 = nn.Linear(embed_dim, int(forward_expansion*embed_dim))
-		self.fc_up2 = nn.Linear(embed_dim, int(forward_expansion*embed_dim))
+		self.fc_up1 = nn.Linear(embed_dim, int(forward_expansion*embed_dim), bias=False)
+		self.fc_up2 = nn.Linear(embed_dim, int(forward_expansion*embed_dim), bias=False)
 		self.fc_down = nn.Linear(int(forward_expansion*embed_dim), embed_dim)
 		self.silu = torch.nn.SiLU(inplace=False)
 
 		self.dropout = nn.Dropout(dropout)
 
 	def forward(self, x):
-		attention_out = self.dropout(self.attention(x))
-		x = self.norm1(x + attention_out)
-		mid1 = self.fc_up1(x)
-		mid2 = self.silu(self.fc_up2(x))
+		attention_out = self.attention(self.norm1(x))
+		x = (x + attention_out)
+		x1 = self.norm2(x)
+		mid1 = self.fc_up1(x1)
+		mid2 = self.silu(self.fc_up2(x1))
 		mid = torch.mul(mid1,mid2)
 		swiglu = self.fc_down(mid)
 		forward_out = self.dropout(swiglu)
-		out = self.norm2(x + forward_out)
+		out = x + forward_out
 
 		return out
 	
 
-class Classifier(nn.Module):
+class ClassifierV10(nn.Module):
 	def __init__(self, vocab_size, max_length, red_embed_dim, embed_dim, num_heads, forward_expansion, layers, out_labels):
-			super(Classifier, self).__init__()
+			super(ClassifierV10, self).__init__()
 
 			self.embedder = Embedding(vocab_size, max_length, embed_dim, red_embed_dim)
 			self.encoder = nn.Sequential(*[TransformerEncoder(embed_dim, num_heads, forward_expansion) for _ in range(layers)])
+			self.norm = nn.LayerNorm(embed_dim)
 			self.fc = nn.Linear(embed_dim, out_labels)
 
 	def forward(self, x):
 		embedding = self.embedder(x)
-		encoding = self.encoder(embedding)
-		compact_encoding = encoding.max(dim=1)[0]
+		encoding = self.norm(self.encoder(embedding))
+		#compact_encoding = encoding.max(dim=1)[0]
+		compact_encoding = encoding[:,0]
 		out = self.fc(compact_encoding)
 		return torch.sigmoid(out)
 	

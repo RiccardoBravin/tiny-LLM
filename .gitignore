@@ -5,3 +5,4 @@ silicone_dataset
 stpiece
 **/__pycache__
 lib/__pycache__
+*.pyc
