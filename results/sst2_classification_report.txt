@@ -375,5 +375,57 @@ Confusion matrix:
 
 *********************************************************************************************************************************
 
+MODEL: ClassifierV11
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 64
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
 
+Avg loss: 0.5400471048695701
+              precision    recall  f1-score   support
+
+           0       0.77      0.74      0.76       428
+           1       0.76      0.79      0.77       444
+
+    accuracy                           0.76       872
+   macro avg       0.77      0.76      0.76       872
+weighted avg       0.77      0.76      0.76       872
+
+Confusion matrix:
+[[318 110]
+ [ 95 349]]
+
+*******************************************
+
+MODEL: ClassifierV9
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 0.5
+MAX_LENGTH: 64
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.0002
+EPOCHS: 20
+
+Avg loss: 0.5227995578731809
+              precision    recall  f1-score   support
+
+           0       0.79      0.73      0.76       428
+           1       0.76      0.81      0.78       444
+
+    accuracy                           0.77       872
+   macro avg       0.77      0.77      0.77       872
+weighted avg       0.77      0.77      0.77       872
+
+Confusion matrix:
+[[313 115]
+ [ 83 361]]
+
+*******************************************
 
