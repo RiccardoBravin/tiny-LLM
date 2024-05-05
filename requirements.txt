@@ -1,7 +1,6 @@
 torch
-numpy
 datasets
 tqdm
 sentencepiece
+evaluate
 scikit-learn
-pathlib

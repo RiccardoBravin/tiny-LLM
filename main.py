@@ -1,105 +1,123 @@
-from colors import ATTRIBUTES, FOREGROUND_COLORS, RESET
-
-
-import BERTs.BERT_Eff_Enc_Gray as BERT
-from BERTs.LLM import BERTLM
-from trainer import BERTTrainer
-import BERTdataset
-from utils import model_size, train_sp
-
-from datasets import load_dataset
-
-
 import torch
-import tqdm
 
-from torch.utils.data import DataLoader
-import datetime
+import evaluate
 
 
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+from lib import utils
+from lib.MAMBA import Mamba, MambaConfig
+
+from lib.dataset import dataset_importer
 
 VOCAB_SIZE = 512*8
-BATCH_SIZE = 256
-SENTENCE_LEN = 512
+BATCH_SIZE = 32
+
+REDUCED_EMBEDDING_DIM = 16
+EMBED_DIM = 64
+NUM_HEADS = 8
+FORWARD_EXPANSION = 4
+MAX_LENGTH = 64
+LAYERS = 1
 
 
-tokens = {
-    "pad":0,
-    "bos":1,
-    "eos":2,
-    "unk":3,
-    "mask":4
-}
-    
-print(f"{ATTRIBUTES['Bold']}Loading dataset...{RESET}")
-dataset = load_dataset("Open-Orca/OpenOrca", cache_dir="./orca_madonna", trust_remote_code=True, split=['train[:1%]', 'train[80%:81%]', 'train[90%:91%]'])
 
-#dataset is composed of a dictionary containig train, validation and test
-#each of them is a list of dictionaries containing the following keys: ['id', 'system_prompt', 'question', 'response']
-train_data = dataset[0]
-validation_data = dataset[1]
-test_data = dataset[2]
+########################################################################################
+print("Loading dataset:")
 
-sp = train_sp(train_data, VOCAB_SIZE, tokens)
+#'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
+DATASET = "sst2"
 
-print(f"{ATTRIBUTES['Bold']}Tokenizing data...{RESET}")
-print("\tTrain dataset")
-train_data_tokenized = list(zip(sp.encode(train_data["question"]), sp.encode(train_data["response"])))
-print("\tValidation dataset")
-val_data_tokenized = list(zip(sp.encode(validation_data["question"]), sp.encode(validation_data["response"])))
-print("\tTest dataset")
-test_data_tokenized = list(zip(sp.encode(test_data["question"]), sp.encode(test_data["response"])))
-#average length of tokenized sentences
-print(f"Average length of tokenized sentences: {sum([len(x[0]) + len(x[1]) for x in train_data_tokenized])/len(train_data_tokenized)}")
+train_dataloader, val_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 
-#################################################################################################################################
-print(f"{ATTRIBUTES['Bold']}Building dataset...{RESET}")
 
-train_data = BERTdataset.BERTDataset(train_data_tokenized, special_tokens=tokens, seq_len=SENTENCE_LEN)
-train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True, pin_memory=True)
+########################################################################################
+print("Model initialization:")
 
-valid_data = BERTdataset.BERTDataset(val_data_tokenized, special_tokens=tokens, seq_len=SENTENCE_LEN)
-valid_loader = DataLoader(valid_data, batch_size=BATCH_SIZE, shuffle=True, pin_memory=True)
+class Mamba_classifier(torch.nn.Module):
+	def __init__(self, model, d_model, reduced_d_model, vocab_size, n_labels):
+		super(Mamba_classifier, self).__init__()
+		self.embedder = torch.nn.Embedding(vocab_size, reduced_d_model)
+		self.embed_expander = torch.nn.Linear(reduced_d_model, d_model)
+		self.model = model
+		self.fc = torch.nn.Linear(d_model, n_labels)
 
-#################################################################################################################################
-print(f"{ATTRIBUTES['Bold']}Building BERT model...{RESET}")
+	def forward(self, x):
+		embedded = self.embedder(x)
+		embedded = self.embed_expander(embedded)
+		processed = self.model(embedded)
+		x_mean = processed.mean(dim=1)
+		out = self.fc(x_mean)
+		return out
 
-bert_model = BERT.BERT(
-  vocab_size=VOCAB_SIZE,
-  d_model=128,
-  n_layers=6,
-  heads=8,
-  sentence_length=SENTENCE_LEN,
-  dropout=0.1
+#initialize model
+config = MambaConfig(
+	d_model=EMBED_DIM,
+	n_layers=LAYERS
 )
 
-bert_lm = BERTLM(bert_model, VOCAB_SIZE)
-bert_lm = bert_lm.to(device)
+model = Mamba(config)
 
-print("BERT model parameters without classifier:")
+classifier = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+classifier.to(device)
+print(f"Model initialized on {device}")
+
+
+print("Model parameters:")
 #print all model parameters with names
-for name, param in bert_model.named_parameters():
+for name, param in classifier.named_parameters():
 	print(f"{name}: {param.nelement()}")
+
 #print the model size
-print(model_size(bert_model))
+print(utils.model_size(classifier))
 
 
-#################################################################################################################################
-print(f"{ATTRIBUTES['Bold']}Training BERT model...{RESET}")
-bert_trainer = BERTTrainer(bert_lm, train_loader, valid_loader, device=device, log_freq=len(train_loader)//5)
-epochs = 5
 
-for epoch in range(epochs):
-  print(f"{FOREGROUND_COLORS['Green']}", end="")
-  bert_trainer.train(epoch)
-  print(f"{FOREGROUND_COLORS['BrightBlue']}", end="")
-  bert_trainer.test(epoch)
-  print(f"{RESET}")
+########################################################################################
+print("Starting training")
 
+EPOCHS = 5
+LR = 1e-2
 
-#################################################################################################################################
-print(f"{ATTRIBUTES['Bold']}Saving BERT model...{RESET}")
-timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-torch.save(bert_lm.state_dict(), "./models/bert_lm_" + str(bert_lm.bert.d_model) + "_" + str(bert_lm.bert.n_layers) + "_" + str(VOCAB_SIZE) + "_" + timestamp + ".pth")
-torch.save(bert_model.state_dict(), "./models/bert_model_" + str(bert_model.d_model) + "_" + str(bert_model.n_layers) + "_" + str(VOCAB_SIZE) + "_" + timestamp + ".pth")
+utils.trainer(classifier, train_dataloader, val_dataloader, LR, EPOCHS)
+
+########################################################################################
+print("Starting evaluation")
+predicted, avg_eval_loss = utils.evaluator(classifier, test_dataloader)
+
+accuracy = evaluate.load("accuracy").compute(references=label_test, predictions=predicted)
+f1 = evaluate.load("f1").compute(references=label_test, predictions=predicted, average="weighted")
+precision = evaluate.load("precision").compute(references=label_test, predictions=predicted, average="weighted", zero_division=0)
+recall = evaluate.load("recall").compute(references=label_test, predictions=predicted, average="weighted")
+mcc = evaluate.load("matthews_correlation").compute(references=label_test, predictions=predicted, average="weighted")
+conf_mat = evaluate.load("confusion_matrix").compute(references=label_test, predictions=predicted)
+
+print(f"Accuracy: {accuracy['accuracy']}")
+print(f"F1: {f1['f1']}")
+print(f"Precision: {precision['precision']}")
+print(f"Recall: {recall['recall']}")
+print(f"MCC: {mcc['matthews_correlation']}")
+print(f"Confusion matrix:\n {conf_mat['confusion_matrix']}")
+
+########################################################################################
+#save the classification report in a file for later use specifying the dataset, model hyperparameters
+with open(f"results/{DATASET}_classification_report.txt", "a") as f:
+	f.write(f"MODEL: {classifier.__class__.__name__}\n")
+	f.write(f"DATASET: {DATASET}\n")
+	f.write(f"VOCAB_SIZE: {VOCAB_SIZE}\n")
+	f.write(f"EMBED_DIM: {EMBED_DIM}\n")
+	f.write(f"FORWARD_EXPANSION: {FORWARD_EXPANSION}\n")
+	f.write(f"MAX_LENGTH: {MAX_LENGTH}\n")
+	f.write(f"LAYERS: {LAYERS}\n")
+	f.write(f"REDUCED_EMBEDDING_DIM: {REDUCED_EMBEDDING_DIM}\n")
+	f.write(f"LR: {LR}\n")
+	f.write(f"EPOCHS: {EPOCHS}\n\n")
+	f.write(f"average eval loss: {avg_eval_loss}\n")
+	f.write(f"Accuracy: {accuracy['accuracy']}\n")
+	f.write(f"F1: {f1['f1']}\n")
+	f.write(f"Precision: {precision['precision']}\n")
+	f.write(f"Recall: {recall['recall']}\n")
+	f.write(f"MCC: {mcc['matthews_correlation']}\n")
+	f.write(f"Confusion matrix:\n {conf_mat['confusion_matrix']}\n")
+	f.write(str(utils.model_size(classifier)))
+	f.write("\n\n*******************************************\n\n")
