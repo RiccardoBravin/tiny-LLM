@@ -419,3 +419,18 @@ class RMSNorm(nn.Module):
 
         return output
     
+class Mamba_classifier(torch.nn.Module):
+	def __init__(self, model, d_model, reduced_d_model, vocab_size, n_labels):
+		super(Mamba_classifier, self).__init__()
+		self.embedder = torch.nn.Embedding(vocab_size, reduced_d_model)
+		self.embed_expander = torch.nn.Linear(reduced_d_model, d_model)
+		self.model = model
+		self.fc = torch.nn.Linear(d_model, n_labels)
+
+	def forward(self, x):
+		embedded = self.embedder(x)
+		embedded = self.embed_expander(embedded)
+		processed = self.model(embedded)
+		x_mean = processed.mean(dim=1)
+		out = self.fc(x_mean)
+		return out

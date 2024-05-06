@@ -4,7 +4,10 @@ import evaluate
 
 
 from lib import utils
-from lib.MAMBA import Mamba, MambaConfig
+from lib.MAMBA import Mamba, MambaConfig, Mamba_classifier
+from lib.BERT_Eff import BERT_Eff_cls
+from lib.BERT_Eff_Enc_Gray import BERT_Eff_gray_cls
+from lib.BERT_Eff_Enc_Head import BERT_Eff_multihead_cls
 
 from lib.dataset import dataset_importer
 
@@ -12,9 +15,9 @@ VOCAB_SIZE = 512*8
 BATCH_SIZE = 32
 
 REDUCED_EMBEDDING_DIM = 16
-EMBED_DIM = 64
+EMBED_DIM = 128
 NUM_HEADS = 8
-FORWARD_EXPANSION = 4
+FORWARD_EXPANSION = 0.5
 MAX_LENGTH = 64
 LAYERS = 1
 
@@ -24,7 +27,7 @@ LAYERS = 1
 print("Loading dataset:")
 
 #'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
-DATASET = "sst2"
+DATASET = "bull"
 
 train_dataloader, val_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 
@@ -32,21 +35,6 @@ train_dataloader, val_dataloader, test_dataloader, N_LABELS, label_test = datase
 ########################################################################################
 print("Model initialization:")
 
-class Mamba_classifier(torch.nn.Module):
-	def __init__(self, model, d_model, reduced_d_model, vocab_size, n_labels):
-		super(Mamba_classifier, self).__init__()
-		self.embedder = torch.nn.Embedding(vocab_size, reduced_d_model)
-		self.embed_expander = torch.nn.Linear(reduced_d_model, d_model)
-		self.model = model
-		self.fc = torch.nn.Linear(d_model, n_labels)
-
-	def forward(self, x):
-		embedded = self.embedder(x)
-		embedded = self.embed_expander(embedded)
-		processed = self.model(embedded)
-		x_mean = processed.mean(dim=1)
-		out = self.fc(x_mean)
-		return out
 
 #initialize model
 config = MambaConfig(
@@ -54,9 +42,11 @@ config = MambaConfig(
 	n_layers=LAYERS
 )
 
-model = Mamba(config)
-
-classifier = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
+# model = Mamba(config)
+# classifier = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
+# classifier = BERT_Eff_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
+# classifier = BERT_Eff_gray_cls(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
+# classifier = BERT_Eff_multihead_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)	
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 classifier.to(device)
