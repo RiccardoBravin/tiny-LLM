@@ -1,0 +1,123 @@
+MODEL: Mamba_classifier
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.32618436551250307
+Accuracy: 0.871
+F1: 0.8706496984804764
+Precision: 0.8750629240338083
+Recall: 0.871
+MCC: 0.7460518609762805
+Confusion matrix:
+ [[10237  2263]
+ [  962 11538]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.704MB')
+
+*******************************************
+
+MODEL: Mamba_classifier
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 127.49590737519104
+Accuracy: 0.49164
+F1: 0.36526848433915227
+Precision: 0.45894358101551186
+Recall: 0.49164
+MCC: -0.037053024854136855
+Confusion matrix:
+ [[  568 11932]
+ [  777 11723]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.704MB')
+
+*******************************************
+
+MODEL: Mamba_classifier
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.31205653197244
+Accuracy: 0.87092
+F1: 0.8709089785184043
+Precision: 0.8710467163125065
+Recall: 0.87092
+MCC: 0.7419667054919241
+Confusion matrix:
+ [[10771  1729]
+ [ 1498 11002]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.704MB')
+
+*******************************************
+
+MODEL: Mamba_classifier
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.29135156541948426
+Accuracy: 0.879
+F1: 0.8789691708335453
+Precision: 0.8793865517979699
+Recall: 0.879
+MCC: 0.758386453284684
+Confusion matrix:
+ [[10788  1712]
+ [ 1313 11187]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.704MB')
+
+*******************************************
+
+MODEL: Mamba_classifier
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.2983667466294049
+Accuracy: 0.87716
+F1: 0.8769332955748175
+Precision: 0.8799597354383519
+Recall: 0.87716
+MCC: 0.757114558882416
+Confusion matrix:
+ [[10428  2072]
+ [  999 11501]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.704MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************
