@@ -1,11 +1,13 @@
-import torch
+#COLORS
+from colors import ATTRIBUTES, FOREGROUND_COLORS, RESET
 
+#STD
+import torch
 import evaluate
 
-
+#CUSTOM
 from lib import utils
-from lib.MAMBA import Mamba, MambaConfig
-
+from lib.MAMBA import Mamba, MambaConfig, Mamba_classifier
 from lib.dataset import dataset_importer
 
 VOCAB_SIZE = 512*8
@@ -19,22 +21,6 @@ MAX_LENGTH = 512
 LAYERS = 1
 
 
-class Mamba_classifier(torch.nn.Module):
-		def __init__(self, model, d_model, reduced_d_model, vocab_size, n_labels):
-			super(Mamba_classifier, self).__init__()
-			self.embedder = torch.nn.Embedding(vocab_size, reduced_d_model)
-			self.embed_expander = torch.nn.Linear(reduced_d_model, d_model)
-			self.model = model
-			self.fc = torch.nn.Linear(d_model, n_labels)
-
-		def forward(self, x):
-			embedded = self.embedder(x)
-			embedded = self.embed_expander(embedded)
-			processed = self.model(embedded)
-			x_mean = processed.mean(dim=1)
-			out = self.fc(x_mean)
-			return out
-		
 #initialize model
 config = MambaConfig(
 	d_model=EMBED_DIM,
@@ -45,14 +31,14 @@ config = MambaConfig(
 #'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
 
 for DATASET in ["imdb", "sst2", "news", "trec_coarse", "bull"]:
-	print(f"Loading dataset {DATASET}:")
+	print(f"{ATTRIBUTES['Bold']}Loading dataset {DATASET}: {RESET}")
 
 
 	train_dataloader, val_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)		
 
 	########################################################################################
 	for _ in range(5):
-		print("Model initialization:")
+		print(f"{ATTRIBUTES['Bold']}Model initialization:{RESET}")
 
 		model = Mamba(config)
 
@@ -73,7 +59,7 @@ for DATASET in ["imdb", "sst2", "news", "trec_coarse", "bull"]:
 
 
 		########################################################################################
-		print("Starting training")
+		print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
 
 		EPOCHS = 5
 		LR = 1e-2
@@ -82,7 +68,7 @@ for DATASET in ["imdb", "sst2", "news", "trec_coarse", "bull"]:
 		utils.trainer(classifier, train_dataloader, val_dataloader, LR, EPOCHS)
 		
 		########################################################################################
-		print("Starting evaluation")
+		print(f"{ATTRIBUTES['Bold']}Starting evaluation{RESET}")
 		predicted, avg_eval_loss = utils.evaluator(classifier, test_dataloader)
 
 		accuracy = evaluate.load("accuracy").compute(references=label_test, predictions=predicted)
