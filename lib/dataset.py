@@ -151,6 +151,11 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 		data_dict = {}
 		text = []
 		label = []
+
+		#check if the file exists 
+		if not os.path.exists('./datasets/cyberbullying_tweets.csv'):
+			raise ValueError("Dataset not found") 
+
 		with open('./datasets/cyberbullying_tweets.csv', mode ='r')as file:
 		
 			reader = csv.reader(file)		

@@ -1,10 +1,10 @@
 
 virtualenv
 test.prof
-orca_madonna
 silicone_dataset
 BERTs/__pycache__
 __pycache__
 venv
 /stpiece/**.txt
 datasets
+!datasets/cyberbullying_tweets.csv
