@@ -30,7 +30,7 @@ config = MambaConfig(
 ########################################################################################
 #'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
 
-for DATASET in ["imdb", "sst2", "news", "trec_coarse", "bull"]:
+for DATASET in ["bull"]:
 	print(f"{ATTRIBUTES['Bold']}Loading dataset {DATASET}: {RESET}")
 
 
