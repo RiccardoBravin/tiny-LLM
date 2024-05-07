@@ -6,5 +6,9 @@ BERTs/__pycache__
 __pycache__
 venv
 /stpiece/**.txt
-datasets
-!datasets/cyberbullying_tweets.csv
+datasets/ag_news
+datasets/dowloads
+datasets/imdb
+datasets/sst2
+datasets/trec
+datasets/**.lock
