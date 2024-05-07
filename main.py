@@ -9,6 +9,7 @@ from lib.BERT_Eff import BERT_Eff_cls
 from lib.BERT_Eff_Enc_Gray import BERT_Eff_gray_cls
 from lib.BERT_Eff_Enc_Head import BERT_Eff_multihead_cls
 from lib.BRAV import BRAV_cls
+from lib.MLP import MLPSwiGLU
 
 from lib.dataset import dataset_importer
 
@@ -28,7 +29,7 @@ torch.autograd.set_detect_anomaly(True)
 print("Loading dataset:")
 
 #'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
-DATASET = "news"
+DATASET = "bull"
 
 train_dataloader, val_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 
@@ -44,11 +45,12 @@ config = MambaConfig(
 )
 
 # model = Mamba(config)
+classifier = MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
 # classifier = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
 # classifier = BERT_Eff_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
 # classifier = BERT_Eff_gray_cls(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
 # classifier = BERT_Eff_multihead_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)	
-classifier = BRAV_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
+# classifier = BRAV_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 classifier.to(device)
@@ -93,23 +95,23 @@ print(f"Confusion matrix:\n {conf_mat['confusion_matrix']}")
 
 ########################################################################################
 #save the classification report in a file for later use specifying the dataset, model hyperparameters
-with open(f"results/{DATASET}_classification_report.txt", "a") as f:
-	f.write(f"MODEL: {classifier.__class__.__name__}\n")
-	f.write(f"DATASET: {DATASET}\n")
-	f.write(f"VOCAB_SIZE: {VOCAB_SIZE}\n")
-	f.write(f"EMBED_DIM: {EMBED_DIM}\n")
-	f.write(f"FORWARD_EXPANSION: {FORWARD_EXPANSION}\n")
-	f.write(f"MAX_LENGTH: {MAX_LENGTH}\n")
-	f.write(f"LAYERS: {LAYERS}\n")
-	f.write(f"REDUCED_EMBEDDING_DIM: {REDUCED_EMBEDDING_DIM}\n")
-	f.write(f"LR: {LR}\n")
-	f.write(f"EPOCHS: {EPOCHS}\n\n")
-	f.write(f"average eval loss: {avg_eval_loss}\n")
-	f.write(f"Accuracy: {accuracy['accuracy']}\n")
-	f.write(f"F1: {f1['f1']}\n")
-	f.write(f"Precision: {precision['precision']}\n")
-	f.write(f"Recall: {recall['recall']}\n")
-	f.write(f"MCC: {mcc['matthews_correlation']}\n")
-	f.write(f"Confusion matrix:\n {conf_mat['confusion_matrix']}\n")
-	f.write(str(utils.model_size(classifier)))
-	f.write("\n\n*******************************************\n\n")
+# with open(f"results/{DATASET}_classification_report.txt", "a") as f:
+# 	f.write(f"MODEL: {classifier.__class__.__name__}\n")
+# 	f.write(f"DATASET: {DATASET}\n")
+# 	f.write(f"VOCAB_SIZE: {VOCAB_SIZE}\n")
+# 	f.write(f"EMBED_DIM: {EMBED_DIM}\n")
+# 	f.write(f"FORWARD_EXPANSION: {FORWARD_EXPANSION}\n")
+# 	f.write(f"MAX_LENGTH: {MAX_LENGTH}\n")
+# 	f.write(f"LAYERS: {LAYERS}\n")
+# 	f.write(f"REDUCED_EMBEDDING_DIM: {REDUCED_EMBEDDING_DIM}\n")
+# 	f.write(f"LR: {LR}\n")
+# 	f.write(f"EPOCHS: {EPOCHS}\n\n")
+# 	f.write(f"average eval loss: {avg_eval_loss}\n")
+# 	f.write(f"Accuracy: {accuracy['accuracy']}\n")
+# 	f.write(f"F1: {f1['f1']}\n")
+# 	f.write(f"Precision: {precision['precision']}\n")
+# 	f.write(f"Recall: {recall['recall']}\n")
+# 	f.write(f"MCC: {mcc['matthews_correlation']}\n")
+# 	f.write(f"Confusion matrix:\n {conf_mat['confusion_matrix']}\n")
+# 	f.write(str(utils.model_size(classifier)))
+# 	f.write("\n\n*******************************************\n\n")

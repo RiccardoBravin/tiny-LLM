@@ -1,0 +1,147 @@
+MODEL: MLPSwiGLU
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.5870760764394488
+Accuracy: 0.7993119266055045
+F1: 0.7987924409942758
+Precision: 0.8011748100792893
+Recall: 0.7993119266055045
+MCC: 0.6000350469796164
+Confusion matrix:
+ [[322 106]
+ [ 69 375]]
+('Model params: 0.331M', 'Model buffers: 0.000M', 'Model size: 1.264MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 2
+
+average eval loss: 0.5526739827224186
+Accuracy: 0.7981651376146789
+F1: 0.7981438913924019
+Precision: 0.7981562507727689
+Recall: 0.7981651376146789
+MCC: 0.5961514301139891
+Confusion matrix:
+ [[338  90]
+ [ 86 358]]
+('Model params: 0.331M', 'Model buffers: 0.000M', 'Model size: 1.264MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 2
+
+average eval loss: 0.521131443125861
+Accuracy: 0.805045871559633
+F1: 0.8047992190691973
+Precision: 0.8057772079254503
+Recall: 0.805045871559633
+MCC: 0.6104940650989098
+Confusion matrix:
+ [[331  97]
+ [ 73 371]]
+('Model params: 0.331M', 'Model buffers: 0.000M', 'Model size: 1.264MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 2
+
+average eval loss: 0.525436839887074
+Accuracy: 0.8038990825688074
+F1: 0.8035989340388943
+Precision: 0.8048477969454322
+Recall: 0.8038990825688074
+MCC: 0.6083907547746581
+Confusion matrix:
+ [[329  99]
+ [ 72 372]]
+('Model params: 0.331M', 'Model buffers: 0.000M', 'Model size: 1.264MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 2
+
+average eval loss: 0.5189144781657627
+Accuracy: 0.7993119266055045
+F1: 0.7993264432273066
+Precision: 0.7995953615251885
+Recall: 0.7993119266055045
+MCC: 0.5988650985162396
+Confusion matrix:
+ [[346  82]
+ [ 93 351]]
+('Model params: 0.331M', 'Model buffers: 0.000M', 'Model size: 1.264MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 2
+
+average eval loss: 0.5208866511072431
+Accuracy: 0.7855504587155964
+F1: 0.7853309277529961
+Precision: 0.7860254804025151
+Recall: 0.7855504587155964
+MCC: 0.5712414468105906
+Confusion matrix:
+ [[324 104]
+ [ 83 361]]
+('Model params: 0.331M', 'Model buffers: 0.000M', 'Model size: 1.264MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

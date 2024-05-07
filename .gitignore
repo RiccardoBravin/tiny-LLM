@@ -6,6 +6,7 @@ BERTs/__pycache__
 __pycache__
 venv
 /stpiece/**.txt
+stpiece
 datasets/ag_news
 datasets/downloads
 datasets/imdb

@@ -14,6 +14,11 @@ from lib.utils import pad_sequences, train_sp
 # https://huggingface.co/datasets/super_glue
 
 
+# https://huggingface.co/datasets/nlu_evaluation_data
+# https://huggingface.co/datasets/blog_authorship_corpus
+# https://huggingface.co/datasets/limit
+# https://huggingface.co/datasets/benayas/snips
+
 def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32, custom_sentencepiece = None):
 
 	#load dataset

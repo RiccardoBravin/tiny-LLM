@@ -1,0 +1,143 @@
+MODEL: MLPSwiGLU
+DATASET: trec_coarse
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 2
+
+average eval loss: 1.287688285112381
+Accuracy: 0.482
+F1: 0.4508325991468849
+Precision: 0.5834290145817815
+Recall: 0.482
+MCC: 0.35602918473642226
+Confusion matrix:
+ [[  0   2   7   0   0   0]
+ [  0  54  37   3   0   0]
+ [  0  35 102   0   0   1]
+ [  0  12   1  50   2   0]
+ [  0  35  31   1  14   0]
+ [  0  13  58   1  20  21]]
+('Model params: 0.332M', 'Model buffers: 0.000M', 'Model size: 1.266MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: trec_coarse
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 2
+
+average eval loss: 1.2329489290714264
+Accuracy: 0.528
+F1: 0.49524618357721806
+Precision: 0.5809062115406942
+Recall: 0.528
+MCC: 0.42283215984427913
+Confusion matrix:
+ [[  0   0   9   0   0   0]
+ [  0  22  61   7   4   0]
+ [  0   5 127   0   6   0]
+ [  0   7   4  50   3   1]
+ [  0   9  52   5  13   2]
+ [  0  11  44   3   3  52]]
+('Model params: 0.332M', 'Model buffers: 0.000M', 'Model size: 1.266MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: trec_coarse
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 2
+
+average eval loss: 1.3163145780563354
+Accuracy: 0.424
+F1: 0.39873404625404624
+Precision: 0.41668688317550495
+Recall: 0.424
+MCC: 0.2900195240974441
+Confusion matrix:
+ [[ 0  9  0  0  0  0]
+ [ 0 60 30  1  0  3]
+ [ 0 89 41  5  0  3]
+ [ 0 11  2 51  0  1]
+ [ 0 35 30 11  0  5]
+ [ 0 17 34  2  0 60]]
+('Model params: 0.332M', 'Model buffers: 0.000M', 'Model size: 1.266MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: trec_coarse
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 2
+
+average eval loss: 1.2181239426136017
+Accuracy: 0.472
+F1: 0.4408518043540756
+Precision: 0.6657198320547377
+Recall: 0.472
+MCC: 0.3457109651490222
+Confusion matrix:
+ [[  0   3   6   0   0   0]
+ [  0  46  46   2   0   0]
+ [  0  29 108   0   0   1]
+ [  0  12   6  47   0   0]
+ [  0  29  38   2  12   0]
+ [  0  19  69   2   0  23]]
+('Model params: 0.332M', 'Model buffers: 0.000M', 'Model size: 1.266MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: trec_coarse
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 2
+
+average eval loss: 1.2533243000507355
+Accuracy: 0.504
+F1: 0.46631212868785843
+Precision: 0.6713254196787003
+Recall: 0.504
+MCC: 0.3848843359264441
+Confusion matrix:
+ [[  0   1   8   0   0   0]
+ [  0  47  45   2   0   0]
+ [  0  26 110   0   0   2]
+ [  0  10   6  49   0   0]
+ [  0  25  53   0   1   2]
+ [  0  22  44   2   0  45]]
+('Model params: 0.332M', 'Model buffers: 0.000M', 'Model size: 1.266MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

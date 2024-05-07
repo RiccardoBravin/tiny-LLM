@@ -10,8 +10,10 @@ from lib import utils
 from lib.MAMBA import Mamba, MambaConfig, Mamba_classifier
 from lib.dataset import dataset_importer
 
+from lib.MLP import MLPSwiGLU
+
 VOCAB_SIZE = 512*8
-BATCH_SIZE = 32
+BATCH_SIZE = 128
 
 REDUCED_EMBEDDING_DIM = 16
 EMBED_DIM = 128
@@ -30,7 +32,7 @@ config = MambaConfig(
 ########################################################################################
 #'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
 
-for DATASET in ["bull"]:
+for DATASET in ["imdb", "sst2", "news", "trec_coarse", "bull"]:
 	print(f"{ATTRIBUTES['Bold']}Loading dataset {DATASET}: {RESET}")
 
 
@@ -40,9 +42,10 @@ for DATASET in ["bull"]:
 	for _ in range(5):
 		print(f"{ATTRIBUTES['Bold']}Model initialization:{RESET}")
 
-		model = Mamba(config)
+		#model = Mamba(config)
 
-		classifier = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
+		#classifier = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
+		classifier = MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
 
 		device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 		classifier.to(device)
@@ -61,7 +64,7 @@ for DATASET in ["bull"]:
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
 
-		EPOCHS = 5
+		EPOCHS = 2
 		LR = 1e-2
 	
 		
