@@ -7,7 +7,7 @@ __pycache__
 venv
 /stpiece/**.txt
 datasets/ag_news
-datasets/dowloads
+datasets/downloads
 datasets/imdb
 datasets/sst2
 datasets/trec
