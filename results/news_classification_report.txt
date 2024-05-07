@@ -1,0 +1,133 @@
+MODEL: Mamba_classifier
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.31949205292748806
+Accuracy: 0.8986842105263158
+F1: 0.8990950694601064
+Precision: 0.9018984698063099
+Recall: 0.8986842105263158
+MCC: 0.8657580870454741
+Confusion matrix:
+ [[1681   34   74  111]
+ [  35 1808   41   16]
+ [  42   10 1585  263]
+ [  37   17   90 1756]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.705MB')
+
+*******************************************
+
+MODEL: Mamba_classifier
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.42823719727892834
+Accuracy: 0.8405263157894737
+F1: 0.8385116970526004
+Precision: 0.8636089137870278
+Recall: 0.8405263157894737
+MCC: 0.7950389164415292
+Confusion matrix:
+ [[1782   32   18   68]
+ [ 162 1668    6   64]
+ [ 158   17 1194  531]
+ [ 127    7   22 1744]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.705MB')
+
+*******************************************
+
+MODEL: Mamba_classifier
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.3138334386113311
+Accuracy: 0.8946052631578948
+F1: 0.8950939151013152
+Precision: 0.8965537613806679
+Recall: 0.8946052631578948
+MCC: 0.8597933080716417
+Confusion matrix:
+ [[1720   30   68   82]
+ [  73 1762   20   45]
+ [  72    7 1613  208]
+ [  51    6  139 1704]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.705MB')
+
+*******************************************
+
+MODEL: Mamba_classifier
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.4502031149953103
+Accuracy: 0.8563157894736843
+F1: 0.8556445526943031
+Precision: 0.8656052258033606
+Recall: 0.8563157894736843
+MCC: 0.8117463735931971
+Confusion matrix:
+ [[1680   63  126   31]
+ [  64 1771   60    5]
+ [  71   21 1718   90]
+ [ 133   29  399 1339]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.705MB')
+
+*******************************************
+
+MODEL: Mamba_classifier
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.30165757273300353
+Accuracy: 0.9034210526315789
+F1: 0.902802813180142
+Precision: 0.9029769400081202
+Recall: 0.9034210526315789
+MCC: 0.8714789079262995
+Confusion matrix:
+ [[1749   49   48   54]
+ [  19 1862   11    8]
+ [  80   41 1587  192]
+ [  59   43  130 1668]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.705MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************
