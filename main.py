@@ -8,26 +8,27 @@ from lib.MAMBA import Mamba, MambaConfig, Mamba_classifier
 from lib.BERT_Eff import BERT_Eff_cls
 from lib.BERT_Eff_Enc_Gray import BERT_Eff_gray_cls
 from lib.BERT_Eff_Enc_Head import BERT_Eff_multihead_cls
+from lib.BRAV import BRAV_cls
 
 from lib.dataset import dataset_importer
 
 VOCAB_SIZE = 512*8
-BATCH_SIZE = 32
+BATCH_SIZE = 512
 
 REDUCED_EMBEDDING_DIM = 16
 EMBED_DIM = 128
 NUM_HEADS = 8
-FORWARD_EXPANSION = 0.5
+FORWARD_EXPANSION = 2
 MAX_LENGTH = 64
 LAYERS = 1
 
 
-
+torch.autograd.set_detect_anomaly(True)
 ########################################################################################
 print("Loading dataset:")
 
 #'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
-DATASET = "bull"
+DATASET = "news"
 
 train_dataloader, val_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 
@@ -47,6 +48,7 @@ config = MambaConfig(
 # classifier = BERT_Eff_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
 # classifier = BERT_Eff_gray_cls(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
 # classifier = BERT_Eff_multihead_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)	
+classifier = BRAV_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 classifier.to(device)

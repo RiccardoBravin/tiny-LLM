@@ -243,7 +243,7 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 	idxs = random.sample(range(len(test_tokens_tensor)), len(test_tokens_tensor)//PART_OF_TEST)
 	val_dataset = TensorDataset(test_tokens_tensor[idxs], test_y_tensor[idxs])
 	val_sampler = SequentialSampler(val_dataset)
-	val_dataloader = DataLoader(val_dataset, sampler=val_sampler, batch_size=1, pin_memory=True)
+	val_dataloader = DataLoader(val_dataset, sampler=val_sampler, batch_size=batch_size, pin_memory=True)
 
 	test_dataset = TensorDataset(test_tokens_tensor, test_y_tensor)
 	test_sampler = SequentialSampler(test_dataset)

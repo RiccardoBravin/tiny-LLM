@@ -120,7 +120,7 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs):
 
 	optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 	scheduler = ReduceLROnPlateau(optimizer, 'min')
-	scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(epochs*10)//2, eta_min=1e-6)
+	scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs*2, eta_min=1e-6)
 
 	log_step = len(train_dataloader) // 10
 
@@ -162,14 +162,15 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs):
 
 					guess = model(x)
 					val_loss += criterion(guess, y).item()
-					val_accuracy.append((torch.argmax(guess, dim=1) == y).item())	
+					val_accuracy += (torch.argmax(guess, dim=1) == y).tolist()
 				
 				val_accuracy = sum(val_accuracy) / len(val_accuracy)
 				val_loss = val_loss / len(val_dataloader)
 				scheduler.step()
 				tqdm.write(f"Validation loss: {val_loss:.3f}, Validation accuracy: {val_accuracy:.3f}, Lr: {scheduler.get_last_lr()[0]:.6f}")
 				model.train()
-
+			
+			
 
 
 
