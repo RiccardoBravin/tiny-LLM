@@ -119,7 +119,6 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs):
 	criterion.to(device);
 
 	optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-	scheduler = ReduceLROnPlateau(optimizer, 'min')
 	scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs*2, eta_min=1e-6)
 
 	log_step = len(train_dataloader) // 10

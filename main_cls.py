@@ -1,15 +1,18 @@
 import torch
-
 import evaluate
 
+from colors import ATTRIBUTES, FOREGROUND_COLORS, RESET
 
 from lib import utils
 from lib.MAMBA import Mamba, MambaConfig, Mamba_classifier
-from lib.BERT_Eff import BERT_Eff_cls
-from lib.BERT_Eff_Enc_Gray import BERT_Eff_gray_cls
-from lib.BERT_Eff_Enc_Head import BERT_Eff_multihead_cls
-from lib.BRAV import BRAV_cls
+from lib.BERT_Eff import BERT_efficient
+from lib.BERT_Eff_Enc_Gray import BERT_Eff_gray
+from lib.BERT_Eff_Enc_Head import BERT_Eff_Multihead
+from lib.BRAV import BRAV
 from lib.MLP import MLPSwiGLU
+from lib.GatedBert import Gated_BERT
+
+from lib.classifier import classifier
 
 from lib.dataset import dataset_importer
 
@@ -21,12 +24,10 @@ EMBED_DIM = 128
 NUM_HEADS = 8
 FORWARD_EXPANSION = 2
 MAX_LENGTH = 64
-LAYERS = 1
+LAYERS = 6
 
-
-torch.autograd.set_detect_anomaly(True)
 ########################################################################################
-print("Loading dataset:")
+print(f"{ATTRIBUTES['Bold']}Loading dataset:{RESET}")
 
 #'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
 DATASET = "bull"
@@ -35,23 +36,21 @@ train_dataloader, val_dataloader, test_dataloader, N_LABELS, label_test = datase
 
 
 ########################################################################################
-print("Model initialization:")
+print(f"{ATTRIBUTES['Bold']}Model initialization:{RESET}")
 
-
-#initialize model
-config = MambaConfig(
-	d_model=EMBED_DIM,
-	n_layers=LAYERS
-)
-
+# config = MambaConfig(d_model=EMBED_DIM, n_layers=LAYERS)
 # model = Mamba(config)
-classifier = MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
 # classifier = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
-# classifier = BERT_Eff_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
-# classifier = BERT_Eff_gray_cls(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
-# classifier = BERT_Eff_multihead_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)	
-# classifier = BRAV_cls(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, N_LABELS, dropout=0.1)
 
+# model = MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+# model = BERT_Efficient(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+# model = BERT_Eff_gray(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+# model = BERT_Eff_multihead(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)	
+# model = BRAV(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+model = Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+
+
+classifier = classifier(model, EMBED_DIM, N_LABELS)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 classifier.to(device)
 print(f"Model initialized on {device}")
@@ -68,7 +67,7 @@ print(utils.model_size(classifier))
 
 
 ########################################################################################
-print("Starting training")
+print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
 
 EPOCHS = 5
 LR = 1e-2
@@ -76,7 +75,7 @@ LR = 1e-2
 utils.trainer(classifier, train_dataloader, val_dataloader, LR, EPOCHS)
 
 ########################################################################################
-print("Starting evaluation")
+print(f"{ATTRIBUTES['Bold']}Starting evaluation{RESET}")
 predicted, avg_eval_loss = utils.evaluator(classifier, test_dataloader)
 
 accuracy = evaluate.load("accuracy").compute(references=label_test, predictions=predicted)

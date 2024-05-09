@@ -18,6 +18,9 @@ from lib.utils import pad_sequences, train_sp
 # https://huggingface.co/datasets/blog_authorship_corpus
 # https://huggingface.co/datasets/limit
 # https://huggingface.co/datasets/benayas/snips
+# https://huggingface.co/datasets/fancyzhx/dbpedia_14
+	#difficile perchè deve comprendere il testo
+# https://huggingface.co/datasets/nyu-mll/multi_nli/viewer/default/train
 
 def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32, custom_sentencepiece = None):
 

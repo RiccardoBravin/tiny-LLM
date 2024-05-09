@@ -160,18 +160,6 @@ class BERT_Eff_gray(torch.nn.Module):
 
     
 
-class BERT_Eff_gray_cls(torch.nn.Module):
-    def __init__(self, vocab_size, d_model, reduced_embed_sz, n_layers, sentence_length, fw_expand, n_labels, dropout=0.1):
-        super(BERT_Eff_gray_cls, self).__init__()
-        self.model = BERT_Eff_gray(vocab_size, d_model, reduced_embed_sz, n_layers, sentence_length, fw_expand, dropout)
-        self.fc = torch.nn.Linear(d_model, n_labels)
-
-    def forward(self, x):
-        x = self.model(x)
-        x_mean = x.mean(dim=1)
-        out = self.fc(x_mean)
-        return out
-
 
 
 

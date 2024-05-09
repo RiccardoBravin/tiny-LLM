@@ -7,6 +7,34 @@ import tqdm
 
 import math
 
+class RMSNorm(nn.Module):
+    def __init__(self, d_model: int, eps: float = 1e-5):
+        super().__init__()
+
+        self.eps = eps
+        self.weight = nn.Parameter(torch.ones(d_model))
+
+    def forward(self, x):
+        output = x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + self.eps) * self.weight
+
+        return output
+    
+class Mamba_classifier(torch.nn.Module):
+	def __init__(self, model, d_model, reduced_d_model, vocab_size, n_labels):
+		super(Mamba_classifier, self).__init__()
+		self.embedder = torch.nn.Embedding(vocab_size, reduced_d_model)
+		self.embed_expander = torch.nn.Linear(reduced_d_model, d_model)
+		self.model = model
+		self.fc = torch.nn.Linear(d_model, n_labels)
+
+	def forward(self, x):
+		embedded = self.embedder(x)
+		embedded = self.embed_expander(embedded)
+		processed = self.model(embedded)
+		x_mean = processed.mean(dim=1)
+		out = self.fc(x_mean)
+		return out
+
 class BERTEmbedding(torch.nn.Module):
 
     def __init__(self, vocab_size, embed_size, reduced_embed_sz = 16, seq_len=128, dropout=0.1):
@@ -85,49 +113,72 @@ class EfficientMultiHeadedAttention(torch.nn.Module):
         return self.output_linear(context)
 
 
-class FeedForwardSwiGLU(torch.nn.Module):
-    "Implements FFN equation with SiLU."
+# class FeedForwardSwiGLU(torch.nn.Module):
+#     "Implements FFN equation with SiLU."
 
-    def __init__(self, d_model, middle_dim=2048, dropout=0.1):
-        super(FeedForwardSwiGLU, self).__init__()
+#     def __init__(self, d_model, middle_dim=2048, dropout=0.1):
+#         super(FeedForwardSwiGLU, self).__init__()
         
-        self.fc1 = torch.nn.Linear(d_model, middle_dim)
-        self.fc2 = torch.nn.Linear(middle_dim, d_model)
-        self.dropout = torch.nn.Dropout(dropout)
+#         self.fc1 = torch.nn.Linear(d_model, middle_dim)
+#         self.fc2 = torch.nn.Linear(middle_dim, d_model)
+#         self.dropout = torch.nn.Dropout(dropout)
+#         self.activation = torch.nn.SiLU()
+
+#     def forward(self, x):
+#         mid1 = self.fc1(x)
+#         mid2 = self.activation(self.fc1(x))
+#         mul = mid1*mid2
+#         out = self.fc2(self.dropout(mul))
+#         return out
+
+
+# class EncoderLayer(torch.nn.Module):
+#     def __init__(self, d_model, heads, feed_forward_hidden, dropout=0.1):
+#         super(EncoderLayer, self).__init__()
+#         self.layernorm = torch.nn.LayerNorm(d_model)
+#         self.self_multihead = EfficientMultiHeadedAttention(heads, d_model)
+#         self.feed_forward = FeedForwardSwiGLU(d_model, middle_dim=feed_forward_hidden)
+#         self.dropout = torch.nn.Dropout(dropout)
+
+#     def forward(self, embeddings, mask):
+#         # embeddings: (batch_size, max_len, d_model)
+#         # encoder mask: (batch_size, 1, 1, max_len)
+#         # result: (batch_size, max_len, d_model)
+#         interacted = self.dropout(self.self_multihead(embeddings, embeddings, embeddings, mask))
+#         # residual layer (skip connection)
+#         interacted = self.layernorm(interacted + embeddings)
+#         # bottleneck with skip connection
+#         feed_forward_out = self.dropout(self.feed_forward(interacted))
+#         encoded = self.layernorm(feed_forward_out + interacted)
+#         return encoded
+
+class GatedEncoder(torch.nn.Module):
+    def __init__(self, d_model, heads, feed_forward_hidden, dropout=0.1):
+        super().__init__()
+        self.norm = RMSNorm(d_model)
+        self.fc_up1 = torch.nn.Linear(d_model, feed_forward_hidden)
+        self.fc_up2 = torch.nn.Linear(d_model, feed_forward_hidden)
+        self.attention = EfficientMultiHeadedAttention(heads, feed_forward_hidden, dropout)
         self.activation = torch.nn.SiLU()
 
-    def forward(self, x):
-        mid1 = self.fc1(x)
-        mid2 = self.activation(self.fc1(x))
-        mul = mid1*mid2
-        out = self.fc2(self.dropout(mul))
-        return out
+        self.fc_down = torch.nn.Linear(feed_forward_hidden, d_model)
+        
+    def forward(self, x, mask):
+        normalized = self.norm(x)
+        up1 = self.fc_up1(normalized)
+        up2 = self.fc_up2(normalized)
 
+        
+        att = self.attention(up1,up1,up1, mask)
+        gated = self.activation(up2) * att
+        down = self.fc_down(gated)
 
-class EncoderLayer(torch.nn.Module):
-    def __init__(self, d_model, heads, feed_forward_hidden, dropout=0.1):
-        super(EncoderLayer, self).__init__()
-        self.layernorm = torch.nn.LayerNorm(d_model)
-        self.self_multihead = EfficientMultiHeadedAttention(heads, d_model)
-        self.feed_forward = FeedForwardSwiGLU(d_model, middle_dim=feed_forward_hidden)
-        self.dropout = torch.nn.Dropout(dropout)
-
-    def forward(self, embeddings, mask):
-        # embeddings: (batch_size, max_len, d_model)
-        # encoder mask: (batch_size, 1, 1, max_len)
-        # result: (batch_size, max_len, d_model)
-        interacted = self.dropout(self.self_multihead(embeddings, embeddings, embeddings, mask))
-        # residual layer (skip connection)
-        interacted = self.layernorm(interacted + embeddings)
-        # bottleneck with skip connection
-        feed_forward_out = self.dropout(self.feed_forward(interacted))
-        encoded = self.layernorm(feed_forward_out + interacted)
-        return encoded
+        return down + x
     
 
 
 
-class BERT_Eff_Multihead(torch.nn.Module):
+class Gated_BERT(torch.nn.Module):
     """
     BERT model : Bidirectional Encoder Representations from Transformers.
     """
@@ -154,7 +205,7 @@ class BERT_Eff_Multihead(torch.nn.Module):
 
         # multi-layers transformer blocks, deep network
         self.encoder_blocks = torch.nn.ModuleList(
-            [EncoderLayer(d_model, heads, self.feed_forward_hidden, dropout) for _ in range(n_layers)])
+            [GatedEncoder(d_model, heads, self.feed_forward_hidden, dropout) for _ in range(n_layers)])
 
     def forward(self, x):
         # attention masking for padded token
