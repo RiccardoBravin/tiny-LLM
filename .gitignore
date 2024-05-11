@@ -13,3 +13,9 @@ datasets/imdb
 datasets/sst2
 datasets/trec
 datasets/**.lock
+datasets/benayas___snips
+datasets/blog_authorship_corpus
+datasets/fancyzhx___dbpedia_14
+datasets/limit
+datasets/nlu_evaluation_data
+datasets/nyu-mll___multi_nli

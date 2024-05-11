@@ -14,13 +14,8 @@ from lib.utils import pad_sequences, train_sp
 # https://huggingface.co/datasets/super_glue
 
 
-# https://huggingface.co/datasets/nlu_evaluation_data
-# https://huggingface.co/datasets/blog_authorship_corpus
-# https://huggingface.co/datasets/limit
-# https://huggingface.co/datasets/benayas/snips
-# https://huggingface.co/datasets/fancyzhx/dbpedia_14
-	#difficile perchè deve comprendere il testo
-# https://huggingface.co/datasets/nyu-mll/multi_nli/viewer/default/train
+# https://huggingface.co/datasets/blog_authorship_corpus #WE COULD USE IT WITH DIFFERENT LABELS
+# https://huggingface.co/datasets/limit #COULD BE INTERESTING TO MAKE IT ALSO CLASSIFY THE TOKEN THAT IS MOVING (much harder)
 
 def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32, custom_sentencepiece = None):
 
@@ -35,8 +30,10 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 
 		text_test = test_data.to_dict()["text"]
 		label_test = test_data.to_dict()["label"]
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
 
-		N_LABELS = len(set(label_train))
+		LABELS = counts
 
 	elif dataset_name == "Amazon": #NEEDS FIXING: LABELS ARE 0 through 4 but only 0 and 4 are used...
 		dataset = load_dataset("McAuley-Lab/Amazon-Reviews-2023", "raw_review_All_Beauty", trust_remote_code=True, cache_dir="./datasets")
@@ -51,7 +48,10 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 		text_test = text_full[len(label_full)//10 * 9 + 1: ]
 		label_test = label_full[len(label_full)//10 * 9 + 1: ]
 
-		N_LABELS = len(set(label_full))
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
 
 	elif dataset_name == "sst2":
 		dataset = load_dataset("sst2", cache_dir="./datasets")
@@ -66,22 +66,10 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 		text_test = val_data.to_dict()["sentence"]
 		label_test = val_data.to_dict()["label"]
 
-		N_LABELS = len(set(label_train))
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
 
-	elif dataset_name == "sst5":
-		dataset = load_dataset("SetFit/sst5", cache_dir="./datasets")
-
-		train_data = dataset['train']
-		val_data = dataset['validation']
-		test_data = dataset['test']
-
-		text_train = train_data.to_dict()["text"]
-		label_train = train_data.to_dict()["label"]
-
-		text_test = test_data.to_dict()["text"] +  val_data.to_dict()["text"]
-		label_test = test_data.to_dict()["label"] + val_data.to_dict()["label"]
-
-		N_LABELS = len(set(label_train))
+		LABELS = counts
 
 	elif dataset_name == "twitter":
 		dataset = load_dataset("tweet_eval", "emoji", cache_dir="./datasets")
@@ -95,7 +83,11 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 		text_test = test_data["text"]
 		label_test = test_data["label"]
 
-		N_LABELS = len(set(label_train))
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
+
 	elif dataset_name == "race":
 		dataset = load_dataset("ehovy/race", "middle", cache_dir="./datasets")
 
@@ -109,7 +101,10 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 		text_test = [art + "\nThe question is: " + que + "\nThe possible answers are:\nA:" + opt[0] + "\nB:" + opt[1] + "\nC:" + opt[2] + "\nD:" + opt[3] for art, que, opt in zip(test_data["article"], test_data["question"], test_data["options"])]
 		label_test = [0 if ans == "A" else 1 if ans == "B" else 2 if ans == "C" else 3 for ans in test_data["answer"]]
 
-		N_LABELS = len(set(label_train))
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
 
 	elif dataset_name == "yelp":
 		dataset = load_dataset("yelp_review_full", cache_dir="./datasets")
@@ -123,7 +118,11 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 		text_test = test_data.to_dict()["text"]
 		label_test = test_data.to_dict()["label"]
 
-		N_LABELS = len(set(label_train))
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
+
 	elif dataset_name == "news":
 		dataset = load_dataset("ag_news", cache_dir="./datasets")
 		
@@ -136,7 +135,10 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 		text_test = test_data.to_dict()["text"]
 		label_test = test_data.to_dict()["label"]
 
-		N_LABELS = len(set(label_train))
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
 
 	elif dataset_name == "trec_coarse":
 		dataset = load_dataset("trec", cache_dir="./datasets")
@@ -150,7 +152,11 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 		text_test = test_data.to_dict()["text"]
 		label_test = test_data.to_dict()["coarse_label"]
 
-		N_LABELS = len(set(label_train)) 
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
+
 	elif dataset_name == "bull":
 		#read csv file and import data
 		
@@ -189,43 +195,158 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 		text_test = text[len(label)//10 * 9 + 1: ]
 		label_test = label[len(label)//10 * 9 + 1: ]
 
-		N_LABELS = len(set(label))
-	
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
+	elif dataset_name == "limit":
+		dataset = load_dataset("limit", cache_dir="./datasets")
+
+		train_data = dataset['train']
+		test_data = dataset['test']
+
+		text_train = train_data.to_dict()["sentence"]
+		label_train = train_data.to_dict()["motion"]
+		#convert label from "yes" and "no" to 1 and o
+		label_train = [1 if l == "yes" else 0 for l in label_train]
+
+		text_test = test_data.to_dict()["sentence"]
+		label_test = test_data.to_dict()["motion"]
+		label_test = [1 if l == "yes" else 0 for l in label_test]
+
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
+
+	elif dataset_name == "dbpedia":
+		dataset = load_dataset("fancyzhx/dbpedia_14", cache_dir="./datasets")
+
+		train_data = dataset['train']
+		test_data = dataset['test']
+
+		text_train = train_data.to_dict()["content"]
+		label_train = train_data.to_dict()["label"]
+
+		text_test = test_data.to_dict()["content"]
+		label_test = test_data.to_dict()["label"]
+
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
+
+	elif dataset_name == "nlu":
+		dataset = load_dataset("nlu_evaluation_data", cache_dir="./datasets")
+
+		train_data = dataset['train']
+
+		text = train_data.to_dict()["text"]
+		label = train_data.to_dict()["scenario"]
+
+		label_mapping = {label: i for i, label in enumerate(set(label))}
+		print(label_mapping)
+
+		# Transform the labels to integers
+		label = [label_mapping[l] for l in label]
+
+		combined = list(zip(text, label))
+		random.shuffle(combined)
+		text[:], label[:] = zip(*combined)
+		
+		text_train = text[:len(label)//10 * 9]
+		label_train = label[:len(label)//10 * 9]
+
+		text_test = text[len(label)//10 * 9 + 1: ]
+		label_test = label[len(label)//10 * 9 + 1: ]
+
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
+
+	elif dataset_name == "snips":
+		dataset = load_dataset("benayas/snips", cache_dir="./datasets")
+
+		train_data = dataset['train']
+		test_data = dataset['test']
+
+		text_train = train_data.to_dict()["text"]
+		label_train = train_data.to_dict()["category"]
+
+		text_test = test_data.to_dict()["text"]
+		label_test = test_data.to_dict()["category"]
+
+		label_mapping = {label: i for i, label in enumerate(set(label_train))}
+		print(label_mapping)
+
+		# Transform the labels to integers
+		label_train = [label_mapping[l] for l in label_train]
+		label_test = [label_mapping[l] for l in label_test]
+
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
+
+	elif dataset_name == "multi_nli":
+		dataset = load_dataset("nyu-mll/multi_nli", cache_dir="./datasets")
+
+		train_data = dataset['train']
+		test_data = dataset['validation_matched']
+
+		premise_train = train_data.to_dict()["premise"]
+		consequence_train = train_data.to_dict()["hypothesis"]
+
+		text_train = [premise + "\n" + consequence for premise, consequence in zip(premise_train, consequence_train)]
+		label_train = train_data.to_dict()["label"]
+
+		premise_test = test_data.to_dict()["premise"]
+		consequence_test = test_data.to_dict()["hypothesis"]
+		text_test = [premise + "\n" + consequence for premise, consequence in zip(premise_test, consequence_test)]
+		label_test = test_data.to_dict()["label"]
+
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
+
+	elif dataset_name == "blog":
+		dataset = load_dataset("blog_authorship_corpus", cache_dir="./datasets")
+
+		train_data = dataset['train']
+		test_data = dataset['validation']
+
+		text_train = train_data.to_dict()["text"]
+		label_train = train_data.to_dict()["job"]
+
+		text_test = test_data.to_dict()["text"]
+		label_test = test_data.to_dict()["job"]
+
+		label_mapping = {label: i for i, label in enumerate(set(label_train))}
+		print(label_mapping)
+
+		# Transform the labels to integers
+		label_train = [label_mapping[l] for l in label_train]
+		label_test = [label_mapping[l] for l in label_test]
+
+		#count the occurrences of each label in train set
+		_, counts = np.unique(np.array(label_train), return_counts=True)
+
+		LABELS = counts
+
 	else:
 		raise ValueError("Dataset not found")
 
 	assert len(text_train) == len(label_train)
 	assert len(text_test) == len(label_test)
-	assert(N_LABELS > 1)
+	assert(len(LABELS) > 1)
 
-	# if not os.path.exists("./stpiece/train_ds_" + dataset_name + ".txt"):
-	# 	#reduce dataset for sentencepiece training
-	# 	try:
-	# 		idxs = random.sample(range(len(text_train)), 10000)
-	# 		aux = [text_train[i] for i in idxs]
-	# 	except:
-	# 		aux = text_train
-	# 	#save file of dataset for tokenizer
-	# 	filename = "./stpiece/train_ds_" + dataset_name + ".txt"
-	# 	with open(filename, 'w') as f:
-	# 		for s in aux:
-	# 			f.write(s)
-
-	# if not os.path.exists("./stpiece/m_" + dataset_name + ".model") and custom_sentencepiece is None:
-	# 	#Train tokenizer
-	# 	spm.SentencePieceTrainer.train(input="./stpiece/train_ds_" + dataset_name + ".txt", model_prefix="./stpiece/m_" + dataset_name, max_sentence_length = 100000000 ,vocab_size=vocab_size)
-	# elif custom_sentencepiece is not None:
-	# 	dataset_name = custom_sentencepiece
-	# sp = spm.SentencePieceProcessor(model_file="./stpiece/m_" + dataset_name + ".model")
+	
  
 	sp = train_sp(text_train, vocab_size, dataset_name)
 
-	#Load tokenizer
-
-	# print(f'Dictionary size {sp.get_piece_size()}')
-	# # print(f'Vocabulary: {[sp.id_to_piece(id) for id in range(sp.get_piece_size())]}')
-	# print(f'Encoding results:  {sp.encode("this is a phrase that could be commonly found", out_type=str)} -> {sp.encode("this is a phrase that could be commonly found")}')
-
+	
 	train_tokens = sp.encode(text_train)
 	test_tokens = sp.encode(text_test)
 	print(f"The average token length is {np.mean(list(map(len, train_tokens)))}")
@@ -240,11 +361,9 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 
 
 	train_tokens_tensor = torch.tensor(train_tokens_ids)
-	#train_y_tensor = torch.tensor(np.array(label_train).reshape(-1, 1)).long()
 	train_y_tensor = torch.tensor(np.array(label_train)).long()
 
 	test_tokens_tensor = torch.tensor(test_tokens_ids)
-	#test_y_tensor = torch.tensor(np.array(label_test).reshape(-1, 1)).long()
 	test_y_tensor = torch.tensor(np.array(label_test)).long()
 
 
@@ -264,4 +383,4 @@ def dataset_importer(dataset_name, vocab_size, max_length = 512, batch_size = 32
 
 	
 
-	return train_dataloader, val_dataloader, test_dataloader, N_LABELS, label_test
+	return train_dataloader, val_dataloader, test_dataloader, LABELS, label_test

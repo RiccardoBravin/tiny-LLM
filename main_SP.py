@@ -24,14 +24,14 @@ REDUCED_EMBEDDING_DIM = 16
 EMBED_DIM = 128
 NUM_HEADS = 8
 FORWARD_EXPANSION = 2
-MAX_LENGTH = 512
+MAX_LENGTH = 128
 LAYERS = 2
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Loading dataset:{RESET}")
 
-#'Amazon', "imdb", "sst2" "sst5" "twitter" "race" "yelp" "news" "trec_coarse" "bull"
-DATASET = "imdb"
+#'Amazon', "imdb", "sst2" "twitter" "race" "yelp" "news" "trec_coarse" "bull" "limit" "dbpedia" "nlu" "snips" "limit" "blog"
+DATASET = "snips"
 
 train_dataloader, val_dataloader, test_dataloader, N_LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 
@@ -51,8 +51,6 @@ print(f"{ATTRIBUTES['Bold']}Electra model initialization:{RESET}")
 model = Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 
 
-
-#classifier = classifier(model, EMBED_DIM, N_LABELS)
 electra_cls = SimpleElectra(model, EMBED_DIM, VOCAB_SIZE)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 electra_cls.to(device)
@@ -72,8 +70,8 @@ print(utils.model_size(electra_cls))
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
 
-EPOCHS = 10
-LR = 1e-3
+EPOCHS = 4
+LR = 1e-2
 
 #utils.trainer(electra_cls, train_dataloader, val_dataloader, LR, EPOCHS)
 electraTrainer(electra_cls, train_dataloader, val_dataloader, LR, EPOCHS)
@@ -116,7 +114,7 @@ with open(f"results/tests_{DATASET}_classification_report.txt", "a") as f:
 	f.write(f"Recall: {recall['recall']}\n")
 	f.write(f"MCC: {mcc['matthews_correlation']}\n")
 	f.write(f"Confusion matrix:\n {conf_mat['confusion_matrix']}\n")
-	f.write(str(utils.model_size(classifier)))
+	f.write(str(utils.model_size(electra_cls)))
 	f.write("\n\n*******************************************\n\n")
 
 
