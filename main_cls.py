@@ -74,7 +74,7 @@ print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
 EPOCHS = 0
 LR = 1e-2
 
-utils.trainer(classifier, train_dataloader, val_dataloader, LR, EPOCHS, LABELS)
+utils.trainer(classifier, train_dataloader, val_dataloader, LR, EPOCHS)
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Starting evaluation{RESET}")

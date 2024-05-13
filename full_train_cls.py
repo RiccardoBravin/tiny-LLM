@@ -73,7 +73,7 @@ for DATASET in ["imdb", "sst2", "race", "news", "bull", "limit", "dbpedia", "nlu
 			LR = 1e-2
 
 
-			utils.trainer(cls, train_dataloader, val_dataloader, LR, EPOCHS, LABELS)
+			utils.trainer(cls, train_dataloader, val_dataloader, LR, EPOCHS)
 
 			########################################################################################
 			print(f"{ATTRIBUTES['Bold']}Starting evaluation{RESET}")

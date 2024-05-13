@@ -112,11 +112,10 @@ def pad_sequences(ls, maxlen=512, truncating="post", padding="post", dtype="int"
 	
 
 
-def trainer(model, train_dataloader, val_dataloader, lr, epochs, labels):
+def trainer(model, train_dataloader, val_dataloader, lr, epochs):
 	device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-	labels_weights = torch.Tensor(sum(labels)/labels)
 
-	criterion = torch.nn.CrossEntropyLoss(weight=labels_weights)
+	criterion = torch.nn.CrossEntropyLoss()
 	criterion.to(device);
 
 	optimizer = torch.optim.Adam(model.parameters(), lr=lr)
