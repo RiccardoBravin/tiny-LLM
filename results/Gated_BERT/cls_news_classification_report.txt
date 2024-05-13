@@ -1,0 +1,130 @@
+MODEL: Gated_BERT
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.386306486527125
+Accuracy: 0.25
+F1 (micro): 0.25
+Precision (micro): 0.25
+Recall (micro): 0.25
+MCC: 0.0
+Confusion matrix:
+ [[1900    0    0    0]
+ [1900    0    0    0]
+ [1900    0    0    0]
+ [1900    0    0    0]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.390MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.3863325476646424
+Accuracy: 0.25
+F1 (micro): 0.25
+Precision (micro): 0.25
+Recall (micro): 0.25
+MCC: 0.0
+Confusion matrix:
+ [[   0    0    0 1900]
+ [   0    0    0 1900]
+ [   0    0    0 1900]
+ [   0    0    0 1900]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.390MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.3866618315378825
+Accuracy: 0.25
+F1 (micro): 0.25
+Precision (micro): 0.25
+Recall (micro): 0.25
+MCC: 0.0
+Confusion matrix:
+ [[1900    0    0    0]
+ [1900    0    0    0]
+ [1900    0    0    0]
+ [1900    0    0    0]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.390MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.3864571511745454
+Accuracy: 0.25
+F1 (micro): 0.25
+Precision (micro): 0.25
+Recall (micro): 0.25
+MCC: 0.0
+Confusion matrix:
+ [[   0    0    0 1900]
+ [   0    0    0 1900]
+ [   0    0    0 1900]
+ [   0    0    0 1900]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.390MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: news
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.3863406916459402
+Accuracy: 0.25
+F1 (micro): 0.25
+Precision (micro): 0.25
+Recall (micro): 0.25
+MCC: 0.0
+Confusion matrix:
+ [[   0    0    0 1900]
+ [   0    0    0 1900]
+ [   0    0    0 1900]
+ [   0    0    0 1900]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.390MB')
+
+*******************************************
+

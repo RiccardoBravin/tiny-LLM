@@ -1,0 +1,145 @@
+MODEL: BERT_Eff_Multihead
+DATASET: snips
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.11250595153648067
+Accuracy: 0.9757142857142858
+F1 (micro): 0.9757142857142858
+Precision (micro): 0.9757142857142858
+Recall (micro): 0.9757142857142858
+MCC: 0.9716857535385733
+Confusion matrix:
+ [[195   0   2   1   0   0   2]
+ [  0 194   1   1   0   3   1]
+ [  1   0 199   0   0   0   0]
+ [  0   0   0 192   0   0   8]
+ [  0   0   1   0 199   0   0]
+ [  0   1   1   0   0 198   0]
+ [  5   0   0   2   3   1 189]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.890MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: snips
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.10554516848854044
+Accuracy: 0.9757142857142858
+F1 (micro): 0.9757142857142858
+Precision (micro): 0.9757142857142858
+Recall (micro): 0.9757142857142858
+MCC: 0.9717453349495314
+Confusion matrix:
+ [[198   0   2   0   0   0   0]
+ [  0 192   1   2   0   4   1]
+ [  2   0 198   0   0   0   0]
+ [  0   0   0 193   1   0   6]
+ [  0   0   0   0 200   0   0]
+ [  0   0   0   0   0 200   0]
+ [  9   0   0   2   1   3 185]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.890MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: snips
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.09081920562312007
+Accuracy: 0.9778571428571429
+F1 (micro): 0.9778571428571429
+Precision (micro): 0.9778571428571429
+Recall (micro): 0.9778571428571429
+MCC: 0.9741892820375025
+Confusion matrix:
+ [[192   0   2   0   0   1   5]
+ [  0 195   1   0   0   3   1]
+ [  0   0 200   0   0   0   0]
+ [  0   0   0 196   0   0   4]
+ [  0   0   0   0 199   0   1]
+ [  0   2   2   1   1 194   0]
+ [  4   0   0   1   2   0 193]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.890MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: snips
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.06432284844446588
+Accuracy: 0.9864285714285714
+F1 (micro): 0.9864285714285714
+Precision (micro): 0.9864285714285714
+Recall (micro): 0.9864285714285714
+MCC: 0.9841871707796447
+Confusion matrix:
+ [[196   0   2   0   0   0   2]
+ [  0 195   0   0   0   4   1]
+ [  1   0 199   0   0   0   0]
+ [  0   0   0 196   0   0   4]
+ [  0   0   0   0 199   1   0]
+ [  0   0   0   0   0 200   0]
+ [  3   0   0   1   0   0 196]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.890MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: snips
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.08767371878705242
+Accuracy: 0.9785714285714285
+F1 (micro): 0.9785714285714285
+Precision (micro): 0.9785714285714285
+Recall (micro): 0.9785714285714285
+MCC: 0.975031921210425
+Confusion matrix:
+ [[198   0   2   0   0   0   0]
+ [  0 192   0   4   0   4   0]
+ [  0   0 200   0   0   0   0]
+ [  0   1   0 192   0   0   7]
+ [  0   0   1   0 198   0   1]
+ [  0   0   1   0   0 199   0]
+ [  6   0   1   1   1   0 191]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.890MB')
+
+*******************************************
+

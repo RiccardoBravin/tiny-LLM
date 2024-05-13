@@ -1,0 +1,120 @@
+MODEL: BERT_efficient
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.33561928980812733
+Accuracy: 0.85596
+F1 (micro): 0.85596
+Precision (micro): 0.85596
+Recall (micro): 0.85596
+MCC: 0.7121103491795626
+Confusion matrix:
+ [[10844  1656]
+ [ 1945 10555]]
+('Model params: 0.689M', 'Model buffers: 0.000M', 'Model size: 2.629MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.3368206121483628
+Accuracy: 0.85396
+F1 (micro): 0.85396
+Precision (micro): 0.85396
+Recall (micro): 0.85396
+MCC: 0.7079758450716637
+Confusion matrix:
+ [[10753  1747]
+ [ 1904 10596]]
+('Model params: 0.689M', 'Model buffers: 0.000M', 'Model size: 2.629MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.327418396819611
+Accuracy: 0.86264
+F1 (micro): 0.86264
+Precision (micro): 0.86264
+Recall (micro): 0.86264
+MCC: 0.7252840940952094
+Confusion matrix:
+ [[10804  1696]
+ [ 1738 10762]]
+('Model params: 0.689M', 'Model buffers: 0.000M', 'Model size: 2.629MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.3343301413922894
+Accuracy: 0.8534
+F1 (micro): 0.8534
+Precision (micro): 0.8534
+Recall (micro): 0.8534
+MCC: 0.707050937878544
+Confusion matrix:
+ [[10834  1666]
+ [ 1999 10501]]
+('Model params: 0.689M', 'Model buffers: 0.000M', 'Model size: 2.629MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.3350778080675067
+Accuracy: 0.85716
+F1 (micro): 0.85716
+Precision (micro): 0.85716
+Recall (micro): 0.85716
+MCC: 0.7145675484985171
+Confusion matrix:
+ [[10879  1621]
+ [ 1950 10550]]
+('Model params: 0.689M', 'Model buffers: 0.000M', 'Model size: 2.629MB')
+
+*******************************************
+

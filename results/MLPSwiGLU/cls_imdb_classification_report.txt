@@ -1,0 +1,120 @@
+MODEL: MLPSwiGLU
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.37119957835090406
+Accuracy: 0.8336
+F1 (micro): 0.8336
+Precision (micro): 0.8336
+Recall (micro): 0.8336
+MCC: 0.6673110156211012
+Confusion matrix:
+ [[10534  1966]
+ [ 2194 10306]]
+('Model params: 0.232M', 'Model buffers: 0.000M', 'Model size: 0.887MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.3907447372164045
+Accuracy: 0.82564
+F1 (micro): 0.82564
+Precision (micro): 0.82564
+Recall (micro): 0.82564
+MCC: 0.6513576443746214
+Confusion matrix:
+ [[10224  2276]
+ [ 2083 10417]]
+('Model params: 0.232M', 'Model buffers: 0.000M', 'Model size: 0.887MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.39949195626742984
+Accuracy: 0.82092
+F1 (micro): 0.82092
+Precision (micro): 0.82092
+Recall (micro): 0.82092
+MCC: 0.6424330987051947
+Confusion matrix:
+ [[10530  1970]
+ [ 2507  9993]]
+('Model params: 0.232M', 'Model buffers: 0.000M', 'Model size: 0.887MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.3848597683316591
+Accuracy: 0.82992
+F1 (micro): 0.82992
+Precision (micro): 0.82992
+Recall (micro): 0.82992
+MCC: 0.6598419003474094
+Confusion matrix:
+ [[10389  2111]
+ [ 2141 10359]]
+('Model params: 0.232M', 'Model buffers: 0.000M', 'Model size: 0.887MB')
+
+*******************************************
+
+MODEL: MLPSwiGLU
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.3772633501461574
+Accuracy: 0.83356
+F1 (micro): 0.83356
+Precision (micro): 0.83356
+Recall (micro): 0.83356
+MCC: 0.6671247157878585
+Confusion matrix:
+ [[10443  2057]
+ [ 2104 10396]]
+('Model params: 0.232M', 'Model buffers: 0.000M', 'Model size: 0.887MB')
+
+*******************************************
+

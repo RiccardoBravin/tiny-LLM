@@ -1,0 +1,145 @@
+MODEL: BERT_Eff_Multihead
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 3.6369262961827546
+Accuracy: 0.027215907592499804
+F1 (micro): 0.027215907592499804
+Precision (micro): 0.027215907592499804
+Recall (micro): 0.027215907592499804
+MCC: 0.0
+Confusion matrix:
+ [[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]
+('Model params: 0.238M', 'Model buffers: 0.000M', 'Model size: 0.906MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 3.6386745369394218
+Accuracy: 0.047153142224214774
+F1 (micro): 0.047153142224214774
+Precision (micro): 0.047153142224214774
+Recall (micro): 0.047153142224214774
+MCC: 0.0
+Confusion matrix:
+ [[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]
+('Model params: 0.238M', 'Model buffers: 0.000M', 'Model size: 0.906MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 3.6338455203406337
+Accuracy: 0.04032279332260872
+F1 (micro): 0.04032279332260872
+Precision (micro): 0.04032279332260872
+Recall (micro): 0.04032279332260872
+MCC: 0.0
+Confusion matrix:
+ [[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]
+('Model params: 0.238M', 'Model buffers: 0.000M', 'Model size: 0.906MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 3.6438829128188317
+Accuracy: 0.054009863129301935
+F1 (micro): 0.054009863129301935
+Precision (micro): 0.054009863129301935
+Recall (micro): 0.054009863129301935
+MCC: 0.0
+Confusion matrix:
+ [[2048    0    0 ...    0    0    0]
+ [ 352    0    0 ...    0    0    0]
+ [ 152    0    0 ...    0    0    0]
+ ...
+ [ 511    0    0 ...    0    0    0]
+ [ 212    0    0 ...    0    0    0]
+ [ 144    0    0 ...    0    0    0]]
+('Model params: 0.238M', 'Model buffers: 0.000M', 'Model size: 0.906MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 3.6556775891018236
+Accuracy: 0.027215907592499804
+F1 (micro): 0.027215907592499804
+Precision (micro): 0.027215907592499804
+Recall (micro): 0.027215907592499804
+MCC: 0.0
+Confusion matrix:
+ [[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]
+('Model params: 0.238M', 'Model buffers: 0.000M', 'Model size: 0.906MB')
+
+*******************************************
+

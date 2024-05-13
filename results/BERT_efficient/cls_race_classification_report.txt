@@ -1,0 +1,130 @@
+MODEL: BERT_efficient
+DATASET: race
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.3849866688251495
+Accuracy: 0.25835654596100277
+F1 (micro): 0.25835654596100277
+Precision (micro): 0.25835654596100277
+Recall (micro): 0.25835654596100277
+MCC: -0.005845477204157867
+Confusion matrix:
+ [[  0  10 281  18]
+ [  0   6 362  20]
+ [  0   9 343  22]
+ [  0   6 337  22]]
+('Model params: 0.690M', 'Model buffers: 0.000M', 'Model size: 2.630MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: race
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.3863053917884827
+Accuracy: 0.25348189415041783
+F1 (micro): 0.25348189415041783
+Precision (micro): 0.25348189415041783
+Recall (micro): 0.25348189415041783
+MCC: 0.006580621958560704
+Confusion matrix:
+ [[ 79   9 194  27]
+ [ 89  16 265  18]
+ [ 90  15 246  23]
+ [ 92  19 231  23]]
+('Model params: 0.690M', 'Model buffers: 0.000M', 'Model size: 2.630MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: race
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.3864128589630127
+Accuracy: 0.270891364902507
+F1 (micro): 0.270891364902507
+Precision (micro): 0.270891364902507
+Recall (micro): 0.270891364902507
+MCC: 0.020536088197807594
+Confusion matrix:
+ [[ 44 256   9   0]
+ [ 46 336   6   0]
+ [ 74 291   9   0]
+ [ 73 277  15   0]]
+('Model params: 0.690M', 'Model buffers: 0.000M', 'Model size: 2.630MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: race
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.3858055174350739
+Accuracy: 0.27019498607242337
+F1 (micro): 0.27019498607242337
+Precision (micro): 0.27019498607242337
+Recall (micro): 0.27019498607242337
+MCC: 0.00871025132822611
+Confusion matrix:
+ [[  6 191  91  21]
+ [ 14 243 112  19]
+ [ 11 235 107  21]
+ [ 12 218 103  32]]
+('Model params: 0.690M', 'Model buffers: 0.000M', 'Model size: 2.630MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: race
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.387839784224828
+Accuracy: 0.21866295264623956
+F1 (micro): 0.21866295264623956
+Precision (micro): 0.21866295264623956
+Recall (micro): 0.21866295264623956
+MCC: 0.0016378464480292637
+Confusion matrix:
+ [[285   0   3  21]
+ [357   0   3  28]
+ [354   0   1  19]
+ [333   0   4  28]]
+('Model params: 0.690M', 'Model buffers: 0.000M', 'Model size: 2.630MB')
+
+*******************************************
+

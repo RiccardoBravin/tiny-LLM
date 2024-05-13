@@ -1,0 +1,145 @@
+MODEL: BERT_efficient
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 3.621451898857399
+Accuracy: 0.021097602784883568
+F1 (micro): 0.021097602784883568
+Precision (micro): 0.021097602784883568
+Recall (micro): 0.021097602784883568
+MCC: 0.0017102423834564813
+Confusion matrix:
+ [[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]
+('Model params: 0.694M', 'Model buffers: 0.000M', 'Model size: 2.648MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 3.6434946469586307
+Accuracy: 0.002004272264563939
+F1 (micro): 0.002004272264563939
+Precision (micro): 0.002004272264563939
+Recall (micro): 0.002004272264563939
+MCC: 0.0
+Confusion matrix:
+ [[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]
+('Model params: 0.694M', 'Model buffers: 0.000M', 'Model size: 2.648MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 3.641105541877875
+Accuracy: 0.017141802262717897
+F1 (micro): 0.017141802262717897
+Precision (micro): 0.017141802262717897
+Recall (micro): 0.017141802262717897
+MCC: 0.0
+Confusion matrix:
+ [[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]
+('Model params: 0.694M', 'Model buffers: 0.000M', 'Model size: 2.648MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 3.6426533296052055
+Accuracy: 0.0774809462274849
+F1 (micro): 0.0774809462274849
+Precision (micro): 0.0774809462274849
+Recall (micro): 0.0774809462274849
+MCC: 0.0
+Confusion matrix:
+ [[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]
+('Model params: 0.694M', 'Model buffers: 0.000M', 'Model size: 2.648MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 3.639144118787464
+Accuracy: 0.016508874179171393
+F1 (micro): 0.016508874179171393
+Precision (micro): 0.016508874179171393
+Recall (micro): 0.016508874179171393
+MCC: 0.0
+Confusion matrix:
+ [[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]
+('Model params: 0.694M', 'Model buffers: 0.000M', 'Model size: 2.648MB')
+
+*******************************************
+

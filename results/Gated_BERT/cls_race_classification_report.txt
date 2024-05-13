@@ -1,0 +1,130 @@
+MODEL: Gated_BERT
+DATASET: race
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.3862375319004059
+Accuracy: 0.2604456824512535
+F1 (micro): 0.2604456824512535
+Precision (micro): 0.2604456824512535
+Recall (micro): 0.2604456824512535
+MCC: 0.0
+Confusion matrix:
+ [[  0   0 309   0]
+ [  0   0 388   0]
+ [  0   0 374   0]
+ [  0   0 365   0]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.390MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: race
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.3856463929017384
+Accuracy: 0.27019498607242337
+F1 (micro): 0.27019498607242337
+Precision (micro): 0.27019498607242337
+Recall (micro): 0.27019498607242337
+MCC: 0.0
+Confusion matrix:
+ [[  0 309   0   0]
+ [  0 388   0   0]
+ [  0 374   0   0]
+ [  0 365   0   0]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.390MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: race
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.386285314957301
+Accuracy: 0.27019498607242337
+F1 (micro): 0.27019498607242337
+Precision (micro): 0.27019498607242337
+Recall (micro): 0.27019498607242337
+MCC: 0.0
+Confusion matrix:
+ [[  0 309   0   0]
+ [  0 388   0   0]
+ [  0 374   0   0]
+ [  0 365   0   0]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.390MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: race
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.386291633049647
+Accuracy: 0.2541782729805014
+F1 (micro): 0.2541782729805014
+Precision (micro): 0.2541782729805014
+Recall (micro): 0.2541782729805014
+MCC: 0.0
+Confusion matrix:
+ [[  0   0   0 309]
+ [  0   0   0 388]
+ [  0   0   0 374]
+ [  0   0   0 365]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.390MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: race
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 1.3863226970036824
+Accuracy: 0.2541782729805014
+F1 (micro): 0.2541782729805014
+Precision (micro): 0.2541782729805014
+Recall (micro): 0.2541782729805014
+MCC: 0.0
+Confusion matrix:
+ [[  0   0   0 309]
+ [  0   0   0 388]
+ [  0   0   0 374]
+ [  0   0   0 365]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.390MB')
+
+*******************************************
+

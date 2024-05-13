@@ -1,0 +1,140 @@
+MODEL: BERT_efficient
+DATASET: bull
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.383390854063787
+Accuracy: 0.8482180293501048
+F1 (micro): 0.8482180293501048
+Precision (micro): 0.8482180293501048
+Recall (micro): 0.8482180293501048
+MCC: 0.818234554541433
+Confusion matrix:
+ [[551  10  38 156   1   4]
+ [  6 767   2   4   0   1]
+ [ 37   0 746  57   1   1]
+ [242  11  48 438  35  12]
+ [  8   4   3  21 752   2]
+ [  4   3   3  10   0 792]]
+('Model params: 0.690M', 'Model buffers: 0.000M', 'Model size: 2.631MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: bull
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.38461260419142873
+Accuracy: 0.8492662473794549
+F1 (micro): 0.8492662473794549
+Precision (micro): 0.8492662473794549
+Recall (micro): 0.8492662473794549
+MCC: 0.8195248599133256
+Confusion matrix:
+ [[558   7  39 152   2   2]
+ [  7 766   1   5   0   1]
+ [ 36   1 740  62   1   2]
+ [247   8  53 434  35   9]
+ [  5   1   2  25 756   1]
+ [  4   1   1   9   0 797]]
+('Model params: 0.690M', 'Model buffers: 0.000M', 'Model size: 2.631MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: bull
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.3820649981498718
+Accuracy: 0.8536687631027253
+F1 (micro): 0.8536687631027253
+Precision (micro): 0.8536687631027253
+Recall (micro): 0.8536687631027253
+MCC: 0.8246372922240248
+Confusion matrix:
+ [[556   3  42 153   1   5]
+ [  7 767   1   4   0   1]
+ [ 31   0 746  63   1   1]
+ [224  11  48 454  37  12]
+ [  8   0   4  24 753   1]
+ [  5   2   2   6   1 796]]
+('Model params: 0.690M', 'Model buffers: 0.000M', 'Model size: 2.631MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: bull
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.3775456371276002
+Accuracy: 0.8524109014675052
+F1 (micro): 0.8524109014675052
+Precision (micro): 0.8524109014675052
+Recall (micro): 0.8524109014675052
+MCC: 0.8234078955463805
+Confusion matrix:
+ [[563   7  37 146   2   5]
+ [  7 767   1   4   0   1]
+ [ 37   2 746  53   2   2]
+ [242   7  50 436  38  13]
+ [  6   1   2  23 757   1]
+ [  6   0   2   6   1 797]]
+('Model params: 0.690M', 'Model buffers: 0.000M', 'Model size: 2.631MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: bull
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 6
+
+average eval loss: 0.3852938829283965
+Accuracy: 0.8471698113207548
+F1 (micro): 0.8471698113207548
+Precision (micro): 0.8471698113207548
+Recall (micro): 0.8471698113207548
+MCC: 0.8169094715093805
+Confusion matrix:
+ [[545   6  40 160   4   5]
+ [  6 768   0   5   0   1]
+ [ 42   1 738  56   4   1]
+ [240   6  42 446  36  16]
+ [ 10   0   4  27 749   0]
+ [  4   1   1  10   1 795]]
+('Model params: 0.690M', 'Model buffers: 0.000M', 'Model size: 2.631MB')
+
+*******************************************
+
