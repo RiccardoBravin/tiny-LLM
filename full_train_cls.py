@@ -32,8 +32,8 @@ LAYERS = 1
 
 ########################################################################################
 
-#'Amazon', "imdb", "sst2" "twitter" "race" "yelp" "news" "trec_coarse" "bull" "limit" "dbpedia" "nlu" "snips" "blog"
-for DATASET in ["imdb", "sst2", "race", "news", "bull", "limit", "dbpedia", "nlu", "snips", "blog"]:
+#'Amazon', "imdb", "sst2" "twitter" "race" "yelp" "news" "trec_coarse" "bull" "limit" "dbpedia" "nlu" "snips" "blog" "multi_nli"
+for DATASET in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snips", "blog", "multi_nli"]:
 	print(f"{ATTRIBUTES['Bold']}Loading dataset {DATASET}: {RESET}")
 
 
@@ -44,7 +44,7 @@ for DATASET in ["imdb", "sst2", "race", "news", "bull", "limit", "dbpedia", "nlu
 		print(f"{ATTRIBUTES['Bold']}Models initialization:{RESET}")
 
 		models = [
-			MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
+			#MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
 			BERT_efficient(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
 			BERT_Eff_Multihead(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
 			#BRAV_multihead(VOCAB_SIZE, EMBED_DIM, NUM_HEADS, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
@@ -70,7 +70,7 @@ for DATASET in ["imdb", "sst2", "race", "news", "bull", "limit", "dbpedia", "nlu
 			########################################################################################
 			print(f"{ATTRIBUTES['Bold']}Starting training of model {model.__class__.__name__}{RESET}")
 
-			EPOCHS = 6
+			EPOCHS = 5
 			LR = 1e-2
 
 
@@ -82,9 +82,9 @@ for DATASET in ["imdb", "sst2", "race", "news", "bull", "limit", "dbpedia", "nlu
 
 			########################################################################################
 			accuracy = accuracy_score(label_test, predicted)
-			f1 = f1_score(label_test, predicted, average='micro')  
-			precision = precision_score(label_test, predicted, average='micro')  
-			recall = recall_score(label_test, predicted, average='micro')  
+			f1 = f1_score(label_test, predicted, average='weighted')  
+			precision = precision_score(label_test, predicted, average='weighted')  
+			recall = recall_score(label_test, predicted, average='weighted')  
 			mcc = matthews_corrcoef(label_test, predicted)
 			conf_mat = confusion_matrix(label_test, predicted)
 
@@ -114,9 +114,9 @@ for DATASET in ["imdb", "sst2", "race", "news", "bull", "limit", "dbpedia", "nlu
 				f.write(f"EPOCHS: {EPOCHS}\n\n")
 				f.write(f"average eval loss: {avg_eval_loss}\n")
 				f.write(f"Accuracy: {accuracy}\n")
-				f.write(f"F1 (micro): {f1}\n")
-				f.write(f"Precision (micro): {precision}\n")
-				f.write(f"Recall (micro): {recall}\n")
+				f.write(f"F1 (weighted): {f1}\n")
+				f.write(f"Precision (weighted): {precision}\n")
+				f.write(f"Recall (weighted): {recall}\n")
 				f.write(f"MCC: {mcc}\n")
 				f.write(f"Confusion matrix:\n {conf_mat}\n")
 				f.write(str(utils.model_size(cls)))
