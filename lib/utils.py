@@ -119,8 +119,8 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs):
 	criterion.to(device);
 
 	optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-	scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
-	#scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs*2, eta_min=1e-6)
+	#scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
+	scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs*2, eta_min=1e-6)
 
 	log_step = len(train_dataloader) // 10
 
@@ -167,7 +167,8 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs):
 				val_accuracy = sum(val_accuracy) / len(val_accuracy)
 				mcc = matthews_corrcoef(y.cpu().numpy(), torch.argmax(guess, dim=1).cpu().numpy())
 				val_loss = val_loss / len(val_dataloader)
-				scheduler.step(-mcc)
+				#scheduler.step(-mcc)
+				scheduler.step()
 				tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()[0]:.6f}{FOREGROUND_COLORS['Green']}")
 				model.train()
 			
