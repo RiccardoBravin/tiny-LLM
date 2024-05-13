@@ -18,6 +18,7 @@ from lib.BRAV_multihead import BRAV_multihead
 
 from lib.classifier import classifier
 
+torch.set_printoptions(profile="full")
 
 VOCAB_SIZE = 512*8
 BATCH_SIZE = 128
