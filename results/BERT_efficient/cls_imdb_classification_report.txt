@@ -1,0 +1,120 @@
+MODEL: BERT_efficient
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.3397791793912041
+Accuracy: 0.854
+F1 (weighted): 0.8538801452475874
+Precision (weighted): 0.8551652967704393
+Recall (weighted): 0.854
+MCC: 0.7091643393649614
+Confusion matrix:
+ [[11033  1467]
+ [ 2183 10317]]
+('Model params: 0.689M', 'Model buffers: 0.000M', 'Model size: 2.629MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.3297767006621069
+Accuracy: 0.85792
+F1 (weighted): 0.8579146084845677
+Precision (weighted): 0.8579743342035837
+Recall (weighted): 0.85792
+MCC: 0.7158943321416834
+Confusion matrix:
+ [[10801  1699]
+ [ 1853 10647]]
+('Model params: 0.689M', 'Model buffers: 0.000M', 'Model size: 2.629MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.3314513524576109
+Accuracy: 0.85772
+F1 (weighted): 0.8577140988914517
+Precision (weighted): 0.8577793535911964
+Recall (weighted): 0.85772
+MCC: 0.715499351129385
+Confusion matrix:
+ [[10641  1859]
+ [ 1698 10802]]
+('Model params: 0.689M', 'Model buffers: 0.000M', 'Model size: 2.629MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.3304879280681513
+Accuracy: 0.8592
+F1 (weighted): 0.8591980093977777
+Precision (weighted): 0.8592203140524478
+Recall (weighted): 0.8592
+MCC: 0.7184203137652477
+Confusion matrix:
+ [[10693  1807]
+ [ 1713 10787]]
+('Model params: 0.689M', 'Model buffers: 0.000M', 'Model size: 2.629MB')
+
+*******************************************
+
+MODEL: BERT_efficient
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.33039294008393677
+Accuracy: 0.85848
+F1 (weighted): 0.8584718253326311
+Precision (weighted): 0.8585628423590987
+Recall (weighted): 0.85848
+MCC: 0.7170428375735711
+Confusion matrix:
+ [[10826  1674]
+ [ 1864 10636]]
+('Model params: 0.689M', 'Model buffers: 0.000M', 'Model size: 2.629MB')
+
+*******************************************
+

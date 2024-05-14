@@ -1,0 +1,120 @@
+MODEL: BERT_Eff_Multihead
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.33577337701405796
+Accuracy: 0.86176
+F1 (weighted): 0.8617455029652517
+Precision (weighted): 0.8619117968097006
+Recall (weighted): 0.86176
+MCC: 0.7236717808893125
+Confusion matrix:
+ [[10644  1856]
+ [ 1600 10900]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.888MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.34186501618550746
+Accuracy: 0.86032
+F1 (weighted): 0.8602845896322179
+Precision (weighted): 0.8606856579261319
+Recall (weighted): 0.86032
+MCC: 0.7210055652044411
+Confusion matrix:
+ [[10555  1945]
+ [ 1547 10953]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.888MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.341857052807297
+Accuracy: 0.86348
+F1 (weighted): 0.863475407312702
+Precision (weighted): 0.8635289164509976
+Recall (weighted): 0.86348
+MCC: 0.7270089148053376
+Confusion matrix:
+ [[10866  1634]
+ [ 1779 10721]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.888MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.34718272781797815
+Accuracy: 0.8588
+F1 (weighted): 0.8587994351977408
+Precision (weighted): 0.8588057408918542
+Recall (weighted): 0.8588
+MCC: 0.7176057408688906
+Confusion matrix:
+ [[10760  1740]
+ [ 1790 10710]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.888MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.3413410477948432
+Accuracy: 0.8632
+F1 (weighted): 0.8631999290828433
+Precision (weighted): 0.8632007531330816
+Recall (weighted): 0.8632
+MCC: 0.7264007531326913
+Confusion matrix:
+ [[10781  1719]
+ [ 1701 10799]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.888MB')
+
+*******************************************
+

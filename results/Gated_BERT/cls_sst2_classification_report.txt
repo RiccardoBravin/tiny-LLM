@@ -1,0 +1,120 @@
+MODEL: Gated_BERT
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.45771157315799166
+Accuracy: 0.7878440366972477
+F1 (weighted): 0.7876581945803836
+Precision (weighted): 0.7882224763980705
+Recall (weighted): 0.7878440366972477
+MCC: 0.5757535880367932
+Confusion matrix:
+ [[326 102]
+ [ 83 361]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.389MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.6954355750765119
+Accuracy: 0.5091743119266054
+F1 (weighted): 0.3435765873790469
+Precision (weighted): 0.25925847992593215
+Recall (weighted): 0.5091743119266054
+MCC: 0.0
+Confusion matrix:
+ [[  0 428]
+ [  0 444]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.389MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.6974327308791024
+Accuracy: 0.5091743119266054
+F1 (weighted): 0.3435765873790469
+Precision (weighted): 0.25925847992593215
+Recall (weighted): 0.5091743119266054
+MCC: 0.0
+Confusion matrix:
+ [[  0 428]
+ [  0 444]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.389MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.6974243181092399
+Accuracy: 0.5091743119266054
+F1 (weighted): 0.3435765873790469
+Precision (weighted): 0.25925847992593215
+Recall (weighted): 0.5091743119266054
+MCC: 0.0
+Confusion matrix:
+ [[  0 428]
+ [  0 444]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.389MB')
+
+*******************************************
+
+MODEL: Gated_BERT
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.6957049795559475
+Accuracy: 0.5091743119266054
+F1 (weighted): 0.3435765873790469
+Precision (weighted): 0.25925847992593215
+Recall (weighted): 0.5091743119266054
+MCC: 0.0
+Confusion matrix:
+ [[  0 428]
+ [  0 444]]
+('Model params: 0.364M', 'Model buffers: 0.000M', 'Model size: 1.389MB')
+
+*******************************************
+
