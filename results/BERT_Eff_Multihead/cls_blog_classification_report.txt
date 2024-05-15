@@ -1,0 +1,87 @@
+MODEL: BERT_Eff_Multihead
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 2.400738075526074
+Accuracy: 0.35462433081041167
+F1 (weighted): 0.25010246109678563
+Precision (weighted): 0.19616533968739952
+Recall (weighted): 0.35462433081041167
+MCC: 0.03705138043449521
+Confusion matrix:
+ [[ 0  1  0 ...  0  0  0]
+ [ 0 36  0 ...  0  0  0]
+ [ 0  5  0 ...  0  0  0]
+ ...
+ [ 0  1  0 ...  0  0  0]
+ [ 0  6  0 ...  0  0  0]
+ [ 0  0  0 ...  0  0  0]]
+('Model params: 0.238M', 'Model buffers: 0.000M', 'Model size: 0.906MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 2.3892646189089173
+Accuracy: 0.3553891189113637
+F1 (weighted): 0.24572825870031326
+Precision (weighted): 0.19471976666441515
+Recall (weighted): 0.3553891189113637
+MCC: 0.02019942650245244
+Confusion matrix:
+ [[ 0  5  0 ...  0  0  0]
+ [ 0 28  0 ...  0  0  0]
+ [ 0  2  0 ...  0  0  0]
+ ...
+ [ 0  0  0 ...  0  0  0]
+ [ 0  9  0 ...  0  0  0]
+ [ 0  2  0 ...  0  0  0]]
+('Model params: 0.238M', 'Model buffers: 0.000M', 'Model size: 0.906MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: blog
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 2.3915912498930085
+Accuracy: 0.36293151190695955
+F1 (weighted): 0.24786531704626183
+Precision (weighted): 0.19784345935982572
+Recall (weighted): 0.36293151190695955
+MCC: 0.026585159276385894
+Confusion matrix:
+ [[ 0  5  0 ...  0  0  0]
+ [ 0 27  0 ...  0  0  0]
+ [ 0  6  0 ...  0  0  0]
+ ...
+ [ 0  0  0 ...  0  0  0]
+ [ 0  6  0 ...  0  0  0]
+ [ 0  1  0 ...  0  0  0]]
+('Model params: 0.238M', 'Model buffers: 0.000M', 'Model size: 0.906MB')
+
+*******************************************
+
