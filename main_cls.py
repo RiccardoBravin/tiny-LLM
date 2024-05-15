@@ -24,14 +24,14 @@ REDUCED_EMBEDDING_DIM = 16
 EMBED_DIM = 128
 NUM_HEADS = 8
 FORWARD_EXPANSION = 2
-MAX_LENGTH = 256
+MAX_LENGTH = 128
 LAYERS = 1
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Loading dataset:{RESET}")
 
 #'Amazon', "imdb", "sst2" "twitter" "race" "yelp" "news" "trec_coarse" "bull" "limit" "dbpedia" "nlu" "snips" "blog"
-DATASET = "bull"
+DATASET = "news"
 
 train_dataloader, val_dataloader, test_dataloader, LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 N_LABELS = len(LABELS)
@@ -52,33 +52,33 @@ print(f"{ATTRIBUTES['Bold']}Model initialization:{RESET}")
 model = Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 
 
-classifier = classifier(model, EMBED_DIM, N_LABELS)
+cls = classifier(model, EMBED_DIM, N_LABELS)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-classifier.to(device)
+cls.to(device)
 print(f"Model initialized on {device}")
 
 
 print("Model parameters:")
 #print all model parameters with names
-for name, param in classifier.named_parameters():
+for name, param in cls.named_parameters():
 	print(f"{name}: {param.nelement()}")
 
 #print the model size
-print(utils.model_size(classifier))
+print(utils.model_size(cls))
 
 
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
 
-EPOCHS = 0
-LR = 1e-2
+EPOCHS = 5
+LR = 5e-3
 
-utils.trainer(classifier, train_dataloader, val_dataloader, LR, EPOCHS)
+utils.trainer(cls, train_dataloader, val_dataloader, LR, EPOCHS)
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Starting evaluation{RESET}")
-predicted, avg_eval_loss = utils.evaluator(classifier, test_dataloader)
+predicted, avg_eval_loss = utils.evaluator(cls, test_dataloader)
 
 accuracy = accuracy_score(label_test, predicted)
 f1 = f1_score(label_test, predicted, average='micro')  
