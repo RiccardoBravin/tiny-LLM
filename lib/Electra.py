@@ -87,10 +87,12 @@ def electraTrainer(model, train_dataloader, val_dataloader, lr, epochs):
 	criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor([1.0, 9.0]))
 	criterion.to(device);
 
-	optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-	scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs*2, eta_min=1e-6)
-	#scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
 	log_step = len(train_dataloader) // 10
+
+	optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
+	#scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs*2, eta_min=1e-6)
+	#scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
+	scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=lr, steps_per_epoch=epochs*10, epochs=epochs)
 
 	for epoch in range(epochs):
 		tqdm.write(f"Epoch {epoch+1}/{epochs}")
