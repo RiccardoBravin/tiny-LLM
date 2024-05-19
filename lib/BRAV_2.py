@@ -32,22 +32,24 @@ class Reader(torch.nn.Module):
         self.d_model_expand = d_model_expand
         #might need to expand and contract the embeddings
         self.weighter = torch.nn.Parameter(torch.randn(d_model_expand))
-        self.eps = torch.nn.Parameter(torch.randn(d_model))
+        #self.eps = torch.nn.Parameter(torch.randn(d_model))
 
-        self.af = torch.nn.Sigmoid()
+        self.af = torch.nn.Softsign()
 
 
-    def forward(self, x):
+    def forward(self, x, x_mask):
         # x: (batch_size, seq_len, d_model)
         # weight: (d_model_expand, 1)
         # res: (batch_size, seq_len, d_model)
+    
 
         # Perform W = (x + epx) * weighter: (batch_size, seq_len, d_model, d_model_expand)
-        W = (x + self.eps).unsqueeze(-1) * self.weighter.unsqueeze(0).unsqueeze(0).unsqueeze(0)
+        W = (x).unsqueeze(-1) * self.weighter.unsqueeze(0).unsqueeze(0).unsqueeze(0)
+
 
         # sum all the matrices along the seq_len axis: (batch_size, d_model, d_model_expand)
-        W_tot = self.af(W.sum(dim=1))
-
+        W_tot = self.af(W.sum(dim=1) / x_mask.sum(dim=1).unsqueeze(-1).unsqueeze(-1))
+        
         # use the obtained matrix to multiply all x (W_tot * x)
         # (batch_size, d_model, d_model_expand) @ (batch_size, seq_len, d_model) = (batch_size, seq_len, d_model_expand)
         res = torch.einsum('bde,bsd->bse', W_tot, x)
@@ -102,12 +104,12 @@ class MambaBlock(torch.nn.Module):
         self.down1 = torch.nn.Linear(feed_forward_hidden, d_model)
         self.activation = torch.nn.SiLU()
 
-    def forward(self, embeddings):
+    def forward(self, embeddings, mask):
         # embeddings: (batch_size, max_len, d_model)
         # result: (batch_size, max_len, d_model)
         x1 = self.norm(embeddings)
 
-        y1 = self.reader(x1)
+        y1 = self.reader(x1, mask)
         y2 = self.up2(x1)
         
         y2 = self.activation(y2)
@@ -139,13 +141,13 @@ class BRAV_2(torch.nn.Module):
     def forward(self, x):
         # attention masking for padded token
         # (batch_size, 1, seq_len, seq_len)
-        mask = (x > 0).unsqueeze(1).repeat(1, x.size(1), 1).unsqueeze(1)
+        mask = (x > 0)
 
         # embedding the indexed sequence to sequence of vectors
         x = self.embedding(x)
 
         # running over multiple transformer blocks
         for encoder in self.encoder_blocks:
-            x = encoder.forward(x)
+            x = encoder.forward(x, mask)
         return x
 

@@ -2,5 +2,4 @@ torch
 datasets
 tqdm
 sentencepiece
-evaluate
 scikit-learn
