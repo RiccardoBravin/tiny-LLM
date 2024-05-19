@@ -1,0 +1,81 @@
+Values of ELECTRA training
+MODEL: BRAV_2
+DATASET: bull
+VOCAB_SIZE: 4096
+EMBED_DIM: 32
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 128
+LAYERS: 4
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 1.062663733959198
+average eval loss: 1.062663733959198
+Accuracy: 0.2668271750524109
+F1 (weighted): 0.2668271750524109
+Precision (weighted): 0.2668271750524109
+Recall (weighted): 0.2668271750524109
+MCC: 0.039130168968814084
+Confusion matrix:
+ [[145409 444467]
+ [  3179  17505]]
+('Model params: 0.169M', 'Model buffers: 0.000M', 'Model size: 0.646MB')
+
+*******************************************
+
+Values of ELECTRA training
+MODEL: BRAV_2
+DATASET: bull
+VOCAB_SIZE: 4096
+EMBED_DIM: 32
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 128
+LAYERS: 4
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.2951033248713142
+average eval loss: 0.2951033248713142
+Accuracy: 0.9594945623689728
+F1 (weighted): 0.9594945623689728
+Precision (weighted): 0.9594945623689728
+Recall (weighted): 0.9594945623689728
+MCC: 0.1633168718044221
+Confusion matrix:
+ [[583337   6636]
+ [ 18095   2492]]
+('Model params: 0.169M', 'Model buffers: 0.000M', 'Model size: 0.646MB')
+
+*******************************************
+
+Values of final training
+MODEL: BRAV_2
+DATASET: bull
+VOCAB_SIZE: 4096
+EMBED_DIM: 32
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 128
+LAYERS: 4
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.446785369985982
+Accuracy: 0.8161425576519916
+F1 (weighted): 0.8161425576519916
+Precision (weighted): 0.8161425576519916
+Recall (weighted): 0.8161425576519916
+MCC: 0.7811795447377594
+Confusion matrix:
+ [[820   2   3   8   6   5]
+ [  1 744   5   8   4  17]
+ [  3   0 749   2  10  16]
+ [  5   6   1 690  61  65]
+ [  7   3   2  48 600 142]
+ [  9  28  24  29 357 290]]
+('Model params: 0.170M', 'Model buffers: 0.000M', 'Model size: 0.647MB')
+
+*******************************************
+

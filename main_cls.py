@@ -9,6 +9,7 @@ from lib.BERT_Eff import BERT_efficient
 from lib.BERT_Eff_Enc_Gray import BERT_Eff_gray
 from lib.BERT_Eff_Enc_Head import BERT_Eff_Multihead
 from lib.BRAV import BRAV
+from lib.BRAV_2 import BRAV_2
 from lib.BRAV_multihead import BRAV_multihead
 from lib.MLP import MLPSwiGLU
 from lib.GatedBert import Gated_BERT
@@ -21,17 +22,18 @@ VOCAB_SIZE = 512*8
 BATCH_SIZE = 128
 
 REDUCED_EMBEDDING_DIM = 16
-EMBED_DIM = 128
+#EMBED_DIM = 128
+EMBED_DIM = 32
 NUM_HEADS = 8
-FORWARD_EXPANSION = 2
-MAX_LENGTH = 128
-LAYERS = 1
+FORWARD_EXPANSION = 4
+MAX_LENGTH = 64
+LAYERS = 4
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Loading dataset:{RESET}")
 
 #'Amazon', "imdb", "sst2" "twitter" "race" "yelp" "news" "trec_coarse" "bull" "limit" "dbpedia" "nlu" "snips" "blog"
-DATASET = "news"
+DATASET = "bull"
 
 train_dataloader, val_dataloader, test_dataloader, LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 N_LABELS = len(LABELS)
@@ -49,7 +51,8 @@ print(f"{ATTRIBUTES['Bold']}Model initialization:{RESET}")
 # model = BERT_Eff_multihead(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)	
 # model = BRAV(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 #model = BRAV_multihead(VOCAB_SIZE, EMBED_DIM, NUM_HEADS, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
-model = Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+model = BRAV_2(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+#model = Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 
 
 cls = classifier(model, EMBED_DIM, N_LABELS)
@@ -71,8 +74,8 @@ print(utils.model_size(cls))
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
 
-EPOCHS = 5
-LR = 5e-3
+EPOCHS = 10
+LR = 1e-2
 
 utils.trainer(cls, train_dataloader, val_dataloader, LR, EPOCHS)
 
