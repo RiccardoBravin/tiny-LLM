@@ -33,6 +33,7 @@ class Reader(torch.nn.Module):
         #might need to expand and contract the embeddings
         self.weighter = torch.nn.Parameter(torch.randn(d_model_expand))
         #self.eps = torch.nn.Parameter(torch.randn(d_model))
+        self.W_weighter = torch.nn.Linear(d_model_expand, d_model_expand)
 
         self.af = torch.nn.Softsign()
 
@@ -49,7 +50,8 @@ class Reader(torch.nn.Module):
 
         # sum all the matrices along the seq_len axis: (batch_size, d_model, d_model_expand)
         W_tot = self.af(W.sum(dim=1) / x_mask.sum(dim=1).unsqueeze(-1).unsqueeze(-1))
-        
+        W_tot = self.W_weighter(W_tot)
+
         # use the obtained matrix to multiply all x (W_tot * x)
         # (batch_size, d_model, d_model_expand) @ (batch_size, seq_len, d_model) = (batch_size, seq_len, d_model_expand)
         res = torch.einsum('bde,bsd->bse', W_tot, x)

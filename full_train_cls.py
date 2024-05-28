@@ -15,6 +15,7 @@ from lib.BERT_Eff import BERT_efficient
 from lib.BERT_Eff_Enc_Head import BERT_Eff_Multihead
 from lib.GatedBert import Gated_BERT
 from lib.BRAV_multihead import BRAV_multihead
+from lib.BRAV_2 import BRAV_2
 
 from lib.classifier import classifier
 
@@ -48,6 +49,7 @@ for DATASET in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snip
 			BERT_efficient(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
 			BERT_Eff_Multihead(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
 			#BRAV_multihead(VOCAB_SIZE, EMBED_DIM, NUM_HEADS, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
+			BRAV_2(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
 			Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 
 		]
@@ -122,5 +124,5 @@ for DATASET in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snip
 				f.write(str(utils.model_size(cls)))
 				f.write("\n\n*******************************************\n\n")
 
-	with open(f"results/{DATASET}_classification_report.txt", "a") as f:
-			f.write(f"**************************************************\n==================================================\n**************************************************\n")
+	with open(f"results/{model.__class__.__name__}/cls_{DATASET}_classification_report.txt", "a") as f:
+		f.write(f"**************************************************\n==================================================\n**************************************************\n")

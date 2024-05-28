@@ -84,7 +84,7 @@ class SimpleElectra (nn.Module):
 def electraTrainer(model, train_dataloader, val_dataloader, lr, epochs):
 	device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-	criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor([1.0, 1.0]))
+	criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor([1.0, 5.0]))
 	criterion.to(device);
 
 	log_step = len(train_dataloader) // 10

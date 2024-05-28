@@ -25,11 +25,11 @@ VOCAB_SIZE = 512*8
 BATCH_SIZE = 128
 
 REDUCED_EMBEDDING_DIM = 16
-EMBED_DIM = 32
+EMBED_DIM = 16
 NUM_HEADS = 8
-FORWARD_EXPANSION = 4
+FORWARD_EXPANSION = 6
 MAX_LENGTH = 128
-LAYERS = 4
+LAYERS = 10
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Loading dataset:{RESET}")
@@ -74,7 +74,7 @@ print(utils.model_size(electra_cls))
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
 
-EPOCHS = 2
+EPOCHS = 5
 LR = 1e-2
 
 electraTrainer(electra_cls, train_dataloader, val_dataloader, LR, EPOCHS)
@@ -155,7 +155,7 @@ print(utils.model_size(std_cls))
 print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
 
 EPOCHS = 5
-LR = 1e-2
+LR = 1e-3
 
 utils.trainer(std_cls, train_dataloader, val_dataloader, LR, EPOCHS)
 
