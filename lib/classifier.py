@@ -17,3 +17,20 @@ class classifier(nn.Module):
         x = self.fc(x)
         return x
     
+class classifier_SP(nn.Module):
+    def __init__(self, model, model_out_sz, sentence_len, n_labels):
+        super().__init__()
+        self.model = model
+        self.norm = nn.LayerNorm(model_out_sz)
+        self.fc = nn.Linear(model_out_sz, n_labels)
+        self.fc_slen = nn.Linear(sentence_len, 1)
+
+    def forward(self, x:torch.Tensor):
+        x = self.model(x)
+        x = self.norm(x)
+        x = self.fc(x)
+        x = x.transpose(1, 2)
+        x = self.fc_slen(x)
+        x = x.squeeze()
+        return x
+    

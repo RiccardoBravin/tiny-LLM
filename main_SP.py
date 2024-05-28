@@ -17,6 +17,7 @@ from lib.MLP import MLPSwiGLU
 from lib.GatedBert import Gated_BERT
 
 from lib.classifier import classifier
+from lib.classifier import classifier_SP
 from lib.Electra import SimpleElectra, electraTrainer, electraEvaluator
 
 from lib.dataset import dataset_importer
@@ -29,7 +30,7 @@ EMBED_DIM = 16
 NUM_HEADS = 8
 FORWARD_EXPANSION = 6
 MAX_LENGTH = 128
-LAYERS = 10
+LAYERS = 1
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Loading dataset:{RESET}")
@@ -74,7 +75,7 @@ print(utils.model_size(electra_cls))
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
 
-EPOCHS = 5
+EPOCHS = 2
 LR = 1e-2
 
 electraTrainer(electra_cls, train_dataloader, val_dataloader, LR, EPOCHS)
@@ -137,7 +138,7 @@ with open(f"results/tests_{DATASET}_classification_report.txt", "a") as f:
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Normal model initialization:{RESET}")
 
-std_cls = classifier(model, EMBED_DIM, N_LABELS)
+std_cls = classifier_SP(model, EMBED_DIM, MAX_LENGTH, N_LABELS)
 std_cls.to(device)
 print(f"Model initialized on {device}")
 
@@ -154,7 +155,7 @@ print(utils.model_size(std_cls))
 
 print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
 
-EPOCHS = 5
+EPOCHS = 10
 LR = 1e-3
 
 utils.trainer(std_cls, train_dataloader, val_dataloader, LR, EPOCHS)

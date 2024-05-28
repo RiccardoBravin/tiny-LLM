@@ -15,6 +15,7 @@ from lib.MLP import MLPSwiGLU
 from lib.GatedBert import Gated_BERT
 
 from lib.classifier import classifier
+from lib.classifier import classifier_SP
 
 from lib.dataset import dataset_importer
 
@@ -23,17 +24,17 @@ BATCH_SIZE = 128
 
 REDUCED_EMBEDDING_DIM = 16
 #EMBED_DIM = 128
-EMBED_DIM = 32
+EMBED_DIM = 16
 NUM_HEADS = 8
-FORWARD_EXPANSION = 4
+FORWARD_EXPANSION = 6
 MAX_LENGTH = 128
-LAYERS = 1
+LAYERS = 4
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Loading dataset:{RESET}")
 
 #'Amazon', "imdb", "sst2" "twitter" "race" "yelp" "news" "trec_coarse" "bull" "limit" "dbpedia" "nlu" "snips" "blog"
-DATASET = "sst2"
+DATASET = "bull"
 
 train_dataloader, val_dataloader, test_dataloader, LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 N_LABELS = len(LABELS)
@@ -55,6 +56,7 @@ model = BRAV_2(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dro
 #model = Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 
 
+#cls = classifier_SP(model, EMBED_DIM, MAX_LENGTH, N_LABELS)
 cls = classifier(model, EMBED_DIM, N_LABELS)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 cls.to(device)

@@ -30,7 +30,7 @@ class Reader(torch.nn.Module):
         super().__init__()
         self.d_model = d_model
         self.d_model_expand = d_model_expand
-        #might need to expand and contract the embeddings
+
         self.weighter = torch.nn.Parameter(torch.randn(d_model_expand))
         #self.eps = torch.nn.Parameter(torch.randn(d_model))
         self.W_weighter = torch.nn.Linear(d_model_expand, d_model_expand)
