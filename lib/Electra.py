@@ -67,7 +67,7 @@ class SimpleElectra (nn.Module):
 		
 		for i in range(x.size(0)):
 			for j in range(ranges[i]):
-				if random.random() < 0.10:
+				if random.random() < 0.15: # 10% of the time, replace the token with a random token
 					rand_tok = random.randint(4, self.vocab_size-1)
 					if rand_tok != generated_token[i][j]:
 						generated_token[i][j] = rand_tok
@@ -118,7 +118,7 @@ def electraTrainer(model, train_dataloader, val_dataloader, lr, epochs):
 
 			# print(logits[:10])
 			# print(made_labels[:10])
-
+			
 			batch_loss = criterion(logits, made_labels)
 				  
 			if step_num == 0:

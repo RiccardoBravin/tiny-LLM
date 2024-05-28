@@ -23,12 +23,12 @@ VOCAB_SIZE = 512*8
 BATCH_SIZE = 128
 
 REDUCED_EMBEDDING_DIM = 16
-#EMBED_DIM = 128
-EMBED_DIM = 16
+EMBED_DIM = 128
+#EMBED_DIM = 16
 NUM_HEADS = 8
-FORWARD_EXPANSION = 6
+FORWARD_EXPANSION = 2
 MAX_LENGTH = 128
-LAYERS = 4
+LAYERS = 1
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Loading dataset:{RESET}")
@@ -42,9 +42,9 @@ N_LABELS = len(LABELS)
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Model initialization:{RESET}")
 
-# config = MambaConfig(d_model=EMBED_DIM, n_layers=LAYERS)
-# model = Mamba(config)
-# classifier = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
+config = MambaConfig(d_model=EMBED_DIM, n_layers=LAYERS, expand_factor=FORWARD_EXPANSION)
+model = Mamba(config)
+cls = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
 
 # model = MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 # model = BERT_Efficient(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
@@ -52,12 +52,12 @@ print(f"{ATTRIBUTES['Bold']}Model initialization:{RESET}")
 # model = BERT_Eff_multihead(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)	
 # model = BRAV(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 #model = BRAV_multihead(VOCAB_SIZE, EMBED_DIM, NUM_HEADS, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
-model = BRAV_2(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+#model = BRAV_2(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 #model = Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 
 
 #cls = classifier_SP(model, EMBED_DIM, MAX_LENGTH, N_LABELS)
-cls = classifier(model, EMBED_DIM, N_LABELS)
+#cls = classifier(model, EMBED_DIM, N_LABELS)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 cls.to(device)
 print(f"Model {model.__class__.__name__} initialized on {device}")
