@@ -18,7 +18,7 @@ from lib.GatedBert import Gated_BERT
 
 from lib.classifier import classifier
 from lib.classifier import classifier_SP
-from lib.Electra import SimpleElectra, electraTrainer, electraEvaluator
+from lib.myElectra import SimpleElectra, electraTrainer, electraEvaluator
 
 from lib.dataset import dataset_importer
 

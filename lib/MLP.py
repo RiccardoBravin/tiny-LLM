@@ -42,15 +42,15 @@ class SwiGLU(nn.Module):
 
 
 class MLPSwiGLU(nn.Module):
-    def __init__(self, vocab_size, d_model, n_layers, sentence_length, fw_expand, dropout=0.1):
+    def __init__(self, vocab_size, d_model, red_d_model, n_layers, sentence_length, fw_expand, dropout=0.1):
         super().__init__()
-        self.embededer = Embedder(vocab_size, d_model, seq_len=sentence_length)
+        self.embedder = Embedder(vocab_size, d_model, reduced_embed_sz=red_d_model, seq_len=sentence_length)
         self.mlp_layers = torch.nn.ModuleList([SwiGLU(d_model, d_model*fw_expand) for _ in range(n_layers)])
         self.dropout = torch.nn.Dropout(dropout)
 
     def forward(self, x):
         
-        x = self.embededer(x)
+        x = self.embedder(x)
         for layer in self.mlp_layers:
             x = layer(x)
             x = self.dropout(x)

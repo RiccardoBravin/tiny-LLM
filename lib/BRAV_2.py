@@ -9,19 +9,21 @@ import math
 
 class Embedder(torch.nn.Module):
 
-    def __init__(self, vocab_size, embed_size, seq_len):
+    def __init__(self, vocab_size, embed_size, reduced_embed_size, seq_len):
         super().__init__()
         self.embed_size = embed_size
         # (m, seq_len) --> (m, seq_len, embed_size)
         # padding_idx is not updated during training, remains as fixed pad (0)
-        self.token = torch.nn.Embedding(vocab_size, embed_size, padding_idx=0)
+        self.token = torch.nn.Embedding(vocab_size, reduced_embed_size, padding_idx=0)
+        self.expander = torch.nn.Linear(reduced_embed_size, embed_size)
         self.position = torch.nn.Embedding(seq_len, embed_size)
        
     def forward(self, sequence):
         #build the positions tensor of the tokens
         position = torch.arange(sequence.size(1)).unsqueeze(0).expand_as(sequence).to(sequence.device)
 
-        x = self.token(sequence) + self.position(position)
+        x = self.expander(self.token(sequence)) + self.position(position)
+
         return x
     
 
@@ -49,6 +51,7 @@ class Reader(torch.nn.Module):
 
 
         # sum all the matrices along the seq_len axis: (batch_size, d_model, d_model_expand)
+
         W_tot = self.af(W.sum(dim=1) / x_mask.sum(dim=1).unsqueeze(-1).unsqueeze(-1))
         W_tot = self.W_weighter(W_tot)
 
@@ -95,7 +98,7 @@ class oldff(torch.nn.Module):
 
 
     
-class MambaBlock(torch.nn.Module):
+class BravBlock(torch.nn.Module):
     def __init__(self, d_model, feed_forward_hidden, dropout=0.1):
         super().__init__()
         self.norm = RMSNorm(d_model)
@@ -123,7 +126,7 @@ class MambaBlock(torch.nn.Module):
 
 class BRAV_2(torch.nn.Module):
 
-    def __init__(self, vocab_size, d_model, n_layers, sentence_length, fw_expand,dropout=0.1):
+    def __init__(self, vocab_size, d_model, red_d_model, n_layers, sentence_length, fw_expand,dropout=0.1):
 
 
         super().__init__()
@@ -134,11 +137,11 @@ class BRAV_2(torch.nn.Module):
         self.feed_forward_hidden = int(d_model * fw_expand)
 
         # embedding for BERT, sum of positional, segment, token embeddings
-        self.embedding = Embedder(vocab_size=vocab_size, embed_size=d_model, seq_len= sentence_length)
+        self.embedder = Embedder(vocab_size=vocab_size, embed_size=d_model, reduced_embed_size= red_d_model ,seq_len= sentence_length)
 
         # multi-layers transformer blocks, deep network
         self.encoder_blocks = torch.nn.ModuleList(
-            [MambaBlock(d_model, self.feed_forward_hidden, dropout) for _ in range(n_layers)])
+            [BravBlock(d_model, self.feed_forward_hidden, dropout) for _ in range(n_layers)])
 
     def forward(self, x):
         # attention masking for padded token
@@ -146,7 +149,7 @@ class BRAV_2(torch.nn.Module):
         mask = (x > 0)
 
         # embedding the indexed sequence to sequence of vectors
-        x = self.embedding(x)
+        x = self.embedder(x)
 
         # running over multiple transformer blocks
         for encoder in self.encoder_blocks:

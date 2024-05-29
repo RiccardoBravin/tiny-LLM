@@ -51,11 +51,15 @@ def train_sp(text_train, vocab_size, dataset_name):
 	paths = [str(x) for x in Path('./stpiece').glob(str_text_files)]
 	#check if sentencepiece model already exists and if not train it
 	if not len([x for x in Path('./stpiece').glob('**/' + dataset_name + '_'+ str(vocab_size) + "*")]) == 2:
-		spm.SentencePieceTrainer.train(input=paths, model_prefix="./stpiece/" + dataset_name + '_' + str(vocab_size), vocab_size=vocab_size, model_type='bpe', pad_id=0, bos_id=1, eos_id=2, unk_id=3)
+		spm.SentencePieceTrainer.train(input=paths, model_prefix="./stpiece/" + dataset_name + '_' + str(vocab_size), vocab_size=vocab_size, model_type='bpe', pad_id=0, bos_id=1, eos_id=2, unk_id=3, user_defined_symbols=['<MASK>'])
 
 	#load sentencepiece model
 	sp = spm.SentencePieceProcessor()
 	sp.load("./stpiece/" + dataset_name + '_' + str(vocab_size) + ".model")
+
+	# print("Vocab contains: ")
+	# for i in range(10):
+	# 	print(f"{i} = {sp.id_to_piece(i)}")
 
 	return sp
 
