@@ -23,12 +23,12 @@ VOCAB_SIZE = 512*8
 BATCH_SIZE = 16
 
 REDUCED_EMBEDDING_DIM = 16
-EMBED_DIM = 128
+EMBED_DIM = 32
 #EMBED_DIM = 16
 NUM_HEADS = 8
-FORWARD_EXPANSION = 2
+FORWARD_EXPANSION = 8
 MAX_LENGTH = 128
-LAYERS = 1
+LAYERS = 2
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Loading dataset:{RESET}")
@@ -46,7 +46,7 @@ print(f"{ATTRIBUTES['Bold']}Model initialization:{RESET}")
 # model = Mamba(config)
 # cls = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
 
-generator = MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1) 
+#generator = MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1) 
 
 # model = MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 # model = BERT_Efficient(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
@@ -56,6 +56,9 @@ generator = MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_
 #model = BRAV_multihead(VOCAB_SIZE, EMBED_DIM, NUM_HEADS, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 model = BRAV_2(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 #model = Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+generator = BRAV_2(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, 1, MAX_LENGTH, 4, dropout=0.1)
+
+
 
 generator.embedder.token.weight.data = model.embedder.token.weight.data
 generator.embedder.position.weight.data = model.embedder.position.weight.data
@@ -127,7 +130,7 @@ def get_params_without_weight_decay_ln(named_params, weight_decay):
         return optimizer_grouped_parameters
 
 optimizer = torch.optim.AdamW(get_params_without_weight_decay_ln(electra.named_parameters(), weight_decay=0.1), lr=LR)
-scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=len(train_dataloader)/2, num_training_steps=EPOCHS*len(train_dataloader))
+scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=len(train_dataloader)/2, num_training_steps=EPOCHS*len(train_dataloader)*2)
 
 
 log_step = len(train_dataloader) // 10
