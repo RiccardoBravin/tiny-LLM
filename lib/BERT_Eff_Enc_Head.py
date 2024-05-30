@@ -132,7 +132,7 @@ class BERT_Eff_Multihead(torch.nn.Module):
     BERT model : Bidirectional Encoder Representations from Transformers.
     """
 
-    def __init__(self, vocab_size, d_model, n_layers, heads ,sentence_length, fw_expand, dropout=0.1):
+    def __init__(self, vocab_size, d_model, red_d_model, n_layers, heads ,sentence_length, fw_expand, dropout=0.1):
         """
         :param vocab_size: vocab_size of total words
         :param hidden: BERT model hidden size
@@ -150,7 +150,7 @@ class BERT_Eff_Multihead(torch.nn.Module):
         self.feed_forward_hidden = int(d_model * fw_expand)
 
         # embedding for BERT, sum of positional, segment, token embeddings
-        self.embedding = BERTEmbedding(vocab_size=vocab_size, embed_size=d_model, seq_len=sentence_length)
+        self.embedding = BERTEmbedding(vocab_size=vocab_size, embed_size=d_model, seq_len=sentence_length, reduced_embed_sz=red_d_model)
 
         # multi-layers transformer blocks, deep network
         self.encoder_blocks = torch.nn.ModuleList(

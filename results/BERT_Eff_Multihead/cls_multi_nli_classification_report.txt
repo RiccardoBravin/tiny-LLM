@@ -1,0 +1,128 @@
+MODEL: BERT_Eff_Multihead
+DATASET: multi_nli
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.003
+EPOCHS: 10
+
+average eval loss: 0.9493371194059198
+Accuracy: 0.5441670911869587
+F1 (weighted): 0.5460952100990356
+Precision (weighted): 0.5534556912889359
+Recall (weighted): 0.5441670911869587
+MCC: 0.31774018453535885
+Confusion matrix:
+ [[1906 1142  431]
+ [ 834 1736  553]
+ [ 691  823 1699]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.888MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: multi_nli
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.003
+EPOCHS: 10
+
+average eval loss: 0.9191334750745204
+Accuracy: 0.5639327559857361
+F1 (weighted): 0.5647799199822592
+Precision (weighted): 0.5685735093259803
+Recall (weighted): 0.5639327559857361
+MCC: 0.3453933068418173
+Confusion matrix:
+ [[2135  930  414]
+ [ 934 1615  574]
+ [ 689  739 1785]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.888MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: multi_nli
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.003
+EPOCHS: 10
+
+average eval loss: 0.9460348579790685
+Accuracy: 0.5445746306673459
+F1 (weighted): 0.54542656891477
+Precision (weighted): 0.5466943202406033
+Recall (weighted): 0.5445746306673459
+MCC: 0.31654495021928386
+Confusion matrix:
+ [[1922 1027  530]
+ [ 869 1563  691]
+ [ 645  708 1860]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.888MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: multi_nli
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.003
+EPOCHS: 10
+
+average eval loss: 0.9338710207443732
+Accuracy: 0.5511971472236373
+F1 (weighted): 0.5511106458690507
+Precision (weighted): 0.5538500512671372
+Recall (weighted): 0.5511971472236373
+MCC: 0.3256567717601625
+Confusion matrix:
+ [[2133  880  466]
+ [1022 1501  600]
+ [ 748  689 1776]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.888MB')
+
+*******************************************
+
+MODEL: BERT_Eff_Multihead
+DATASET: multi_nli
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.003
+EPOCHS: 10
+
+average eval loss: 0.9386488833984772
+Accuracy: 0.5510952623535404
+F1 (weighted): 0.5517654400970005
+Precision (weighted): 0.5537596542872038
+Recall (weighted): 0.5510952623535404
+MCC: 0.32580868412247904
+Confusion matrix:
+ [[2043  941  495]
+ [ 947 1562  614]
+ [ 691  718 1804]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.888MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

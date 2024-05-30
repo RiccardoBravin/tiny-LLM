@@ -1,0 +1,123 @@
+MODEL: Mamba
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.3658721501729926
+Accuracy: 0.84716
+F1 (weighted): 0.8471558032651837
+Precision (weighted): 0.8471981329098168
+Recall (weighted): 0.84716
+MCC: 0.694358131862721
+Confusion matrix:
+ [[10524  1976]
+ [ 1845 10655]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.704MB')
+
+*******************************************
+
+MODEL: Mamba
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.30672353734167257
+Accuracy: 0.8728
+F1 (weighted): 0.872797354999081
+Precision (weighted): 0.8728310099955578
+Recall (weighted): 0.8728
+MCC: 0.7456310093507215
+Confusion matrix:
+ [[10967  1533]
+ [ 1647 10853]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.704MB')
+
+*******************************************
+
+MODEL: Mamba
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.3694573055420603
+Accuracy: 0.86956
+F1 (weighted): 0.8695537533988568
+Precision (weighted): 0.8696308011535855
+Recall (weighted): 0.86956
+MCC: 0.7391907977628484
+Confusion matrix:
+ [[10956  1544]
+ [ 1717 10783]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.704MB')
+
+*******************************************
+
+MODEL: Mamba
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.35385951031075447
+Accuracy: 0.86928
+F1 (weighted): 0.8692167008832274
+Precision (weighted): 0.8699963128617003
+Recall (weighted): 0.86928
+MCC: 0.7392759658302673
+Confusion matrix:
+ [[11141  1359]
+ [ 1909 10591]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.704MB')
+
+*******************************************
+
+MODEL: Mamba
+DATASET: imdb
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.37148805502422
+Accuracy: 0.86928
+F1 (weighted): 0.8692790889275382
+Precision (weighted): 0.8692902952225664
+Recall (weighted): 0.86928
+MCC: 0.7385702951508117
+Confusion matrix:
+ [[10899  1601]
+ [ 1667 10833]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.704MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

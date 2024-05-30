@@ -124,8 +124,17 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs):
 	criterion = torch.nn.CrossEntropyLoss()
 	criterion.to(device);
 
+	def get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps, last_epoch=-1):
+		def lr_lambda(current_step):
+			learning_rate = max(0.0, 1. - (float(current_step) / float(num_training_steps)))
+			learning_rate *= min(1.0, float(current_step) / float(num_warmup_steps))
+			return learning_rate
+		return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda, last_epoch)
+
 	optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-	scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=epochs)
+	scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=len(train_dataloader), num_training_steps=epochs*len(train_dataloader))
+
+	#scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=epochs)
 	#scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs*2, eta_min=1e-6)
 
 	log_step = len(train_dataloader) // 10
@@ -155,7 +164,7 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs):
 
 			#torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
 			optimizer.step()
-			
+			scheduler.step()
 
 			loss_str = "{:.4f}".format(train_loss)
 			tqdm_train_loader.set_postfix(loss = loss_str)			
@@ -173,8 +182,7 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs):
 				val_accuracy = sum(val_accuracy) / len(val_accuracy)
 				mcc = matthews_corrcoef(y.cpu().numpy(), torch.argmax(guess, dim=1).cpu().numpy())
 				val_loss = val_loss / len(val_dataloader)
-				scheduler.step(-mcc)
-				#scheduler.step()
+				#scheduler.step(-mcc)
 				tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()[0]:.6f}{FOREGROUND_COLORS['Green']}")
 				model.train()
 			

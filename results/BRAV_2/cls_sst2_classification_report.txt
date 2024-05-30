@@ -1,0 +1,123 @@
+MODEL: BRAV_2
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 32
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.003
+EPOCHS: 10
+
+average eval loss: 0.5219529611723763
+Accuracy: 0.7981651376146789
+F1 (weighted): 0.7980024421717029
+Precision (weighted): 0.7985217065324473
+Recall (weighted): 0.7981651376146789
+MCC: 0.5963976849298414
+Confusion matrix:
+ [[331  97]
+ [ 79 365]]
+('Model params: 0.173M', 'Model buffers: 0.000M', 'Model size: 0.658MB')
+
+*******************************************
+
+MODEL: BRAV_2
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 32
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.003
+EPOCHS: 10
+
+average eval loss: 0.5577481431620461
+Accuracy: 0.786697247706422
+F1 (weighted): 0.7863507651646714
+Precision (weighted): 0.7876346991136681
+Recall (weighted): 0.786697247706422
+MCC: 0.5739355433671481
+Confusion matrix:
+ [[321 107]
+ [ 79 365]]
+('Model params: 0.173M', 'Model buffers: 0.000M', 'Model size: 0.658MB')
+
+*******************************************
+
+MODEL: BRAV_2
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 32
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.003
+EPOCHS: 10
+
+average eval loss: 0.5144974759646824
+Accuracy: 0.7981651376146789
+F1 (weighted): 0.7971552740307822
+Precision (weighted): 0.8023651294576334
+Recall (weighted): 0.7981651376146789
+MCC: 0.5999175900051239
+Confusion matrix:
+ [[313 115]
+ [ 61 383]]
+('Model params: 0.173M', 'Model buffers: 0.000M', 'Model size: 0.658MB')
+
+*******************************************
+
+MODEL: BRAV_2
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 32
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.003
+EPOCHS: 10
+
+average eval loss: 0.5367486519472939
+Accuracy: 0.7935779816513762
+F1 (weighted): 0.7934866733336232
+Precision (weighted): 0.7936963748467853
+Recall (weighted): 0.7935779816513762
+MCC: 0.5870309465311546
+Confusion matrix:
+ [[332  96]
+ [ 84 360]]
+('Model params: 0.173M', 'Model buffers: 0.000M', 'Model size: 0.658MB')
+
+*******************************************
+
+MODEL: BRAV_2
+DATASET: sst2
+VOCAB_SIZE: 4096
+EMBED_DIM: 32
+FORWARD_EXPANSION: 4
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.003
+EPOCHS: 10
+
+average eval loss: 0.5006883868149349
+Accuracy: 0.7993119266055045
+F1 (weighted): 0.7993158867258227
+Precision (weighted): 0.7993219494762354
+Recall (weighted): 0.7993119266055045
+MCC: 0.5985071529265041
+Confusion matrix:
+ [[341  87]
+ [ 88 356]]
+('Model params: 0.173M', 'Model buffers: 0.000M', 'Model size: 0.658MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

@@ -1,0 +1,128 @@
+MODEL: Mamba
+DATASET: multi_nli
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 1.0279504509715292
+Accuracy: 0.47570045848191544
+F1 (weighted): 0.4165471522298759
+Precision (weighted): 0.5193798662127198
+Recall (weighted): 0.47570045848191544
+MCC: 0.23425061803448652
+Confusion matrix:
+ [[2787  121  571]
+ [2280  227  616]
+ [1501   57 1655]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.705MB')
+
+*******************************************
+
+MODEL: Mamba
+DATASET: multi_nli
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.9188964761696853
+Accuracy: 0.5656647987773815
+F1 (weighted): 0.5660280568536813
+Precision (weighted): 0.5678919162306305
+Recall (weighted): 0.5656647987773815
+MCC: 0.3473841904669705
+Confusion matrix:
+ [[2081  903  495]
+ [ 949 1597  577]
+ [ 758  581 1874]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.705MB')
+
+*******************************************
+
+MODEL: Mamba
+DATASET: multi_nli
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.935440363047959
+Accuracy: 0.5570045848191544
+F1 (weighted): 0.5572466254427093
+Precision (weighted): 0.560007973971752
+Recall (weighted): 0.5570045848191544
+MCC: 0.3344180950196404
+Confusion matrix:
+ [[2098  893  488]
+ [ 970 1577  576]
+ [ 805  616 1792]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.705MB')
+
+*******************************************
+
+MODEL: Mamba
+DATASET: multi_nli
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 0.915813799802359
+Accuracy: 0.5691288843606724
+F1 (weighted): 0.5694058503830758
+Precision (weighted): 0.5702495900359986
+Recall (weighted): 0.5691288843606724
+MCC: 0.35263894078231717
+Confusion matrix:
+ [[2046  921  512]
+ [ 900 1612  611]
+ [ 724  561 1928]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.705MB')
+
+*******************************************
+
+MODEL: Mamba
+DATASET: multi_nli
+VOCAB_SIZE: 4096
+EMBED_DIM: 128
+FORWARD_EXPANSION: 2
+MAX_LENGTH: 512
+LAYERS: 1
+REDUCED_EMBEDDING_DIM: 16
+LR: 0.01
+EPOCHS: 5
+
+average eval loss: 1.0055000758790351
+Accuracy: 0.49414161996943456
+F1 (weighted): 0.4947226454096626
+Precision (weighted): 0.4986871569738577
+Recall (weighted): 0.49414161996943456
+MCC: 0.2394917910686116
+Confusion matrix:
+ [[1872 1038  569]
+ [1203 1329  591]
+ [ 916  648 1649]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.705MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

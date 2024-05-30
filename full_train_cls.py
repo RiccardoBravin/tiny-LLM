@@ -29,12 +29,12 @@ EMBED_DIM = 128
 NUM_HEADS = 8
 FORWARD_EXPANSION = 2
 MAX_LENGTH = 512
-LAYERS = 1
+LAYERS = 4
 
 ########################################################################################
 
 #'Amazon', "imdb", "sst2" "twitter" "race" "yelp" "news" "trec_coarse" "bull" "limit" "dbpedia" "nlu" "snips" "blog" "multi_nli"
-for DATASET in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snips", "blog", "multi_nli"]:
+for DATASET in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snips", "multi_nli"]:
 	print(f"{ATTRIBUTES['Bold']}Loading dataset {DATASET}: {RESET}")
 
 
@@ -46,11 +46,11 @@ for DATASET in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snip
 
 		models = [
 			#MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
-			BERT_efficient(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
-			BERT_Eff_Multihead(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
+			#BERT_efficient(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
+			BERT_Eff_Multihead(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
 			#BRAV_multihead(VOCAB_SIZE, EMBED_DIM, NUM_HEADS, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
-			BRAV_2(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
-			Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+			BRAV_2(VOCAB_SIZE, EMBED_DIM//4, REDUCED_EMBEDDING_DIM ,LAYERS+1, MAX_LENGTH, FORWARD_EXPANSION*4, dropout=0.1),
+			#Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 
 		]
 
@@ -72,7 +72,7 @@ for DATASET in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snip
 			########################################################################################
 			print(f"{ATTRIBUTES['Bold']}Starting training of model {model.__class__.__name__}{RESET}")
 
-			EPOCHS = 5
+			EPOCHS = 10
 			LR = 1e-2
 
 
