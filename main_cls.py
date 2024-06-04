@@ -38,7 +38,7 @@ LAYERS = 1
 print(f"{ATTRIBUTES['Bold']}Loading dataset:{RESET}")
 
 #'Amazon', "imdb", "sst2" "twitter" "race" "yelp" "news" "trec_coarse" "bull" "limit" "dbpedia" "nlu" "snips" "blog"
-DATASET = "bull"
+DATASET = "imdb"
 
 train_dataloader, val_dataloader, test_dataloader, LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)
 N_LABELS = len(LABELS)
