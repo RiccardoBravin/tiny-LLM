@@ -31,7 +31,7 @@ EMBED_DIM = 128
 #EMBED_DIM = 16
 NUM_HEADS = 8
 FORWARD_EXPANSION = 2
-MAX_LENGTH = 128
+MAX_LENGTH = 512
 LAYERS = 1
 
 ########################################################################################
@@ -46,18 +46,18 @@ N_LABELS = len(LABELS)
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Model initialization:{RESET}")
 
-# config = MambaConfig(d_model=EMBED_DIM, n_layers=LAYERS, expand_factor=FORWARD_EXPANSION)
-# model = Mamba(config)
-# cls = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
+config = MambaConfig(d_model=EMBED_DIM, n_layers=LAYERS, expand_factor=FORWARD_EXPANSION)
+model = Mamba(config)
+cls = Mamba_classifier(model, EMBED_DIM, REDUCED_EMBEDDING_DIM, VOCAB_SIZE, N_LABELS)
 
-# model = MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
-# model = BERT_Efficient(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+# model = MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+# model = BERT_efficient(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 # model = BERT_Eff_gray(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
-# model = BERT_Eff_multihead(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)	
+# model = BERT_Eff_Multihead(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)	
 # model = BRAV(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
-#model = BRAV_multihead(VOCAB_SIZE, EMBED_DIM, NUM_HEADS, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
-# model = BRAV_2(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
-#model = Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+# model = BRAV_multihead(VOCAB_SIZE, EMBED_DIM, NUM_HEADS, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+# model = BRAV_2(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+# model = Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 
 # config = MambaConfig(d_model=EMBED_DIM, n_layers=LAYERS, expand_factor=FORWARD_EXPANSION)
 # model1 = Mamba(config)
@@ -68,7 +68,7 @@ print(f"{ATTRIBUTES['Bold']}Model initialization:{RESET}")
 
 # model = Mixer(model3, model2, model1, VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, MAX_LENGTH, parallel=False)
 
-cls = classifier(model, EMBED_DIM, N_LABELS)
+#cls = classifier(model, EMBED_DIM, N_LABELS)
 
 #cls = classifier_SP(model, EMBED_DIM, MAX_LENGTH, N_LABELS)
 #cls = classifier(model, EMBED_DIM, N_LABELS)
@@ -85,7 +85,7 @@ for name, param in cls.named_parameters():
 #print the model size
 print(utils.model_size(cls))
 
-
+utils.activations_calculator(cls, VOCAB_SIZE, MAX_LENGTH)
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")

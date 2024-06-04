@@ -24,6 +24,28 @@ def model_size(model):
 	return "Model params: {:.3f}M".format(param_count/1e6), "Model buffers: {:.3f}M".format(buffer_size/1e6), "Model size: {:.3f}MB".format(size_all_mb)
 
 
+def activations_calculator(model, dict_size, max_len):
+	# Register hooks
+	activations = {}
+	model_copy = model 
+	
+	def get_activation(name):
+		def hook(model, input, output):
+			activations[name] = output.shape
+		return hook
+	
+	for name, layer in model_copy.named_modules():
+		layer.register_forward_hook(get_activation(name))
+	
+	# Pass a dummy input through the model
+	device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+	dummy_input = torch.randint(dict_size, (1, max_len)).to(device)  # Example input size (batch_size, channels, height, width)
+	model_copy(dummy_input)
+	
+	# Print the captured activation sizes
+	for name, shape in activations.items():
+		print(f"Layer: {name}, Output shape: {shape}")
+
 def train_sp(text_train, vocab_size, dataset_name):
 
 	Path('./stpiece').mkdir(parents=True, exist_ok=True)

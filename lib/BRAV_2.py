@@ -112,14 +112,16 @@ class BravBlock(torch.nn.Module):
     def forward(self, embeddings, mask):
         # embeddings: (batch_size, max_len, d_model)
         # result: (batch_size, max_len, d_model)
-        x1 = self.norm(embeddings)
+        n = self.norm(embeddings)
 
-        y1 = self.reader(x1, mask)
-        y2 = self.up2(x1)
+        x2 = self.up2(n)
         
-        y2 = self.activation(y2)
-        x1 = self.down1(y1 * y2)
-        return embeddings + x1
+        y1 = self.reader(n, mask)
+        y2 = self.activation(x2)
+
+        res = self.down1(y1 * y2)
+        
+        return embeddings + res
 
 
 
