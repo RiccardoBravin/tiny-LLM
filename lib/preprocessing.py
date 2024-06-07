@@ -193,14 +193,16 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 		#select the trainer corresponding to the tokenizer model
 		from tokenizers.trainers import WordPieceTrainer, BpeTrainer, UnigramTrainer
 		if config.tokenizer_type == "bpe":
-			trainer = BpeTrainer(special_tokens=["[PAD]", "[UNK]", "[CLS]", "[MASK], [SEP]"], vocab_size=config.dict_size)
+			trainer = BpeTrainer(special_tokens=["[PAD]", "[UNK]", "[CLS]", "[MASK], [SEP]"], vocab_size=config.dict_size,  limit_alphabet=config.dict_size)
 		elif config.tokenizer_type == "wordpiece":
-			trainer = WordPieceTrainer(special_tokens=["[PAD]", "[UNK]", "[CLS]", "[MASK], [SEP]"], vocab_size=config.dict_size)
+			trainer = WordPieceTrainer(special_tokens=["[PAD]", "[UNK]", "[CLS]", "[MASK], [SEP]"], vocab_size=config.dict_size, limit_alphabet=config.dict_size)
 		elif config.tokenizer_type == "unigram":
 			trainer = UnigramTrainer(special_tokens=["[PAD]", "[UNK]", "[CLS]", "[MASK], [SEP]"], vocab_size=config.dict_size)
 
 		#train the tokenizer
 		tokenizer.train_from_iterator(train_dataset['text'], trainer=trainer)
+
+		assert(tokenizer.get_vocab_size() == config.dict_size)
 
 		#save the tokenizer
 		if not os.path.exists("tokenizers"):
@@ -209,6 +211,8 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 
 
 	print(f"Tokenizer vocab size: {tokenizer.get_vocab_size()}")
+	assert(tokenizer.get_vocab_size() == config.dict_size)
+
 	aux = tokenizer.encode_batch(train_dataset['text'][:100000])
 	print(f"Average input length: {sum(map((lambda x: len(x.ids)), aux))/len(train_dataset['text'][:100000])}")
 	print(f"Max input length: {max(map((lambda x: len(x.ids)), aux))}")

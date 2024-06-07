@@ -1,7 +1,0 @@
-Model config for current run:
-ModelConfig(model_name='Brav', embedding_dimension=32, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=8, num_layers=1, vocab_size=4096)
-LR: 0.01
-EPOCHS: 1
-
-*******************************************
-

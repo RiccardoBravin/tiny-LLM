@@ -34,7 +34,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 ########################################################################################
 
 
-for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snips", "multi_nli"]:
+for DATASET_NAME in ["dbpedia","imdb", "sst2", "news", "bull", "limit",  "nlu", "snips", "multi_nli"]:
 	dataset_config.dataset_name = DATASET_NAME
 
 
@@ -46,10 +46,11 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 	
 	tokenizer = make_tokenizer(dataset_config, train_dataset)
 
-
 	validation_dataset = train_dataset.train_test_split(test_size=0.1)
 	train_dataset, validation_dataset = validation_dataset["train"], validation_dataset["test"]
-
+	print(train_dataset)
+	#limit train_dataset to 1000 samples
+	train_dataset = train_dataset.select(list(range(1000)))
 
 	train_dataloader = encode_dataset(tokenizer, train_dataset, dataset_config.max_len, dataset_config.batch_size)
 	validation_dataloader = encode_dataset(tokenizer, validation_dataset, dataset_config.max_len, dataset_config.batch_size)
