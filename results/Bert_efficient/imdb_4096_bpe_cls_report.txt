@@ -1,0 +1,7 @@
+Model config for current run:
+ModelConfig(model_name='Bert_efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=2, num_layers=1, vocab_size=4096)
+LR: 0.01
+EPOCHS: 1
+
+*******************************************
+

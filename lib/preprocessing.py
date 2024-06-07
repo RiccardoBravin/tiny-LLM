@@ -193,11 +193,11 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 		#select the trainer corresponding to the tokenizer model
 		from tokenizers.trainers import WordPieceTrainer, BpeTrainer, UnigramTrainer
 		if config.tokenizer_type == "bpe":
-			trainer = BpeTrainer(special_tokens=["[PAD]", "[UNK]", "[CLS]", "[MASK], [SEP]"], vocab_size=dict_size)
+			trainer = BpeTrainer(special_tokens=["[PAD]", "[UNK]", "[CLS]", "[MASK], [SEP]"], vocab_size=config.dict_size)
 		elif config.tokenizer_type == "wordpiece":
-			trainer = WordPieceTrainer(special_tokens=["[PAD]", "[UNK]", "[CLS]", "[MASK], [SEP]"], vocab_size=dict_size)
+			trainer = WordPieceTrainer(special_tokens=["[PAD]", "[UNK]", "[CLS]", "[MASK], [SEP]"], vocab_size=config.dict_size)
 		elif config.tokenizer_type == "unigram":
-			trainer = UnigramTrainer(special_tokens=["[PAD]", "[UNK]", "[CLS]", "[MASK], [SEP]"], vocab_size=dict_size)
+			trainer = UnigramTrainer(special_tokens=["[PAD]", "[UNK]", "[CLS]", "[MASK], [SEP]"], vocab_size=config.dict_size)
 
 		#train the tokenizer
 		tokenizer.train_from_iterator(train_dataset['text'], trainer=trainer)

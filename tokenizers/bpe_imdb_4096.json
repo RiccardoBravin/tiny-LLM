@@ -32,7 +32,7 @@
     },
     {
       "id": 3,
-      "content": "[MASK]",
+      "content": "[MASK], [SEP]",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -65,7 +65,7 @@
       "[PAD]": 0,
       "[UNK]": 1,
       "[CLS]": 2,
-      "[MASK]": 3,
+      "[MASK], [SEP]": 3,
       "!": 4,
       "\"": 5,
       "#": 6,

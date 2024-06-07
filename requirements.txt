@@ -1,5 +1,6 @@
 torch
 datasets
+tokenizers
 tqdm
 sentencepiece
 tokenizers
