@@ -6,7 +6,7 @@ from colors import ATTRIBUTES, FOREGROUND_COLORS, RESET
 from lib import utils
 from lib.MAMBA import Mamba, MambaConfig, Mamba_classifier
 from lib.BERT_Eff import BERT_efficient
-from lib.BERT_Eff_Enc_Gray import BERT_Eff_gray
+#from lib.BERT_Eff_Enc_Gray import BERT_Eff_gray
 from lib.BERT_Eff_Enc_Head import BERT_Eff_Multihead, EncoderLayer
 from lib.BRAV import BRAV
 from lib.BRAV_2 import BRAV_2, BravBlock
@@ -56,7 +56,7 @@ print(f"{ATTRIBUTES['Bold']}Model initialization:{RESET}")
 # model = BERT_Eff_multihead(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)	
 # model = BRAV(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 #model = BRAV_multihead(VOCAB_SIZE, EMBED_DIM, NUM_HEADS, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
-# model = BRAV_2(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
+model = BRAV_2(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 #model = Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 
 # config = MambaConfig(d_model=EMBED_DIM, n_layers=LAYERS, expand_factor=FORWARD_EXPANSION)
@@ -84,6 +84,8 @@ for name, param in cls.named_parameters():
 
 #print the model size
 print(utils.model_size(cls))
+
+utils.activations_calculator(cls, dict_size=VOCAB_SIZE, max_len=MAX_LENGTH)
 
 
 

@@ -47,19 +47,17 @@
 
 # model.train(dataset, opt="LBFGS", steps=20, batch=128)
 
+import cProfile
 import torch
-n_labels = 4
+
+from lib.Models.blocks import BravBlock
+
+
 
 # Creare una matrice NxM
-matrix = torch.randn(32,128,16) #Batch size, sequence length, embedding dimension
+tokens = torch.randn(1000,128,16) #Batch size, sequence length, embedding dimension
+mask = torch.ones(32,128) #Batch size, sequence length
 
+block = BravBlock(16, 64)
 
-
-# Creare un vettore Mx1
-vector = torch.randn(16,n_labels);
-
-# Moltiplicare la matrice per il vettore
-result = torch.matmul(matrix, vector)
-
-print(result)  # Output: tensor([ 4., 10., 16.]
-print(result.shape)  # Output: torch.Size([3]
+cProfile.run('block(tokens, mask)', )

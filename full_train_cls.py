@@ -4,125 +4,125 @@ from colors import ATTRIBUTES, FOREGROUND_COLORS, RESET
 #STD
 import os
 import torch
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, matthews_corrcoef, confusion_matrix
 
 
 #CUSTOM
-from lib import utils
-from lib.dataset import dataset_importer
-from lib.MLP import MLPSwiGLU
-from lib.BERT_Eff import BERT_efficient
-from lib.BERT_Eff_Enc_Head import BERT_Eff_Multihead
-from lib.GatedBert import Gated_BERT
-from lib.BRAV_multihead import BRAV_multihead
-from lib.BRAV_2 import BRAV_2
+from lib.configs import DataConfig, ModelConfig
+from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
+from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
+from lib.Models.models import Brav, Bert_efficient, Nano_Bert_Efficient
+from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Classifier_post_electra
 
-from lib.classifier import classifier
 
-torch.set_printoptions(profile="full")
 
-VOCAB_SIZE = 512*8
-BATCH_SIZE = 128
-
-REDUCED_EMBEDDING_DIM = 16
-EMBED_DIM = 128
-NUM_HEADS = 8
-FORWARD_EXPANSION = 2
-MAX_LENGTH = 512
-LAYERS = 4
 
 ########################################################################################
+EPOCHS = 1
+LR = 1e-2
 
-#'Amazon', "imdb", "sst2" "twitter" "race" "yelp" "news" "trec_coarse" "bull" "limit" "dbpedia" "nlu" "snips" "blog" "multi_nli"
-for DATASET in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snips", "multi_nli"]:
-	print(f"{ATTRIBUTES['Bold']}Loading dataset {DATASET}: {RESET}")
+dataset_config = DataConfig(
+                    dataset_name=None, 
+                    dict_size=pow(2, 12), 
+                    tokenizer_type="bpe", 
+                    batch_size=128, 
+                    max_len=512, 
+                    labels=None
+                )
 
 
-	train_dataloader, val_dataloader, test_dataloader, LABELS, label_test = dataset_importer(DATASET, VOCAB_SIZE, MAX_LENGTH, BATCH_SIZE)		
-	N_LABELS = len(LABELS)
-	########################################################################################
-	for _ in range(5):
-		print(f"{ATTRIBUTES['Bold']}Models initialization:{RESET}")
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+########################################################################################
 
-		models = [
-			#MLPSwiGLU(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
-			#BERT_efficient(VOCAB_SIZE, EMBED_DIM, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
-			BERT_Eff_Multihead(VOCAB_SIZE, EMBED_DIM, REDUCED_EMBEDDING_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
-			#BRAV_multihead(VOCAB_SIZE, EMBED_DIM, NUM_HEADS, LAYERS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1),
-			BRAV_2(VOCAB_SIZE, EMBED_DIM//4, REDUCED_EMBEDDING_DIM ,LAYERS+1, MAX_LENGTH, FORWARD_EXPANSION*4, dropout=0.1),
-			#Gated_BERT(VOCAB_SIZE, EMBED_DIM, LAYERS, NUM_HEADS, MAX_LENGTH, FORWARD_EXPANSION, dropout=0.1)
 
-		]
+for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snips", "multi_nli"]:
+	dataset_config.dataset_name = DATASET_NAME
 
-		for model in models:
-			cls = classifier(model, EMBED_DIM, N_LABELS)
 
-			device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+	print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Loading dataset {DATASET_NAME} {RESET}")
+	
+	print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
+	train_dataset, test_dataset = dataset_selector(dataset_config.dataset_name)
+	dataset_config.labels = train_dataset.unique("label")
+	
+	tokenizer = make_tokenizer(dataset_config, train_dataset)
+
+
+	validation_dataset = train_dataset.train_test_split(test_size=0.1)
+	train_dataset, validation_dataset = validation_dataset["train"], validation_dataset["test"]
+
+
+	train_dataloader = encode_dataset(tokenizer, train_dataset, dataset_config.max_len, dataset_config.batch_size)
+	validation_dataloader = encode_dataset(tokenizer, validation_dataset, dataset_config.max_len, dataset_config.batch_size)
+	test_dataloader = encode_dataset(tokenizer, test_dataset, dataset_config.max_len, dataset_config.batch_size)
+
+	train_dataloader.shuffle = True
+
+	models = [
+		Brav,
+		Bert_efficient,
+		Nano_Bert_Efficient
+	]
+
+	configs = [
+		ModelConfig( model_name="Brav", embedding_dimension=32, reduced_embedding_dimension=16, number_of_heads=None,  
+		   			forward_expansion=8, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		ModelConfig( model_name="Bert_efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
+		   			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
+		   			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size)
+	]
+	
+	for config in configs:
+		if not os.path.exists(f"results/{config.model_name}/"):
+				os.makedirs(f"results/{config.model_name}/")
+
+		with open(f"results/{config.model_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_cls_report.txt", "a") as f:
+			f.write(f"Model config for current run:\n{config}\n")
+			f.write(f"LR: {LR}\n")
+			f.write(f"EPOCHS: {EPOCHS}\n")
+			f.write(f"\n*******************************************\n\n")
+
+
+	for train_set in range(5):
+		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}------------------- Training session {train_set} -------------------{RESET}")
+	
+
+		for model_class, config in zip(models, configs):
+			model = model_class(config)
+			cls = Classifier_rms(model, config.embedding_dimension , dataset_config.n_labels())
 			cls.to(device)
-			print(f"Model initialized on {device}")
-
-			print("Model parameters:")
-			#print all model parameters with names
-			for name, param in cls.named_parameters():
-				print(f"{name}: {param.nelement()}")
-
-			print(utils.model_size(cls))
-
-
+			
 			########################################################################################
-			print(f"{ATTRIBUTES['Bold']}Starting training of model {model.__class__.__name__}{RESET}")
+			print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Model {model.__class__.__name__} parameters{RESET}")
 
-			EPOCHS = 10
-			LR = 1e-2
-
-
-			utils.trainer(cls, train_dataloader, val_dataloader, LR, EPOCHS)
-
-			########################################################################################
-			print(f"{ATTRIBUTES['Bold']}Starting evaluation{RESET}")
-			predicted, avg_eval_loss = utils.evaluator(cls, test_dataloader)
-
-			########################################################################################
-			accuracy = accuracy_score(label_test, predicted)
-			f1 = f1_score(label_test, predicted, average='weighted')  
-			precision = precision_score(label_test, predicted, average='weighted')  
-			recall = recall_score(label_test, predicted, average='weighted')  
-			mcc = matthews_corrcoef(label_test, predicted)
-			conf_mat = confusion_matrix(label_test, predicted)
-
-			print(f"{FOREGROUND_COLORS['Red']}")
-			print(f"Accuracy: {accuracy}")
-			print(f"F1: {f1}")
-			print(f"Precision: {precision}")
-			print(f"Recall: {recall}")
-			print(f"MCC: {mcc}")
-			print(f"Confusion matrix:\n {conf_mat}")
+			print(f"{FOREGROUND_COLORS["White"]}")
+			print_model_params(model)
 			print(f"{RESET}")
-			########################################################################################
-			if not os.path.exists(f"results/{model.__class__.__name__}/"):
-				os.makedirs(f"results/{model.__class__.__name__}/")
 
+			########################################################################################
+			print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Training{RESET}")
+			trainer(cls, train_dataloader, validation_dataloader, lr=LR, epochs=EPOCHS, logs_x_epoch=2)
+
+
+			########################################################################################
+			print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Evaluation{RESET}")
+			predicted, avg_eval_loss = evaluator(cls, test_dataloader)
+
+			########################################################################################
+			metrics = calculate_metrics(test_dataloader, predicted)
+			print(metrics_to_str(metrics))
+
+			########################################################################################
+			
 			#save the classification report in a file for later use specifying the dataset, model hyperparameters
-			with open(f"results/{model.__class__.__name__}/cls_{DATASET}_classification_report.txt", "a") as f:
-				f.write(f"MODEL: {model.__class__.__name__}\n")
-				f.write(f"DATASET: {DATASET}\n")
-				f.write(f"VOCAB_SIZE: {VOCAB_SIZE}\n")
-				f.write(f"EMBED_DIM: {EMBED_DIM}\n")
-				f.write(f"FORWARD_EXPANSION: {FORWARD_EXPANSION}\n")
-				f.write(f"MAX_LENGTH: {MAX_LENGTH}\n")
-				f.write(f"LAYERS: {LAYERS}\n")
-				f.write(f"REDUCED_EMBEDDING_DIM: {REDUCED_EMBEDDING_DIM}\n")
-				f.write(f"LR: {LR}\n")
-				f.write(f"EPOCHS: {EPOCHS}\n\n")
-				f.write(f"average eval loss: {avg_eval_loss}\n")
-				f.write(f"Accuracy: {accuracy}\n")
-				f.write(f"F1 (weighted): {f1}\n")
-				f.write(f"Precision (weighted): {precision}\n")
-				f.write(f"Recall (weighted): {recall}\n")
-				f.write(f"MCC: {mcc}\n")
-				f.write(f"Confusion matrix:\n {conf_mat}\n")
-				f.write(str(utils.model_size(cls)))
+			
+			
+	
+			with open(f"results/{config.model_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_cls_report.txt", "a") as f:
+				f.write(f"average eval loss: {avg_eval_loss: .4f}\n")
+				f.write(f"{metrics_to_str(metrics)}\n")
+				f.write(str(model_size(cls)))
 				f.write("\n\n*******************************************\n\n")
 
-	with open(f"results/{model.__class__.__name__}/cls_{DATASET}_classification_report.txt", "a") as f:
+	with open(f"results/{config.model_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_cls_report.txt", "a") as f:
 		f.write(f"**************************************************\n==================================================\n**************************************************\n")

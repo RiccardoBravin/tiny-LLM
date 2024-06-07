@@ -123,7 +123,6 @@ class EncoderLayer(torch.nn.Module):
         feed_forward_out = self.dropout(self.feed_forward(interacted))
         encoded = self.layernorm(feed_forward_out + interacted)
         return encoded
-    
 
 
 
