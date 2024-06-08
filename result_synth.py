@@ -3,7 +3,7 @@
 import os
 import pathlib
 
-models = ["BERT_Eff_Multihead", "BERT_efficient", "Gated_BERT", "MLPSwiGLU"]
+models = ["Bert_efficient", "Brav", "Nano_Bert_Efficient"]
 
 for model in models:
     print(f"Results for model: {model}")
