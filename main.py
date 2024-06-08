@@ -6,7 +6,7 @@ import os
 from lib.configs import DataConfig, ModelConfig
 from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
-from lib.Models.models import Brav, Bert_efficient, Nano_Bert_Efficient
+from lib.Models.models import *
 from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Classifier_post_electra
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -63,9 +63,10 @@ train_dataloader.shuffle = True
 # Initializing model
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing model{RESET}")
 
-model = Brav(model_config)
+# model = Brav(model_config)
 # model = Bert_efficient(model_config)
 # model = Nano_Bert_Efficient(model_config)
+model = Mlp_structured(model_config)
 
 model_config.model_name = model.__class__.__name__
 
@@ -97,15 +98,15 @@ metrics = calculate_metrics(test_dataloader, predicted)
 print(metrics_to_str(metrics))
 print(f"{RESET}")
 
-if not os.path.exists(f"results/{model_config.model_name}/"):
-    os.makedirs(f"results/{model_config.model_name}/")
+# if not os.path.exists(f"results/{model_config.model_name}/"):
+#     os.makedirs(f"results/{model_config.model_name}/")
 
-#save the classification report in a file for later use specifying the dataset, model hyperparameters
-with open(f"results/{model.__class__.__name__}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_cls_report.txt", "a") as f:
-	f.write(f"{model_config}\n")
-	f.write(f"LR: {lr}\n")
-	f.write(f"EPOCHS: {epochs}\n\n")
-	f.write(f"average eval loss: {avg_eval_loss: .4f}\n")
-	f.write(f"{metrics_to_str(metrics)}\n")
-	f.write(str(model_size(cls)))
-	f.write("\n\n*******************************************\n\n")
+# #save the classification report in a file for later use specifying the dataset, model hyperparameters
+# with open(f"results/{model.__class__.__name__}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_cls_report.txt", "a") as f:
+# 	f.write(f"{model_config}\n")
+# 	f.write(f"LR: {lr}\n")
+# 	f.write(f"EPOCHS: {epochs}\n\n")
+# 	f.write(f"average eval loss: {avg_eval_loss: .4f}\n")
+# 	f.write(f"{metrics_to_str(metrics)}\n")
+# 	f.write(str(model_size(cls)))
+# 	f.write("\n\n*******************************************\n\n")

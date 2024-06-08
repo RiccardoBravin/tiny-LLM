@@ -10,14 +10,14 @@ import torch
 from lib.configs import DataConfig, ModelConfig
 from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
-from lib.Models.models import Brav, Bert_efficient, Nano_Bert_Efficient
-from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Classifier_post_electra
+from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT
+from lib.Models.models import *
 
 
 
 
 ########################################################################################
-EPOCHS = 1
+EPOCHS = 10
 LR = 1e-2
 
 dataset_config = DataConfig(
@@ -34,7 +34,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 ########################################################################################
 
 
-for DATASET_NAME in ["dbpedia","imdb", "sst2", "news", "bull", "limit",  "nlu", "snips", "multi_nli"]:
+for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snips", "nli"]:
 	dataset_config.dataset_name = DATASET_NAME
 
 
@@ -57,18 +57,21 @@ for DATASET_NAME in ["dbpedia","imdb", "sst2", "news", "bull", "limit",  "nlu", 
 	train_dataloader.shuffle = True
 
 	models = [
-		Brav,
-		Bert_efficient,
-		Nano_Bert_Efficient
+		Mlp_structured,
+		# Brav,
+		# Bert_efficient,
+		# Nano_Bert_Efficient
 	]
 
 	configs = [
-		ModelConfig( model_name="Brav", embedding_dimension=32, reduced_embedding_dimension=16, number_of_heads=None,  
+		ModelConfig( model_name="Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		   			forward_expansion=8, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		ModelConfig( model_name="Bert_efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
-		   			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
-		   			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size)
+		# ModelConfig( model_name="Brav", embedding_dimension=32, reduced_embedding_dimension=16, number_of_heads=None,  
+		#    			forward_expansion=8, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		# ModelConfig( model_name="Bert_efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
+		#    			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		# ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
+		#    			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size)
 	]
 	
 	for config in configs:
@@ -114,9 +117,6 @@ for DATASET_NAME in ["dbpedia","imdb", "sst2", "news", "bull", "limit",  "nlu", 
 			########################################################################################
 			
 			#save the classification report in a file for later use specifying the dataset, model hyperparameters
-			
-			
-	
 			with open(f"results/{config.model_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_cls_report.txt", "a") as f:
 				f.write(f"average eval loss: {avg_eval_loss: .4f}\n")
 				f.write(f"{metrics_to_str(metrics)}\n")

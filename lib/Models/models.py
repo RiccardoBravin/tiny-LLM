@@ -6,22 +6,38 @@ from lib.configs import ModelConfig
 import lib.Models.structures as structures
 import lib.Models.blocks as blocks
 import lib.Models.embedders as embedders
+import lib.Models.modules as modules
 
 
+class Mlp_structured(nn.Module):
+    
+    def __init__(self, model_config: ModelConfig, dropout=0.1):
+        """
+        Embedder and multilayer model using the SwiGLU_block
+        """
+        super().__init__()
+        # embedding for BERT, sum of positional, segment, token embeddings
+        self.embedder = embedders.STD_embedder(model_config)
+
+        # multi-layers transformer blocks, deep network
+        self.encoder_blocks = torch.nn.ModuleList([blocks.SwiGLU(model_config.embedding_dimension, model_config.feed_forward_hidden()) for _ in range(model_config.num_layers)])
+        self.norms = torch.nn.ModuleList([modules.RMSNorm(model_config.embedding_dimension) for _ in range(model_config.num_layers)])
+
+    def forward(self, x, mask):
+        # embedding the indexed sequence to sequence of vectors
+        x = self.embedder(x)
+
+        # running over multiple transformer blocks with skip connection and normalization
+        for encoder, norm in zip(self.encoder_blocks, self.norms):
+            x = encoder.forward(x) + x
+            x = norm(x)
+        return x
 
 class Brav(nn.Module):
 
     def __init__(self, model_config: ModelConfig, dropout=0.1):
         """
         Embedder and multilayer model using the Brav_block
-        Args:
-            vocab_size: the size of the vocabulary
-            d_model: the embedding dimension
-            red_d_model: the reduced embedding dimension for NanoBERT embedder
-            sentence_length: the length of the sentence
-            fw_expand: the expansion factor of the feed forward network
-            n_layers: the number of layers
-            dropout: the dropout rate
         """
 
         super().__init__()
@@ -57,13 +73,6 @@ class Bert_efficient(nn.Module):
     def __init__(self, model_config: ModelConfig, dropout=0.1):
         """
         Embedder and multilayer model using the BERT_block
-        Args:
-            vocab_size: the size of the vocabulary
-            d_model: the embedding dimension
-            n_layers: the number of layers
-            sentence_length: the length of the sentence
-            fw_expand: the expansion factor of the feed forward network
-            dropout: the dropout rate
         """
 
         super().__init__()
@@ -105,13 +114,6 @@ class Nano_Bert_Efficient(nn.Module):
     def __init__(self, model_config: ModelConfig, dropout=0.1):
         """
         Embedder and multilayer model using the BERT_block
-        Args:
-            vocab_size: the size of the vocabulary
-            d_model: the embedding dimension
-            n_layers: the number of layers
-            sentence_length: the length of the sentence
-            fw_expand: the expansion factor of the feed forward network
-            dropout: the dropout rate
         """
 
         super().__init__()
