@@ -1,0 +1,77 @@
+Model config for current run:
+ModelConfig(model_name='Brav', embedding_dimension=32, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=8, num_layers=1, vocab_size=4096)
+LR: 0.01
+EPOCHS: 10
+
+*******************************************
+
+average eval loss:  0.9977
+Accuracy: 0.504
+F1: 0.497
+Precision: 0.505
+Recall: 0.504
+MCC: 0.260
+Confusion matrix:
+ [[1542  850 1087]
+ [ 808 1231 1084]
+ [ 563  477 2173]]
+('Model params: 0.165M', 'Model buffers: 0.000M', 'Model size: 0.631MB')
+
+*******************************************
+
+average eval loss:  1.0096
+Accuracy: 0.485
+F1: 0.476
+Precision: 0.490
+Recall: 0.485
+MCC: 0.236
+Confusion matrix:
+ [[1233 1042 1204]
+ [ 646 1327 1150]
+ [ 433  579 2201]]
+('Model params: 0.165M', 'Model buffers: 0.000M', 'Model size: 0.631MB')
+
+*******************************************
+
+average eval loss:  1.0115
+Accuracy: 0.491
+F1: 0.480
+Precision: 0.493
+Recall: 0.491
+MCC: 0.243
+Confusion matrix:
+ [[1535  731 1213]
+ [ 852 1028 1243]
+ [ 556  400 2257]]
+('Model params: 0.165M', 'Model buffers: 0.000M', 'Model size: 0.631MB')
+
+*******************************************
+
+average eval loss:  0.9911
+Accuracy: 0.508
+F1: 0.500
+Precision: 0.515
+Recall: 0.508
+MCC: 0.271
+Confusion matrix:
+ [[1298 1046 1135]
+ [ 617 1448 1058]
+ [ 397  572 2244]]
+('Model params: 0.165M', 'Model buffers: 0.000M', 'Model size: 0.631MB')
+
+*******************************************
+
+average eval loss:  1.0082
+Accuracy: 0.496
+F1: 0.487
+Precision: 0.498
+Recall: 0.496
+MCC: 0.249
+Confusion matrix:
+ [[1444  872 1163]
+ [ 744 1211 1168]
+ [ 537  467 2209]]
+('Model params: 0.165M', 'Model buffers: 0.000M', 'Model size: 0.631MB')
+
+*******************************************
+
