@@ -110,6 +110,8 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 		discriminator = Nano_Bert_Efficient(discriminator_config)
 		# discriminator = Mlp_structured(discriminator_config)
 
+		generator_config.model_name = generator.__class__.__name__
+		discriminator_config.model_name = discriminator.__class__.__name__
 
 		generator.embedder.token.weight.data = discriminator.embedder.token.weight.data
 		generator.embedder.position.weight.data = discriminator.embedder.position.weight.data
