@@ -1,0 +1,95 @@
+Model config for current run:
+ModelConfig(model_name='Mlp_structured', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=8, num_layers=1, vocab_size=4096)
+LR: 0.01
+EPOCHS: 10
+
+*******************************************
+
+average eval loss:  0.4099
+Accuracy: 0.824
+F1: 0.822
+Precision: 0.822
+Recall: 0.824
+MCC: 0.790
+Confusion matrix:
+ [[739   0  26   0   2  10]
+ [  0 790   4   1   0   6]
+ [ 39  11 399   7  49 296]
+ [  0   0   4 773   0   4]
+ [  6   1  42   0 680  56]
+ [  7   4 189   7  67 551]]
+('Model params: 0.395M', 'Model buffers: 0.000M', 'Model size: 1.506MB')
+
+*******************************************
+
+average eval loss:  0.4067
+Accuracy: 0.830
+F1: 0.827
+Precision: 0.827
+Recall: 0.830
+MCC: 0.797
+Confusion matrix:
+ [[741   0  21   1   6   8]
+ [  0 789   4   1   1   6]
+ [ 43  19 404   7  39 289]
+ [  1   0   4 769   0   7]
+ [  6   1  50   0 684  44]
+ [  2   4 180   4  63 572]]
+('Model params: 0.395M', 'Model buffers: 0.000M', 'Model size: 1.506MB')
+
+*******************************************
+
+average eval loss:  0.4005
+Accuracy: 0.830
+F1: 0.829
+Precision: 0.828
+Recall: 0.830
+MCC: 0.797
+Confusion matrix:
+ [[741   0  19   1   6  10]
+ [  0 788   7   1   1   4]
+ [ 47  11 428   4  31 280]
+ [  2   0   1 771   0   7]
+ [  5   0  40   1 686  53]
+ [  7   1 204  10  57 546]]
+('Model params: 0.395M', 'Model buffers: 0.000M', 'Model size: 1.506MB')
+
+*******************************************
+
+average eval loss:  0.3999
+Accuracy: 0.825
+F1: 0.823
+Precision: 0.823
+Recall: 0.825
+MCC: 0.790
+Confusion matrix:
+ [[743   0  20   0   3  11]
+ [  0 791   5   1   0   4]
+ [ 38  16 413   7  47 280]
+ [  1   0   4 768   0   8]
+ [  5   0  55   0 677  48]
+ [  6   2 202   6  65 544]]
+('Model params: 0.395M', 'Model buffers: 0.000M', 'Model size: 1.506MB')
+
+*******************************************
+
+average eval loss:  0.4012
+Accuracy: 0.822
+F1: 0.822
+Precision: 0.822
+Recall: 0.822
+MCC: 0.786
+Confusion matrix:
+ [[739   0  32   0   3   3]
+ [  0 790   8   1   0   2]
+ [ 36  11 446   5  37 266]
+ [  2   0   5 770   0   4]
+ [  4   1  64   2 667  47]
+ [  4   4 251   1  57 508]]
+('Model params: 0.395M', 'Model buffers: 0.000M', 'Model size: 1.506MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

@@ -18,10 +18,10 @@ from lib.Models.models import *
 from lib.electra import Electra
 
 
-epochs_pretraining = 10
+epochs_pretraining = 30
 lr_pretraining = 5e-3
 
-epochs_post = 5
+epochs_post = 10
 lr_post = 1e-3
 logs_x_epoch = 2
 
@@ -109,7 +109,6 @@ generator.embedder.position.weight.data = discriminator.embedder.position.weight
 generator_with_classifier = Classifier_for_electra(generator, generator_config.embedding_dimension, dataset_config.dict_size)
 discriminator_with_classifier = Classifier_for_electra(discriminator, discriminator_config.embedding_dimension, 1)
 
-print(tokenizer.token_to_id("[MASK]"))
 
 electra = Electra(
     generator_with_classifier,
