@@ -162,10 +162,10 @@ class BravBlock(torch.nn.Module):
         self.d_model_expand = d_model_expand
 
         self.weighter = torch.nn.Parameter(torch.randn(d_model_expand)) #the vector that is used to expand the embedding dimension to a matrix
-        #self.W_weighter = torch.nn.Linear(d_model, d_model) # the linear layer that is used to scramble the summed matrix (transposed)
-        self.W_weighter = torch.nn.Linear(d_model_expand, d_model_expand)
+        self.W_weighter = torch.nn.Linear(d_model, d_model) # the linear layer that is used to scramble the summed matrix (transposed)
+        # self.W_weighter = torch.nn.Linear(d_model_expand, d_model_expand)
 
-
+        self.af = torch.nn.Softsign()
 
     def forward(self, x: torch.Tensor, mask: torch.Tensor):
         """
@@ -184,17 +184,18 @@ class BravBlock(torch.nn.Module):
         # (barch_size, seq_len, d_model) @ (d_model) = (batch_size, d_model, d_model_expand)
         W_tot = torch.einsum('bsd,e->bde', x, self.weighter)
 
-
-        W_tot = torch.nn.functional.softmax(W_tot, dim=1)
+        W_tot = self.af(W_tot)
+        #W_tot = torch.nn.functional.softmax(W_tot, dim=1)
         
-        #W_tot = self.W_weighter(W_tot.transpose(1, 2))
-        W_tot = self.W_weighter(W_tot)
+
+        W_tot = self.W_weighter(W_tot.transpose(1, 2))
+        # W_tot = self.W_weighter(W_tot)
 
         # use the obtained matrix to multiply all x (W_tot * x)
         # (batch_size, d_model, d_model_expand) @ (batch_size, seq_len, d_model) = (batch_size, seq_len, d_model_expand)
-        #res = torch.einsum('bed,bsd->bse', W_tot, x)
-        #res = torch.matmul(x, W_tot.transpose(1, 2))
-        res = torch.matmul(x, W_tot)
+        
+        res = torch.matmul(x, W_tot.transpose(1, 2))
+        # res = torch.matmul(x, W_tot)
 
         return res
 

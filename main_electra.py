@@ -83,7 +83,7 @@ test_dataloader = encode_dataset(tokenizer, test_dataset, dataset_config.max_len
 train_dataloader.shuffle = True
 
 ########################################################################################
-print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing model{RESET}")
+print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Initializing model{RESET}")
 
 # config = MambaConfig(d_model=EMBED_DIM, n_layers=LAYERS, expand_factor=FORWARD_EXPANSION)
 # model = Mamba(config)
@@ -124,17 +124,17 @@ electra.to(device)
 print(f"Model {electra.__class__.__name__} initialized on {device}")
 
 
-print("Generator parameters:")
+print(f"{ATTRIBUTES['Bold']}Generator parameters:")
 #print all model parameters with names
 print_model_params(generator)
 
-print("Discriminator parameters:")
+print(f"{ATTRIBUTES['Bold']}Discriminator parameters:")
 #print all model parameters with names
 print_model_params(discriminator)
 
 
 ########################################################################################
-print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
+print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Starting training{RESET}")
 
 	
 
@@ -169,7 +169,7 @@ scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=len(trai
 log_step = len(train_dataloader) // logs_x_epoch
 electra.train()
 for epoch in range(epochs_pretraining):
-	tqdm.write(f"{FOREGROUND_COLORS['Green']}Epoch {epoch+1}/{epochs_pretraining}")
+	tqdm.write(f"{FOREGROUND_COLORS['BrightGreen']}Epoch {epoch+1}/{epochs_pretraining}")
 	
 	train_loss = 0
 	tqdm_train_loader = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{epochs_pretraining}", leave=False)
@@ -232,30 +232,14 @@ for epoch in range(epochs_pretraining):
 			
 print(f"{RESET}")	
 
-# ########################################################################################
-# print(f"{ATTRIBUTES['Bold']}Starting evaluation{RESET}")
-# predicted, avg_eval_loss = utils.evaluator(cls, test_dataloader)
-
-# accuracy = accuracy_score(label_test, predicted)
-# f1 = f1_score(label_test, predicted, average='micro')  
-# precision = precision_score(label_test, predicted, average='micro')  
-# recall = recall_score(label_test, predicted, average='micro')
-# mcc = matthews_corrcoef(label_test, predicted)
-# conf_mat = confusion_matrix(label_test, predicted)
-
-# print(f"Accuracy: {accuracy}")
-# print(f"F1: {f1}")
-# print(f"Precision: {precision}")
-# print(f"Recall: {recall}")
-# print(f"MCC: {mcc}")
-# print(f"Confusion matrix:\n {conf_mat}")
+########################################################################################
 
 
 
 
 
 ########################################################################################
-print(f"{ATTRIBUTES['Bold']}Normal model initialization:{RESET}")
+print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
 
 classifier = Classifier_BERT(discriminator, discriminator_config.embedding_dimension, dataset_config.n_labels())
 classifier.to(device)
@@ -268,56 +252,36 @@ print_model_params(classifier)
 
 ########################################################################################
 
-print(f"{ATTRIBUTES['Bold']}Starting training{RESET}")
+print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Starting training{RESET}")
 
-epochs_post = 5
-lr_post = 1e-4
+trainer(classifier, train_dataloader, validation_dataloader, lr=lr_post, epochs=epochs_post, logs_x_epoch=logs_x_epoch, color=FOREGROUND_COLORS["BrightMagenta"])
 
-trainer(classifier, train_dataloader, validation_dataloader, lr=lr_post, epochs=epochs_post, logs_x_epoch=logs_x_epoch)
+########################################################################################
 
-
-# ########################################################################################
-# print(f"{ATTRIBUTES['Bold']}Starting evaluation{RESET}")
-# predicted, avg_eval_loss = utils.evaluator(std_cls, test_dataloader)
-
-# accuracy = accuracy_score(label_test, predicted)
-# f1 = f1_score(label_test, predicted, average='micro')  
-# precision = precision_score(label_test, predicted, average='micro')  
-# recall = recall_score(label_test, predicted, average='micro')
-# mcc = matthews_corrcoef(label_test, predicted)
-# conf_mat = confusion_matrix(label_test, predicted)
+print(f"{FOREGROUND_COLORS["BrightYellow"]}Testing the model{RESET}")
+print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
+predicted, avg_eval_loss = evaluator(classifier, test_dataloader)
+print(f"{RESET}")
 
 
-# print(f"Accuracy: {accuracy}")
-# print(f"F1: {f1}")
-# print(f"Precision: {precision}")
-# print(f"Recall: {recall}")
-# print(f"MCC: {mcc}")
-# print(f"Confusion matrix:\n {conf_mat}")
+# Evaluating the results
+print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Evaluating the results{RESET}")
+print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
+metrics = calculate_metrics(test_dataloader, predicted)
+print(metrics_to_str(metrics))
+print(f"{RESET}")
 
 
 
-# ########################################################################################
+# if not os.path.exists(f"results/{discriminator_config.model_name}/"):
+#     os.makedirs(f"results/{discriminator_config.model_name}/")
+
 # #save the classification report in a file for later use specifying the dataset, model hyperparameters
-# with open(f"results/tests_{DATASET}_classification_report.txt", "a") as f:
-# 	f.write(f"Values of final training\n")
-# 	f.write(f"MODEL: {model.__class__.__name__}\n")
-# 	f.write(f"DATASET: {DATASET}\n")
-# 	f.write(f"VOCAB_SIZE: {VOCAB_SIZE}\n")
-# 	f.write(f"EMBED_DIM: {EMBED_DIM}\n")
-# 	f.write(f"FORWARD_EXPANSION: {FORWARD_EXPANSION}\n")
-# 	f.write(f"MAX_LENGTH: {MAX_LENGTH}\n")
-# 	f.write(f"LAYERS: {LAYERS}\n")
-# 	f.write(f"REDUCED_EMBEDDING_DIM: {REDUCED_EMBEDDING_DIM}\n")
-# 	f.write(f"LR: {LR}\n")
-# 	f.write(f"EPOCHS: {EPOCHS}\n\n")
-# 	f.write(f"average eval loss: {avg_eval_loss}\n")
-# 	f.write(f"Accuracy: {accuracy}\n")
-# 	f.write(f"F1 (weighted): {f1}\n")
-# 	f.write(f"Precision (weighted): {precision}\n")
-# 	f.write(f"Recall (weighted): {recall}\n")
-# 	f.write(f"MCC: {mcc}\n")
-# 	f.write(f"Confusion matrix:\n {conf_mat}\n")
-# 	f.write(str(utils.model_size(std_cls)))
+# with open(f"results/{discriminator.__class__.__name__}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_pretr_report.txt", "a") as f:
+# 	f.write(f"{discriminator_config}\n")
+# 	f.write(f"LR: {lr_post}\n")
+# 	f.write(f"EPOCHS: {epochs_post}\n\n")
+# 	f.write(f"average eval loss: {avg_eval_loss: .4f}\n")
+# 	f.write(f"{metrics_to_str(metrics)}\n")
+# 	f.write(str(model_size(classifier)))
 # 	f.write("\n\n*******************************************\n\n")
-

@@ -86,7 +86,7 @@ def n_ary_gray_code(n, base = 3):
 
 
 
-def trainer(model, train_dataloader, val_dataloader, lr, epochs, logs_x_epoch = 10):
+def trainer(model, train_dataloader, val_dataloader, lr, epochs, logs_x_epoch = 10, color = FOREGROUND_COLORS['Green']):
 	device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 	criterion = torch.nn.CrossEntropyLoss()
@@ -101,7 +101,7 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs, logs_x_epoch = 
 	log_step = len(train_dataloader) // logs_x_epoch
 
 	for epoch in range(epochs):
-		tqdm.write(f"{FOREGROUND_COLORS['Green']}Epoch {epoch+1}/{epochs}")
+		tqdm.write(f"{color}Epoch {epoch+1}/{epochs}")
 		
 		model.train()
 		train_loss = 0
@@ -150,7 +150,7 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs, logs_x_epoch = 
 				mcc = matthews_corrcoef(val_dataloader.dataset["label"], guesses)
 				val_loss = val_loss / len(val_dataloader)
 				scheduler.step(-mcc)
-				tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()} {FOREGROUND_COLORS['Green']}")
+				tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()} {color}")
 				model.train()
 			
 	print(f"{RESET}")		
