@@ -48,6 +48,28 @@ class Classifier_BERT(nn.Module):
         x = self.fc(x)
         return x
     
+class Classifier_for_electra(nn.Module):
+    def __init__(self, model:nn.Module, model_out_sz: int, labels_num:int):
+        r"""
+        Classifier that to be used for ELCTRA pretraining to ensure correct passage of variables through the model
+        The model is expected to output a tensor of shape (batch_size, seq_len, 1)
+        Args:
+            model: the model that will be used to generate the embeddings
+            model_out_sz: the output size of the model
+            labels_num: the number of labels to output
+        """
+        super().__init__()
+        self.model = model
+        self.act = nn.Sigmoid()
+        self.fc = nn.Linear(model_out_sz, labels_num)
+
+    def forward(self, x:torch.Tensor, mask:torch.Tensor):
+        x = self.model(x, mask)
+        x = self.act(x)
+        x = self.fc(x)
+        return x
+    
+
 class Classifier_post_electra(nn.Module):
 
     def __init__(self, model:nn.Module, seq_len: int, labels_num:int):
@@ -66,6 +88,7 @@ class Classifier_post_electra(nn.Module):
 
     def forward(self, x:torch.Tensor, mask:torch.Tensor):
         x = self.model(x, mask)
-        x = self.act(x)
+        # squeeze the last dimension to make it work with the linear layer
+        x = self.act(x.squeeze(-1))
         x = self.fc(x)
         return x

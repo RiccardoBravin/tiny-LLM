@@ -11,7 +11,7 @@ for model in models:
     # For each file inside the results/model directory 
     for file in os.listdir(f"results/{model}"):
         #keep from the file name only what is after cls_ and before _classification...
-        file_name = file.split("cls_")[1].split("_classification")[0]
+        file_name = file.split("_")[0]
         print(f"\t\t{file_name}")
 
         #for each file extract the float values after the keywords "f1",and "accuracy"
