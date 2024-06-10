@@ -134,11 +134,11 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 		print(f"Model {electra.__class__.__name__} initialized on {device}")
 
 
-		print(f"{ATTRIBUTES['Bold']}Generator parameters:")
+		print(f"{ATTRIBUTES['Bold']}Generator parameters:{RESET}")
 		#print all model parameters with names
 		print_model_params(generator)
 
-		print(f"{ATTRIBUTES['Bold']}Discriminator parameters:")
+		print(f"{ATTRIBUTES['Bold']}Discriminator parameters:{RESET}")
 		#print all model parameters with names
 		print_model_params(discriminator)
 

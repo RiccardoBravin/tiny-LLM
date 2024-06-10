@@ -1,7 +1,9 @@
 import torch
 from torch import nn
+import math
 
 from lib.configs import ModelConfig
+from lib.utils import n_ary_gray_code
 
 class STD_embedder(nn.Module):
     def __init__(self, model_config: ModelConfig):
@@ -60,7 +62,7 @@ class Nano_embedder(nn.Module):
 
 class Gray_nano_embedder(nn.Module):
     #TODO: IMPLEMENT THIS CLASS BEACUSA IT SEEMS TO BE INTERESTING
-    def __init__(self, model_config: ModelConfig):
+    def __init__(self, model_config: ModelConfig, base = 3):
         r"""
         Embedder for transformer models that makes use of the gray encoding for the embeddings of positions and tokens and upscales 
         both with a linear layer
@@ -72,7 +74,25 @@ class Gray_nano_embedder(nn.Module):
         """
 
         super().__init__()
-        raise NotImplementedError("This embedder is not implemented yet")
-       
+        log_vocab_size = math.ceil(math.log(model_config.vocab_size, base))
+        log_sentence_len = math.ceil(math.log(model_config.max_length, base))
+
+        self.embedder = torch.Tensor(n_ary_gray_code(log_vocab_size,   base))[:model_config.vocab_size]
+        self.position = torch.Tensor(n_ary_gray_code(log_sentence_len, base))[:model_config.max_length]
+        
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.embedder = torch.nn.Parameter(self.embedder.to(device), requires_grad=False)
+        self.position = torch.nn.Parameter(self.position.to(device), requires_grad=False)
+        
+        self.embedding_expander = torch.nn.Linear(log_vocab_size,   model_config.embedding_dimension)
+        self.position_expander  = torch.nn.Linear(log_sentence_len, model_config.embedding_dimension)
+                                           
+
     def forward(self, tokens):
-        raise NotImplementedError("This embedder is not implemented yet")
+    
+        tokens = self.embedding_expander(self.embedder[tokens])        
+        position = self.position_expander(self.position)
+
+        x = tokens + position
+        # x = self.embedding_expander(self.embedder[tokens]) + self.position_expander(self.position)
+        return x

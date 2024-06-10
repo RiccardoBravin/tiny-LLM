@@ -81,7 +81,6 @@ def n_ary_gray_code(n, base = 3):
 				invert = not invert
 				val = 0
 
-
 	return gray
 
 

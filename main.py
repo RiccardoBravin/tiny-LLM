@@ -13,25 +13,25 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #NEED TO MAKE THIS A CONFIG FILE WITH A DATA CLASS
 
-lr = 1e-2
-epochs = 10
+lr = 1e-3
+epochs = 20
 
 dataset_config = DataConfig(
                     dataset_name="bull", 
                     dict_size=pow(2, 12), 
                     tokenizer_type="bpe", 
                     batch_size=128, 
-                    max_len=64, 
+                    max_len=128, 
                     labels=None
                 )
 
 model_config = ModelConfig(
                     model_name=None, 
-                    embedding_dimension=64, 
+                    embedding_dimension=128, 
                     reduced_embedding_dimension=16, 
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
-                    forward_expansion=4, 
+                    forward_expansion=2, 
                     num_layers=4,
                     vocab_size=dataset_config.dict_size
                 )
@@ -66,9 +66,10 @@ train_dataloader.shuffle = True
 # Initializing model
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing model{RESET}")
 
-model = Brav(model_config)
+# model = Brav(model_config)
 # model = Bert_efficient(model_config)
 # model = Nano_Bert_Efficient(model_config)
+model = Gray_BERT_Efficient(model_config)
 # model = Mlp_structured(model_config)
 
 model_config.model_name = model.__class__.__name__
@@ -99,6 +100,7 @@ print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
 metrics = calculate_metrics(test_dataloader, predicted)
 print(metrics_to_str(metrics))
 print(f"{RESET}")
+
 
 # if not os.path.exists(f"results/{model_config.model_name}/"):
 #     os.makedirs(f"results/{model_config.model_name}/")
