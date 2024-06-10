@@ -86,7 +86,10 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 
 	train_dataloader.shuffle = True
 
-	for train_n in range(5):
+	train_n = 0
+	while train_n < 5:
+		loss_nan = False
+
 		print(f"\n\n{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}--------------------- STARTING TRAINING CYCLE {train_n} ---------------------{RESET}\n")
 
 
@@ -195,6 +198,11 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 				with torch.cuda.amp.autocast():
 					loss, loss_mlm, loss_disc, acc_gen, acc_disc, disc_labels, disc_pred = electra(tokens, mask = masks)
 
+				if torch.isnan(loss):
+					print(f"{FOREGROUND_COLORS['BrightRed']}LOSS IS NAN AT STEP {step_num}\nRESETTING THE TRAINING ITERATION{RESET}")
+					loss_nan = True
+					break
+
 				loss.backward()
 				optimizer.step()
 				scheduler.step()	
@@ -248,10 +256,11 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 
 		print(f"{RESET}")	
 
-		########################################################################################
+		#######################################################################################
 
-
-
+		# skip current training cycle if loss is nan
+		if loss_nan:
+			continue
 
 
 		########################################################################################
@@ -301,3 +310,5 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 			f.write(f"{metrics_to_str(metrics)}\n")
 			f.write(str(model_size(classifier)))
 			f.write("\n\n*******************************************\n\n")
+
+		train_n += 1
