@@ -21,8 +21,8 @@ from lib.electra import Electra
 epochs_pretraining = 30
 lr_pretraining = 5e-3
 
-epochs_post = 10
-lr_post = 1e-3
+epochs_post = 15
+lr_post = 5e-4
 logs_x_epoch = 1
 
 dataset_config = DataConfig(
@@ -219,6 +219,8 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 				tqdm_train_loader.set_postfix(loss = loss_str)			
 				if step_num % log_step == (log_step - 1):
 					electra.eval()
+					val_gen_loss = 0
+					val_disc_loss = 0
 					val_gen_accuracy = 0
 					val_disc_accuracy = 0
 					val_loss = 0
@@ -227,17 +229,19 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 						masks  = batch_val["attention_mask"].to(device)
 						labels_val = batch_val["label"].to(device)
 
-						loss, _, _, acc_gen, acc_disc, _, _ = electra(tokens, mask = masks)
+						loss, loss_mlm, loss_disc, acc_gen, acc_disc, _, _ = electra(tokens, mask = masks)
 						val_loss += loss.item()
 						val_gen_accuracy += acc_gen.item()
 						val_disc_accuracy += acc_disc.item()
 
+					val_gen_loss = val_gen_loss / len(validation_dataloader)
+					val_disc_loss = val_disc_loss / len(validation_dataloader)
 					val_gen_accuracy = val_gen_accuracy / len(validation_dataloader)
 					val_disc_accuracy = val_disc_accuracy / len(validation_dataloader)
 					val_loss = val_loss / len(validation_dataloader)
 
 					#mcc = matthews_corrcoef(y.cpu().numpy(), torch.argmax(guess, dim=1).cpu().numpy())
-					tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val gen acc: {val_gen_accuracy:.3f}, Val disc acc: {val_disc_accuracy:.3f}, Lr: {scheduler.get_last_lr()[0]:.6f}{FOREGROUND_COLORS['Green']}")
+					tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Gen loss: {val_gen_loss:.3f}, Disc loss: {val_disc_loss:.3f}, Gen acc: {val_gen_accuracy:.3f}, Disc acc: {val_disc_accuracy:.3f}, Lr: {scheduler.get_last_lr()[0]:.6f}{FOREGROUND_COLORS['Green']}")
 					electra.train()
 
 		print(f"{RESET}")	
