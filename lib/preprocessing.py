@@ -160,6 +160,10 @@ def dataset_selector(name:str):
 	else:
 		raise ValueError("Dataset not found")
 
+	#make dataset use only ascii characters
+	train_data = train_data.map(lambda x: {'text': x['text'].encode('ascii', 'ignore').decode()})
+	test_data = test_data.map(lambda x: {'text': x['text'].encode('ascii', 'ignore').decode()})
+
 	return train_data, test_data
 
 
@@ -189,6 +193,7 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 		#set the normalizer to ensure the text is clean
 		from tokenizers.normalizers import BertNormalizer
 		tokenizer.normalizer = BertNormalizer(clean_text=True, handle_chinese_chars=True, strip_accents=True, lowercase=True)
+
 			
 		#select the trainer corresponding to the tokenizer model
 		from tokenizers.trainers import WordPieceTrainer, BpeTrainer, UnigramTrainer
@@ -222,6 +227,8 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 	
 # function to encode the text using the tokenizer and return a torch usable dataloader
 def encode_dataset(tokenizer:Tokenizer, dataset:Dataset, max_length:int, batch_size:int):
+	tokenizer.pre_tokenizer
+
 
 	from tokenizers.processors import TemplateProcessing
 	tokenizer.post_processor = TemplateProcessing(
