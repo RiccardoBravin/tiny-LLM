@@ -17,8 +17,8 @@ from lib.Models.models import *
 
 
 ########################################################################################
-EPOCHS = 10
-LR = 1e-2
+EPOCHS = 20
+LR = 1e-3
 
 dataset_config = DataConfig(
                     dataset_name=None, 
@@ -74,7 +74,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 		# ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		ModelConfig( model_name="Gray_BERT_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
-					forward_expansion=4, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size)			  	
+					forward_expansion=2, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size)			  	
 	]
 	
 	for config in configs:

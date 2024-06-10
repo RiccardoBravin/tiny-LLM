@@ -229,8 +229,10 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 						masks  = batch_val["attention_mask"].to(device)
 						labels_val = batch_val["label"].to(device)
 
-						loss, loss_mlm, loss_disc, acc_gen, acc_disc, _, _ = electra(tokens, mask = masks)
+						loss, loss_gen, loss_disc, acc_gen, acc_disc, _, _ = electra(tokens, mask = masks)
 						val_loss += loss.item()
+						val_gen_loss += loss_gen.item()
+						val_disc_loss += loss_disc.item()
 						val_gen_accuracy += acc_gen.item()
 						val_disc_accuracy += acc_disc.item()
 
