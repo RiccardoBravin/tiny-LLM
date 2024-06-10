@@ -8,6 +8,8 @@ import lib.Models.blocks as blocks
 import lib.Models.embedders as embedders
 import lib.Models.modules as modules
 
+from lib.MAMBA import Mamba, MambaConfig
+
 
 class Mlp_structured(nn.Module):
     
@@ -182,4 +184,38 @@ class Gray_BERT_Efficient(nn.Module):
         # running over multiple transformer blocks
         for encoder in self.encoder_blocks:
             x = encoder.forward(x, mask)
+        return x
+    
+
+
+class Mamba_model(nn.Module):
+    """
+    Mamba model
+    """
+
+    def __init__(self, model_config: ModelConfig, dropout=0.1):
+        """
+        Embedder and multilayer model using the Mamba_block
+        """
+
+        super().__init__()
+        self.d_model = model_config.embedding_dimension
+
+        # embedding for BERT, sum of positional, segment, token embeddings
+        self.embedder = embedders.Nano_embedder(model_config)
+
+        # multi-layers transformer blocks, deep network
+        config = MambaConfig(d_model=model_config.embedding_dimension, 
+                             n_layers=model_config.num_layers,
+                             expand_factor=model_config.forward_expansion,
+                             use_cuda=True )
+        self.mamba_layers = Mamba(config)
+
+    def forward(self, x, mask):
+        
+        # embedding the indexed sequence to sequence of vectors
+        x = self.embedder(x)
+
+        # running over multiple transformer blocks
+        x = self.mamba_layers(x)
         return x

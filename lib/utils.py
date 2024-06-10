@@ -148,7 +148,7 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs, logs_x_epoch = 
 				val_accuracy = sum(val_accuracy) / len(val_accuracy)
 				mcc = matthews_corrcoef(val_dataloader.dataset["label"], guesses)
 				val_loss = val_loss / len(val_dataloader)
-				scheduler.step(-mcc)
+				scheduler.step(val_loss)
 				tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()} {color}")
 				model.train()
 			
