@@ -1,0 +1,80 @@
+Model config for current run:
+ModelConfig(model_name='Nano_Mlp_structured', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=2, num_layers=1, vocab_size=4096)
+LR: 0.01
+EPOCHS: 10
+
+*******************************************
+
+average eval loss:  0.9781
+Accuracy: 0.515
+F1: 0.512
+Precision: 0.512
+Recall: 0.515
+MCC: 0.272
+Confusion matrix:
+ [[1769  831  879]
+ [ 979 1310  834]
+ [ 676  564 1973]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.887MB')
+
+*******************************************
+
+average eval loss:  0.9759
+Accuracy: 0.514
+F1: 0.511
+Precision: 0.512
+Recall: 0.514
+MCC: 0.271
+Confusion matrix:
+ [[1727  885  867]
+ [ 934 1315  874]
+ [ 630  581 2002]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.887MB')
+
+*******************************************
+
+average eval loss:  0.9681
+Accuracy: 0.526
+F1: 0.522
+Precision: 0.525
+Recall: 0.526
+MCC: 0.291
+Confusion matrix:
+ [[1783  767  929]
+ [ 919 1276  928]
+ [ 626  481 2106]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.887MB')
+
+*******************************************
+
+average eval loss:  0.9808
+Accuracy: 0.516
+F1: 0.510
+Precision: 0.515
+Recall: 0.516
+MCC: 0.276
+Confusion matrix:
+ [[1784  702  993]
+ [ 976 1159  988]
+ [ 653  434 2126]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.887MB')
+
+*******************************************
+
+average eval loss:  0.9722
+Accuracy: 0.523
+F1: 0.517
+Precision: 0.523
+Recall: 0.523
+MCC: 0.287
+Confusion matrix:
+ [[1750  738  991]
+ [ 912 1223  988]
+ [ 622  430 2161]]
+('Model params: 0.233M', 'Model buffers: 0.000M', 'Model size: 0.887MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************
