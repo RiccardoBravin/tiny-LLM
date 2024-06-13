@@ -17,7 +17,7 @@ from lib.Models.models import *
 
 
 ########################################################################################
-EPOCHS = 20
+EPOCHS = 10
 LR = 1e-3
 
 dataset_config = DataConfig(
@@ -69,7 +69,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 		# ModelConfig( model_name="Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=8, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		ModelConfig( model_name="Nano_Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
-		   			forward_expansion=8, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		   			forward_expansion=4, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Brav", embedding_dimension=32, reduced_embedding_dimension=16, number_of_heads=None,  
 		#    			forward_expansion=8, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Bert_efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
