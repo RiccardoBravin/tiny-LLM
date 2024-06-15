@@ -81,8 +81,8 @@ class Gray_nano_embedder(nn.Module):
         self.position = torch.Tensor(n_ary_gray_code(log_sentence_len, base))[:model_config.max_length]
         
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.embedder = torch.nn.Parameter(self.embedder.to(device), requires_grad=False)
-        self.position = torch.nn.Parameter(self.position.to(device), requires_grad=False)
+        self.embedder = torch.nn.Parameter(self.embedder.to(device), requires_grad=True)
+        self.position = torch.nn.Parameter(self.position.to(device), requires_grad=True)
         
         self.embedding_expander = torch.nn.Linear(log_vocab_size,   model_config.embedding_dimension)
         self.position_expander  = torch.nn.Linear(log_sentence_len, model_config.embedding_dimension)

@@ -18,7 +18,7 @@ from lib.Models.models import *
 
 ########################################################################################
 EPOCHS = 10
-LR = 1e-3
+LR = 5e-3
 
 dataset_config = DataConfig(
                     dataset_name=None, 
@@ -46,7 +46,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 	
 	tokenizer = make_tokenizer(dataset_config, train_dataset)
 
-	validation_dataset = train_dataset.train_test_split(test_size=0.1)
+	validation_dataset = train_dataset.train_test_split(test_size=0.05)
 	train_dataset, validation_dataset = validation_dataset["train"], validation_dataset["test"]
 
 
@@ -61,7 +61,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 		Nano_Mlp_structured,
 		# Brav,
 		# Bert_efficient,
-		# Nano_Bert_Efficient,
+		Nano_Bert_Efficient,
 		# Gray_BERT_Efficient
 	]
 
@@ -69,14 +69,14 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 		# ModelConfig( model_name="Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=8, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		ModelConfig( model_name="Nano_Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
-		   			forward_expansion=4, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		   			forward_expansion=4, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Brav", embedding_dimension=32, reduced_embedding_dimension=16, number_of_heads=None,  
-		#    			forward_expansion=8, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		#    			forward_expansion=8, num_layers=6, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Bert_efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		# ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
-		#    			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		# ModelConfig( model_name="Gray_BERT_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
+		ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
+		   			forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		# ModelConfig( model_name="Gray_BERT_Efficient", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		# 			forward_expansion=2, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size)			  	
 	]
 	
@@ -109,7 +109,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 
 			########################################################################################
 			print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Training{RESET}")
-			trainer(cls, train_dataloader, validation_dataloader, lr=LR, epochs=EPOCHS, logs_x_epoch=2)
+			cls = trainer(cls, train_dataloader, validation_dataloader, lr=LR, epochs=EPOCHS, logs_x_epoch=3)
 
 
 			########################################################################################

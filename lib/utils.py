@@ -84,6 +84,12 @@ def n_ary_gray_code(n, base = 3):
 	return gray
 
 
+def checkpoint(model, filename):
+    torch.save(model.state_dict(), filename)
+    
+def resume(model, filename):
+    model.load_state_dict(torch.load(filename))
+
 
 def trainer(model, train_dataloader, val_dataloader, lr, epochs, logs_x_epoch = 10, color = FOREGROUND_COLORS['Green']):
 	device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -98,6 +104,8 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs, logs_x_epoch = 
 	#scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs*2, eta_min=1e-6)
 
 	log_step = len(train_dataloader) // logs_x_epoch
+
+	min_loss = float('inf')
 
 	for epoch in range(epochs):
 		tqdm.write(f"{color}Epoch {epoch+1}/{epochs}")
@@ -148,11 +156,16 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs, logs_x_epoch = 
 				val_accuracy = sum(val_accuracy) / len(val_accuracy)
 				mcc = matthews_corrcoef(val_dataloader.dataset["label"], guesses)
 				val_loss = val_loss / len(val_dataloader)
+				if(val_loss < min_loss):
+					min_loss = val_loss
+					checkpoint(model, "best_model.pth")
 				scheduler.step(-mcc)
 				tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()} {color}")
 				model.train()
 			
 	print(f"{RESET}")		
+	resume(model, "best_model.pth")
+	return model
 
 
 

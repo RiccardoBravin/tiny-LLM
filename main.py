@@ -13,13 +13,13 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #NEED TO MAKE THIS A CONFIG FILE WITH A DATA CLASS
 
-lr = 1e-3
-epochs = 20
+lr = 5e-2
+epochs = 10
 
 dataset_config = DataConfig(
-                    dataset_name="bull", 
+                    dataset_name="imdb", 
                     dict_size=pow(2, 12), 
-                    tokenizer_type="bpe", 
+                    tokenizer_type="wordpiece", #wordpiece #bpe #unigram 
                     batch_size=128, 
                     max_len=128, 
                     labels=None
@@ -27,12 +27,12 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
                     model_name=None, 
-                    embedding_dimension=64, 
+                    embedding_dimension=128, 
                     reduced_embedding_dimension=16, 
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
                     forward_expansion=4, 
-                    num_layers=4,
+                    num_layers=2,
                     vocab_size=dataset_config.dict_size
                 )
 
@@ -50,7 +50,7 @@ tokenizer = make_tokenizer(dataset_config, train_dataset)
 print(f"{RESET}")
 
 #split the training to have a small validation set
-validation_dataset = train_dataset.train_test_split(test_size=0.1)
+validation_dataset = train_dataset.train_test_split(test_size=0.05)
 train_dataset, validation_dataset = validation_dataset["train"], validation_dataset["test"]
 
 # tokenizing the dataset
@@ -86,7 +86,7 @@ cls = Classifier_BERT(model, model_out_sz=model_config.embedding_dimension, labe
 # Training the model
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Training the model{RESET}")
 
-trainer(cls, train_dataloader, validation_dataloader, lr=lr, epochs=epochs, logs_x_epoch=2)
+cls = trainer(cls, train_dataloader, validation_dataloader, lr=lr, epochs=epochs, logs_x_epoch=5)
 
 # Testing the model
 print(f"{FOREGROUND_COLORS["BrightYellow"]}Testing the model{RESET}")
