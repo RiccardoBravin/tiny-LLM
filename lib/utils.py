@@ -46,7 +46,7 @@ def activations_calculator(model, dict_size, max_len):
 		layer.register_forward_hook(get_activation(name))
 	
 	# Pass a dummy input through the model
-	dummy_input = torch.randn(1, max_len, dict_size)  # Example input size (batch_size, channels, height, width)
+	dummy_input = torch.randint(0, dict_size, (1, max_len)).to("cuda")  # Example input size (batch_size, max_length, dict_size)
 	model_copy(dummy_input)
 	
 	# Print the captured activation sizes

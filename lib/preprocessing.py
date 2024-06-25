@@ -218,9 +218,9 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 	assert(tokenizer.get_vocab_size() == config.dict_size)
 
 	aux = tokenizer.encode_batch(train_dataset['text'][:100000])
-	# print(f"Average input length: {sum(map((lambda x: len(x.ids)), aux))/len(train_dataset['text'][:100000])}")
-	# print(f"Max input length: {max(map((lambda x: len(x.ids)), aux))}")
-	# print(f"Min input length: {min(map((lambda x: len(x.ids)), aux))}")
+	print(f"Average input length: {sum(map((lambda x: len(x.ids)), aux))/len(train_dataset['text'][:100000])}")
+	print(f"Max input length: {max(map((lambda x: len(x.ids)), aux))}")
+	print(f"Min input length: {min(map((lambda x: len(x.ids)), aux))}")
 	del aux
 	return tokenizer
 

@@ -8,7 +8,7 @@ import lib.Models.blocks as blocks
 import lib.Models.embedders as embedders
 import lib.Models.modules as modules
 
-from lib.MAMBA import Mamba, MambaConfig
+from   lib.Models.mamba import Mamba, MambaConfig
 
 
 class Mlp_structured(nn.Module):
@@ -237,7 +237,7 @@ class Mamba_model(nn.Module):
                              use_cuda=True )
         self.mamba_layers = Mamba(config)
 
-    def forward(self, x, mask):
+    def forward(self, x, mask = None):
         
         # embedding the indexed sequence to sequence of vectors
         x = self.embedder(x)

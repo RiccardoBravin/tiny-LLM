@@ -17,7 +17,7 @@ lr = 5e-2
 epochs = 10
 
 dataset_config = DataConfig(
-                    dataset_name="imdb", 
+                    dataset_name="bull", 
                     dict_size=pow(2, 12), 
                     tokenizer_type="wordpiece", #wordpiece #bpe #unigram 
                     batch_size=128, 
@@ -27,11 +27,11 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
                     model_name=None, 
-                    embedding_dimension=128, 
+                    embedding_dimension=64, 
                     reduced_embedding_dimension=16, 
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
-                    forward_expansion=4, 
+                    forward_expansion=3, 
                     num_layers=2,
                     vocab_size=dataset_config.dict_size
                 )
@@ -67,11 +67,12 @@ train_dataloader.shuffle = True
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing model{RESET}")
 
 # model = Brav(model_config)
-model = Nano_Mlp_structured(model_config)
+# model = Nano_Mlp_structured(model_config)
 # model = Bert_efficient(model_config)
 # model = Nano_Bert_Efficient(model_config)
 # model = Gray_BERT_Efficient(model_config)
 # model = Mlp_structured(model_config)
+model = Mamba_model(model_config)
 
 model_config.model_name = model.__class__.__name__
 
