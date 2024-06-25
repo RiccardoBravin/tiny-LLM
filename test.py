@@ -27,9 +27,6 @@ model_config = ModelConfig(
 batch = 1
 
 
-
-
-
 mamba = Mamba_model(model_config).to("cuda")
 
 activations_calculator(mamba, dataset_config.dict_size, dataset_config.max_len)
@@ -40,3 +37,5 @@ x = torch.randint(0, dataset_config.dict_size, (batch, dataset_config.max_len)).
 y = mamba(x)
 
 print(x.shape, y.shape)
+
+

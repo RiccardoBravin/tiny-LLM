@@ -52,7 +52,7 @@ discriminator_config = ModelConfig(
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
                     forward_expansion=4, 
-                    num_layers=4,
+                    num_layers=2,
                     vocab_size=dataset_config.dict_size
                 )
 
@@ -92,17 +92,19 @@ print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Initializing model
 
 #choose generator model
 # generator = Brav(generator_config)
-# generator = Bert_efficient(generator_config)
+generator = Bert_efficient(generator_config)
 # generator = Nano_Bert_Efficient(generator_config)
-generator = Gray_BERT_Efficient(generator_config)
+# generator = Gray_BERT_Efficient(generator_config)
 # generator = Mlp_structured(generator_config)
+# generator = Mamba_model(generator_config)
 
 #choose discriminator model
 # discriminator = Brav(discriminator_config)
-# discriminator = Bert_efficient(discriminator_config)
+discriminator = Bert_efficient(discriminator_config)
 # discriminator = Nano_Bert_Efficient(discriminator_config)
-discriminator = Gray_BERT_Efficient(discriminator_config)
+# discriminator = Gray_BERT_Efficient(discriminator_config)
 # discriminator = Mlp_structured(discriminator_config)
+# discriminator = Mamba_model(discriminator_config)
 
 
 # generator.embedder.token.weight.data = discriminator.embedder.token.weight.data
@@ -233,6 +235,9 @@ for epoch in range(epochs_pretraining):
 			electra.train()
 			
 print(f"{RESET}")	
+
+torch.save(generator.state_dict(), "best_generator.pth")
+torch.save(discriminator.state_dict(), "best_discriminator.pth")
 
 ########################################################################################
 

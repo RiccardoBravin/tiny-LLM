@@ -2,6 +2,5 @@ torch
 datasets
 tokenizers
 tqdm
-sentencepiece
 tokenizers
 scikit-learn
