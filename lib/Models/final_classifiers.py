@@ -92,3 +92,26 @@ class Classifier_post_electra(nn.Module):
         x = self.act(x.squeeze(-1))
         x = self.fc(x)
         return x
+    
+
+class Classifier_last_token(nn.Module):
+    
+    def __init__(self, model:nn.Module, model_out_sz: int, labels_num:int):
+        r"""
+        Classifier that takes only the last token of the sequence to classify the data 
+        Args:
+            model: the model that will be used to generate the embeddings
+            model_out_sz: the output size of the model
+            labels_num: the number of labels to output
+        """
+        super().__init__()
+        self.model = model
+        self.act = nn.Sigmoid()
+        self.fc = nn.Linear(model_out_sz, labels_num)
+
+    def forward(self, x:torch.Tensor, mask:torch.Tensor):
+        x = self.model(x, mask)
+        x = x[:,-1,:]
+        x = self.act(x)
+        x = self.fc(x)
+        return x
