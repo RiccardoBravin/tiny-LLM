@@ -99,7 +99,7 @@ class EncoderLayer(nn.Module):
 class MamBra_layer(nn.Module):
     def __init__(self, d_model, feed_forward_hidden):
         super().__init__()
-        self.norm = modules.RMSNorm(d_model)
+        # self.norm = modules.RMSNorm(d_model)
         
         self.mambra = blocks.MamBravBlock(d_model, feed_forward_hidden)
 
@@ -115,6 +115,6 @@ class MamBra_layer(nn.Module):
         
         y2 = self.up2(embeddings)
         y2 = self.activation(y2)
+        y2 = self.down1(y2)
 
-        y = self.down1(y1 * y2)
-        return self.norm(embeddings + y)
+        return y1 + y2

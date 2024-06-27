@@ -7,13 +7,12 @@ from lib.configs import DataConfig, ModelConfig
 from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
 from lib.Models.models import *
-from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Classifier_post_electra
+from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-#NEED TO MAKE THIS A CONFIG FILE WITH A DATA CLASS
 
-lr = 1e-2
+lr = 5e-3
 epochs = 10
 
 dataset_config = DataConfig(
@@ -21,7 +20,7 @@ dataset_config = DataConfig(
                     dict_size=pow(2, 12), 
                     tokenizer_type="wordpiece", #wordpiece #bpe #unigram 
                     batch_size=64, 
-                    max_len=128, 
+                    max_len=512, 
                     labels=None
                 )
 
@@ -31,8 +30,8 @@ model_config = ModelConfig(
                     reduced_embedding_dimension=16, 
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
-                    forward_expansion=0.5, 
-                    num_layers=3,
+                    forward_expansion=0.25, 
+                    num_layers=1,
                     vocab_size=dataset_config.dict_size
                 )
 

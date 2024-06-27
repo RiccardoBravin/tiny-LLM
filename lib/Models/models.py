@@ -276,5 +276,5 @@ class MamBra_model(nn.Module):
 
         # running over multiple transformer blocks
         for encoder in self.mambra_layers:
-            x = encoder.forward(x, mask)
+            x = encoder.forward(x, mask) # + x
         return x
