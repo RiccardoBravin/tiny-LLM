@@ -245,3 +245,36 @@ class Mamba_model(nn.Module):
         # running over multiple transformer blocks
         x = self.mamba_layers(x)
         return x
+
+
+
+class MamBra_model(nn.Module):
+    """
+    MamBra model
+    """
+
+    def __init__(self, model_config: ModelConfig, dropout=0.1):
+        """
+        Embedder and multilayer model using the MamBra_block
+        """
+
+        super().__init__()
+        self.d_model = model_config.embedding_dimension
+
+        # embedding for BERT, sum of positional, segment, token embeddings
+        self.embedder = embedders.Nano_embedder(model_config)
+
+        # multi-layers transformer blocks, deep network
+        self.mambra_layers = torch.nn.ModuleList(
+            [blocks.MamBravBlock(model_config.embedding_dimension, model_config.feed_forward_hidden()) for _ in range(model_config.num_layers)]
+        )
+
+    def forward(self, x, mask = None):
+        
+        # embedding the indexed sequence to sequence of vectors
+        x = self.embedder(x)
+
+        # running over multiple transformer blocks
+        for encoder in self.mambra_layers:
+            x = encoder.forward(x)
+        return x

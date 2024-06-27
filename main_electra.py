@@ -236,8 +236,8 @@ for epoch in range(epochs_pretraining):
 			
 print(f"{RESET}")	
 
-torch.save(generator.state_dict(), "best_generator.pth")
-torch.save(discriminator.state_dict(), "best_discriminator.pth")
+torch.save(generator.state_dict(), "./trained_models/best_generator_bull.pth")
+torch.save(discriminator.state_dict(), "./trained_models/best_discriminator_bull.pth")
 
 ########################################################################################
 

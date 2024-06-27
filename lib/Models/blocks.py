@@ -200,4 +200,55 @@ class BravBlock(torch.nn.Module):
         return res
 
 
+class MamBravBlock(torch.nn.Module):
+    def __init__(self, d_model, state_size) -> None:
+        """
+        Block of new ideation that tries to build a Mamba block with fewer parameters and smaller activations 
+
+        Args:
+            d_model: the embedding dimension
+            d_model_expand: the expanded embedding dimension
+        """
+        super().__init__()
+        self.state_size = state_size
+        self.fc = torch.nn.Linear(d_model, state_size)
+        self.weights = torch.nn.Parameter(torch.randn(state_size))
+
+    def forward(self, x: torch.Tensor, mask: torch.Tensor = None):
+        """
+        Args: 
+            x: the input tensor of shape (batch_size, seq_len, d_model)
+            mask: the mask tensor of shape (batch_size, seq_len) that contains 0 for padding tokens and 1 for the rest
+        """
+        #start by constructing x_bar (batch_size, d_model)
+        x_bar = torch.sum(x, dim=1)  #STILL TO DECIDE WHICH IS BEST
+        #normalize x_bar (batch_size, d_model)
+        x_bar = torch.nn.functional.softmax(x_bar, dim=1) #STILL TO DECIDE WHICH IS BEST
+        #expand x_bar (batch_size, state_size)
+        x_bar = self.fc(x_bar)
+
+        #build A_bar (batch_size, state_size, state_size)
+        A_bar = torch.einsum('bd,e->bde', x_bar, self.weights)
+
+        #   calculate h'' as x expanded by fully connected  
+        h_sec = self.fc(x) #(batch_size, seq_len, state_size)
+
+        h = h_sec[:, 0].unsqueeze(1) # (batch_size, 1, state_size)
+        
+        #build all complete internal states
+        for i in range(1,x.shape[1]):
+            # calculate h' as h(t-1) * A_bar
+            h_prime = torch.matmul(h[:, -1].unsqueeze(1), A_bar)
+
+            # sum h' and h'' to get h 
+            h_prime = torch.nn.functional.sigmoid(h_prime + h_sec[:, i].unsqueeze(1))
+            
+            #add new state to h
+            h = torch.concat((h, h_prime), dim=1)
+            
+        # calculate y as the downsample of h
+        y = (h - self.fc.bias) @ self.fc.weight
+
+        return y 
+
 
