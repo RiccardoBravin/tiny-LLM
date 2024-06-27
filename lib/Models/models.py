@@ -266,7 +266,7 @@ class MamBra_model(nn.Module):
 
         # multi-layers transformer blocks, deep network
         self.mambra_layers = torch.nn.ModuleList(
-            [blocks.MamBravBlock(model_config.embedding_dimension, model_config.feed_forward_hidden()) for _ in range(model_config.num_layers)]
+            [structures.MamBra_layer(model_config.embedding_dimension, model_config.feed_forward_hidden()) for _ in range(model_config.num_layers)]
         )
 
     def forward(self, x, mask = None):
@@ -276,5 +276,5 @@ class MamBra_model(nn.Module):
 
         # running over multiple transformer blocks
         for encoder in self.mambra_layers:
-            x = encoder.forward(x)
+            x = encoder.forward(x, mask)
         return x

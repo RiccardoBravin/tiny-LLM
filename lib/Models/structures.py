@@ -96,3 +96,25 @@ class EncoderLayer(nn.Module):
         encoded = self.layernorm2(feed_forward_out + norm_skipped)
         return encoded
     
+class MamBra_layer(nn.Module):
+    def __init__(self, d_model, feed_forward_hidden):
+        super().__init__()
+        self.norm = modules.RMSNorm(d_model)
+        
+        self.mambra = blocks.MamBravBlock(d_model, feed_forward_hidden)
+
+        self.up2 = torch.nn.Linear(d_model, feed_forward_hidden)
+        self.down1 = torch.nn.Linear(feed_forward_hidden, d_model)
+        self.activation = torch.nn.SiLU()
+
+    def forward(self, embeddings, mask):
+        # embeddings: (batch_size, max_len, d_model)
+        # result: (batch_size, max_len, d_model)
+
+        y1 = self.mambra(embeddings, mask)
+        
+        y2 = self.up2(embeddings)
+        y2 = self.activation(y2)
+
+        y = self.down1(y1 * y2)
+        return self.norm(embeddings + y)

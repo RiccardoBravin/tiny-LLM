@@ -214,7 +214,7 @@ class MamBravBlock(torch.nn.Module):
         self.fc = torch.nn.Linear(d_model, state_size)
         self.weights = torch.nn.Parameter(torch.randn(state_size))
 
-    def forward(self, x: torch.Tensor, mask: torch.Tensor = None):
+    def forward(self, x: torch.Tensor, mask: torch.Tensor = None, output_reduced = True):
         """
         Args: 
             x: the input tensor of shape (batch_size, seq_len, d_model)
@@ -247,8 +247,11 @@ class MamBravBlock(torch.nn.Module):
             h = torch.concat((h, h_prime), dim=1)
             
         # calculate y as the downsample of h
-        y = (h - self.fc.bias) @ self.fc.weight
-
+        if output_reduced:
+            y = h
+        else:
+            y = (h - self.fc.bias) @ self.fc.weight
+            
         return y 
 
 

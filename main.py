@@ -32,7 +32,7 @@ model_config = ModelConfig(
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
                     forward_expansion=0.5, 
-                    num_layers=4,
+                    num_layers=3,
                     vocab_size=dataset_config.dict_size
                 )
 
@@ -84,6 +84,11 @@ print(f"{RESET}")
 
 cls = Classifier_rms(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
 
+test_val = torch.randint(0, dataset_config.dict_size, (1, dataset_config.max_len)).to(device)
+contains_nan = torch.isnan(cls(test_val, None)).any()
+if contains_nan:
+    print(f"{FOREGROUND_COLORS["BrightRed"]}Model contains NaN values{RESET}")
+    exit()
 
 # Training the model
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Training the model{RESET}")
