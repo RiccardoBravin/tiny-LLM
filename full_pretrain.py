@@ -40,7 +40,7 @@ generator_config = ModelConfig(
 					reduced_embedding_dimension=16, 
 					number_of_heads=8, 
 					max_length=dataset_config.max_len, 
-					forward_expansion=2, 
+					forward_expansion=0.25, 
 					num_layers=1,
 					vocab_size=dataset_config.dict_size
 				)
@@ -51,8 +51,8 @@ discriminator_config = ModelConfig(
 					reduced_embedding_dimension=generator_config.reduced_embedding_dimension, 
 					number_of_heads=8, 
 					max_length=dataset_config.max_len, 
-					forward_expansion=4, 
-					num_layers=2,
+					forward_expansion=0.25, 
+					num_layers=5,
 					vocab_size=dataset_config.dict_size
 				)
 
@@ -104,14 +104,17 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 		#choose generator model
 		# generator = Brav(generator_config)
 		# generator = Bert_efficient(generator_config)
-		generator = Nano_Bert_Efficient(generator_config)
+		# generator = Nano_Bert_Efficient(generator_config)
 		# generator = Mlp_structured(generator_config)
+		generator = MamBra_model(generator_config)
+
 
 		#choose discriminator model
 		# discriminator = Brav(discriminator_config)
 		# discriminator = Bert_efficient(discriminator_config)
-		discriminator = Nano_Bert_Efficient(discriminator_config)
+		# discriminator = Nano_Bert_Efficient(discriminator_config)
 		# discriminator = Mlp_structured(discriminator_config)
+		discriminator = MamBra_model(discriminator_config)
 
 		generator_config.model_name = generator.__class__.__name__
 		discriminator_config.model_name = discriminator.__class__.__name__
