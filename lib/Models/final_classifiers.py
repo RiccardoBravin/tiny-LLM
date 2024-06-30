@@ -51,7 +51,41 @@ class Classifier_BERT(nn.Module):
         y1 = self.lm_cls(x)
         y2 = self.fake_cls(x)
         return y1, y2
-    
+
+
+class Classifier_Nano_BERT(nn.Module):
+
+    def __init__(self, model:nn.Module, model_out_sz: int, reduced_embedding_dimension: int,  dictionary_size:int):
+        r"""
+        Classifier that takes only the firts token of the sequence to classify the data 
+        Args:
+            model: the model that will be used to generate the embeddings
+            model_out_sz: the output size of the model
+            labels_num: the number of labels to output
+        """
+        super().__init__()
+        self.model = model
+        self.act = nn.Sigmoid()
+        
+        self.reducer = nn.Linear(model_out_sz, reduced_embedding_dimension, bias=False)
+        self.lm_cls = nn.Linear(reduced_embedding_dimension, dictionary_size)
+        
+        self.fake_cls = nn.Linear(model_out_sz, 1)
+
+        self.reducer.weight = torch.nn.Parameter(self.model.embedder.expander.weight.T)
+        self.lm_cls.weight = self.model.embedder.token.weight
+
+    def forward(self, x:torch.Tensor, mask:torch.Tensor):
+        x = self.model(x, mask)
+        x = self.act(x)
+        
+        y1 = self.reducer(x)
+        y1 = self.lm_cls(y1)
+
+        y2 = self.fake_cls(x)
+        return y1, y2
+
+
 class Classifier_for_electra(nn.Module):
     def __init__(self, model:nn.Module, model_out_sz: int, labels_num:int):
         r"""

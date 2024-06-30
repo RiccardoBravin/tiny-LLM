@@ -11,13 +11,13 @@ from tqdm import tqdm
 from lib.configs import DataConfig, ModelConfig
 from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
-from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Classifier_for_electra, Classifier_post_electra
+from lib.Models.final_classifiers import *
 from lib.Models.models import *
 
 
 from lib.trainer import BertTrainer, Trainer
 
-epochs_pretraining = 1
+epochs_pretraining = 10
 lr_pretraining = 5e-3
 
 epochs_post = 15
@@ -32,7 +32,7 @@ dataset_config = DataConfig(
 					dict_size=pow(2, 12), 
 					tokenizer_type="bpe", 
 					batch_size=32, 
-					max_len=512, 
+					max_len=64, 
 					labels=None
 				)
 
@@ -50,7 +50,7 @@ model_config = ModelConfig(
 
 ########################################################################################
 
-for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snips", "nli"]:
+for DATASET_NAME in ["nlu", "snips", "nli"]:
 	dataset_config.dataset_name = DATASET_NAME
 
 	#load the dataset   
@@ -86,11 +86,14 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Initializing model{RESET}")
-		model = Bert_efficient(model_config)
+		#model = Bert_efficient(model_config)
+		model = Nano_Bert_Efficient(model_config)
+		
 		model_config.model_name = model.__class__.__name__
 		
 
-		cls = Classifier_BERT(model, model_config.embedding_dimension, dataset_config.dict_size)
+		# cls = Classifier_BERT(model, model_config.embedding_dimension, dataset_config.dict_size)
+		cls = Classifier_Nano_BERT(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size)
 		cls.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
 
@@ -120,7 +123,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 
 		classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
-		print(f"Model initialized on {device}")
+		print(f"Model {model.__class__.__name__} initialized on {device}")
 
 
 		print("Model parameters:")
@@ -129,8 +132,8 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 		########################################################################################
 
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Starting training{RESET}")
-		trainer = Trainer(cls, device, lr_pretraining, model_config)
-		trainer.train(train_dataloader, validation_dataloader, epochs_pretraining, log_freq=logs_x_epoch, color=FOREGROUND_COLORS["BrightMagenta"])
+		trainer = Trainer(classifier, device, lr_post, model_config)
+		trainer.train(train_dataloader, validation_dataloader, epochs_post, log_freq=logs_x_epoch, color=FOREGROUND_COLORS["BrightMagenta"])
 
 
 		########################################################################################

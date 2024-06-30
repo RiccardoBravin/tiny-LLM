@@ -183,8 +183,10 @@ class Trainer:
 				
 				#Model outputs (batch_size, n_labels)
 				y = self.model(tokens, masks) 
-				
-				batch_loss = self.criterion(y.transpose(1,2), tokens)
+
+
+				batch_loss = self.criterion(y, labels)
+	
 				
 				if step_num == 0:
 					train_loss = batch_loss.item()
@@ -196,7 +198,7 @@ class Trainer:
 				self.model.zero_grad()
 				batch_loss.backward()
 				self.optimizer.step()
-				scheduler.step()
+				#scheduler.step()
 
 				if step_num % log_step == (log_step - 1):
 					self.model.eval()
@@ -215,6 +217,7 @@ class Trainer:
 
 						guesses = torch.cat((guesses, torch.argmax(guess, dim=1)))
 
+					guesses = guesses.cpu().detach()
 					val_accuracy = accuracy_score(eval_dataloader.dataset["label"], guesses)
 					mcc = matthews_corrcoef(eval_dataloader.dataset["label"], guesses)
 					val_loss = val_loss / len(eval_dataloader)
