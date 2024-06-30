@@ -28,7 +28,7 @@ class Classifier_rms(nn.Module):
 
 class Classifier_BERT(nn.Module):
 
-    def __init__(self, model:nn.Module, model_out_sz: int, labels_num:int):
+    def __init__(self, model:nn.Module, model_out_sz: int, dictionary_size:int):
         r"""
         Classifier that takes only the firts token of the sequence to classify the data 
         Args:
@@ -39,14 +39,18 @@ class Classifier_BERT(nn.Module):
         super().__init__()
         self.model = model
         self.act = nn.Sigmoid()
-        self.fc = nn.Linear(model_out_sz, labels_num)
+        self.lm_cls = nn.Linear(model_out_sz, dictionary_size)
+        self.fake_cls = nn.Linear(model_out_sz, 1)
+
+        self.lm_cls.weight = self.model.embedder.token.weight
 
     def forward(self, x:torch.Tensor, mask:torch.Tensor):
         x = self.model(x, mask)
-        x = x[:,0,:]
         x = self.act(x)
-        x = self.fc(x)
-        return x
+
+        y1 = self.lm_cls(x)
+        y2 = self.fake_cls(x)
+        return y1, y2
     
 class Classifier_for_electra(nn.Module):
     def __init__(self, model:nn.Module, model_out_sz: int, labels_num:int):

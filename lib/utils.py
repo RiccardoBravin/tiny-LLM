@@ -158,13 +158,13 @@ def trainer(model, train_dataloader, val_dataloader, lr, epochs, logs_x_epoch = 
 				val_loss = val_loss / len(val_dataloader)
 				if(val_loss < min_loss):
 					min_loss = val_loss
-					checkpoint(model, "best_model.pth")
+					#checkpoint(model, "best_model.pth")
 				scheduler.step(-mcc)
 				tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()} {color}")
 				model.train()
 			
 	print(f"{RESET}")		
-	resume(model, "best_model.pth")
+	#resume(model, "best_model.pth")
 	return model
 
 
