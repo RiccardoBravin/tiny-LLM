@@ -28,7 +28,7 @@ logs_x_epoch = 1
 dataset_config = DataConfig(
 					dataset_name=None, 
 					dict_size=pow(2, 12), 
-					tokenizer_type="bpe", 
+					tokenizer_type="wordpiece", 
 					batch_size=128, 
 					max_len=512, 
 					labels=None
@@ -58,7 +58,7 @@ discriminator_config = ModelConfig(
 
 ########################################################################################
 
-for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snips", "nli"]:
+for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "nli"]:
 	dataset_config.dataset_name = DATASET_NAME
 
 	#load the dataset   

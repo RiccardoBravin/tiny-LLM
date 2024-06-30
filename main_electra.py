@@ -28,7 +28,7 @@ logs_x_epoch = 2
 dataset_config = DataConfig(
                     dataset_name="bull", 
                     dict_size=pow(2, 12), 
-                    tokenizer_type="bpe", 
+                    tokenizer_type="wordpiece", 
                     batch_size=128, 
                     max_len=64, 
                     labels=None
@@ -248,7 +248,7 @@ torch.save(discriminator.state_dict(), "./trained_models/best_discriminator_bull
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
 
-classifier = Classifier_BERT(discriminator, discriminator_config.embedding_dimension, dataset_config.n_labels())
+classifier = Classifier_post_electra(discriminator, discriminator_config.embedding_dimension, dataset_config.n_labels())
 classifier.to(device)
 print(f"Model initialized on {device}")
 

@@ -30,7 +30,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 dataset_config = DataConfig(
 					dataset_name=None, 
 					dict_size=pow(2, 12), 
-					tokenizer_type="bpe", 
+					tokenizer_type="wordpiece", 
 					batch_size=32, 
 					max_len=64, 
 					labels=None
@@ -50,7 +50,7 @@ model_config = ModelConfig(
 
 ########################################################################################
 
-for DATASET_NAME in ["nlu", "snips", "nli"]:
+for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "nli"]:
 	dataset_config.dataset_name = DATASET_NAME
 
 	#load the dataset   
@@ -79,7 +79,7 @@ for DATASET_NAME in ["nlu", "snips", "nli"]:
 	train_dataloader.shuffle = True
 
 	train_n = 0
-	while train_n < 5:
+	while train_n < 2:
 		
 		print(f"\n\n{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}--------------------- STARTING TRAINING CYCLE {train_n} ---------------------{RESET}\n")
 
