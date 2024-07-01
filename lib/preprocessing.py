@@ -1,4 +1,4 @@
-from datasets import load_dataset, Dataset
+from datasets import load_dataset, Dataset, concatenate_datasets
 from tokenizers import Tokenizer
 from torch.utils.data import DataLoader
 import os, random
@@ -14,14 +14,14 @@ def dataset_selector(name:str):
 		train_data = dataset['train']
 		test_data = dataset['test']
 
-	elif name == "sst2": #https://huggingface.co/datasets/stanfordnlp/sst2
-		dataset = load_dataset("stanfordnlp/sst2", cache_dir="./datasets")
+	elif name == "sst2":	#https://huggingface.co/datasets/SetFit/sst2
+		dataset = load_dataset("SetFit/sst2", cache_dir="./datasets")
 
-		train_data = dataset['train']
-		test_data = dataset['validation']
+		train_data = concatenate_datasets([dataset['train'], dataset['validation']])
+		test_data = dataset['test']
 
-		train_data = train_data.rename_column("sentence", "text").remove_columns("idx")
-		test_data = test_data.rename_column("sentence", "text").remove_columns("idx")	
+		train_data = train_data.remove_columns("label_text")
+		test_data = test_data.remove_columns("label_text")	
 		 
 	elif name == "news":#https://huggingface.co/datasets/fancyzhx/ag_news
 		dataset = load_dataset("fancyzhx/ag_news", cache_dir="./datasets")
@@ -217,11 +217,11 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 	print(f"Tokenizer vocab size: {tokenizer.get_vocab_size()}")
 	assert(tokenizer.get_vocab_size() == config.dict_size)
 
-	# aux = tokenizer.encode_batch(train_dataset['text'][:100000])
-	# print(f"Average input length: {sum(map((lambda x: len(x.ids)), aux))/len(train_dataset['text'][:100000])}")
-	# print(f"Max input length: {max(map((lambda x: len(x.ids)), aux))}")
-	# print(f"Min input length: {min(map((lambda x: len(x.ids)), aux))}")
-	# del aux
+	aux = tokenizer.encode_batch(train_dataset['text'][:100000])
+	print(f"Average input length: {sum(map((lambda x: len(x.ids)), aux))/len(train_dataset['text'][:100000])}")
+	print(f"Max input length: {max(map((lambda x: len(x.ids)), aux))}")
+	print(f"Min input length: {min(map((lambda x: len(x.ids)), aux))}")
+	del aux
 	return tokenizer
 
 	

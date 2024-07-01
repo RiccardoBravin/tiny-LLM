@@ -84,7 +84,7 @@ class BertTrainer:
 		self.optimizer = AdamW(lr=lr, params=self.model.parameters())
 		self.device = device 
 		self.lm_criterion = nn.CrossEntropyLoss(ignore_index=0).to(device)
-		self.cls_criterion = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([15])).to(device)
+		self.cls_criterion = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([6])).to(device)
 		self.model_config = model_config
 
 	def train(self, train_dataloader, eval_dataloader, num_epochs, log_freq: int, color = FOREGROUND_COLORS['Green']):
@@ -165,7 +165,7 @@ class BertTrainer:
 						val_loss += lm_loss.item() + cls_loss.item()
 						cls_avg_loss += cls_loss.item()
 						mlm_avg_loss += lm_loss.item()
-						
+
 						mlm_accuracy = torch.cat((mlm_accuracy, (torch.argmax(logits, dim=2) == tokens)))
 						cls_accuracy = torch.cat((cls_accuracy, ((label_guess > 0.5) == cls_labels.float())))
 					
