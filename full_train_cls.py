@@ -23,9 +23,9 @@ LR = 5e-3
 dataset_config = DataConfig(
                     dataset_name=None, 
                     dict_size=pow(2, 12), 
-                    tokenizer_type="wordpiece", 
+                    tokenizer_type="bpe", 
                     batch_size=32, 
-                    max_len=512, 
+                    max_len=256, 
                     labels=None
                 )
 

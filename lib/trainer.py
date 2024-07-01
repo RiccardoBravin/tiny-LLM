@@ -28,8 +28,8 @@ def mask_tokens(tokens, dict_size, device, mlm_prob = 0.15):
 	
 	
 	masked_indices = torch.bernoulli(mlm_probability).bool() # 15% of the tokens are 1 and 85% are 0
-	randomized_indices = torch.bernoulli(masked_indices * 0.2).bool().to(device) # 20% of the 15% are 1 and 80% are 0
-
+	randomized_indices = torch.bernoulli(masked_indices * 0.4).bool().to(device) # 40% of the 15% are 1 and 60% are 0
+	
 	masked_tokens = tokens.clone()
 	masked_tokens[masked_indices * (~randomized_indices)] = 3 # [MASK] token is 3
 	masked_tokens[masked_indices * randomized_indices] = torch.randint(5, dict_size, masked_tokens[masked_indices * randomized_indices].shape).to(device) # random token in the dictionary
@@ -84,6 +84,7 @@ class BertTrainer:
 		self.optimizer = AdamW(lr=lr, params=self.model.parameters())
 		self.device = device 
 		self.lm_criterion = nn.CrossEntropyLoss(ignore_index=0).to(device)
+		self.cls_criterion = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([15])).to(device)
 		self.model_config = model_config
 
 	def train(self, train_dataloader, eval_dataloader, num_epochs, log_freq: int, color = FOREGROUND_COLORS['Green']):
@@ -113,7 +114,7 @@ class BertTrainer:
 					logits, label_guess = self.model(masked_tokens, masks) 
 			
 					lm_loss = self.lm_criterion(logits.transpose(1,2), tokens)
-					cls_loss = nn.functional.binary_cross_entropy_with_logits(label_guess.squeeze(-1), cls_labels.float(), pos_weight=torch.tensor([15]).to(self.device))
+					cls_loss = self.cls_criterion(label_guess.squeeze(-1), cls_labels.float())
 
 					batch_loss = lm_loss + cls_loss
 
@@ -156,16 +157,18 @@ class BertTrainer:
 						masked_tokens, cls_labels = mask_tokens(tokens, self.model_config.vocab_size, self.device)
 
 						logits, label_guess = self.model(masked_tokens, masks)
-						
+						label_guess = label_guess.squeeze(-1)
+
 						lm_loss = self.lm_criterion(logits.transpose(1,2), tokens)
-						cls_loss = nn.functional.binary_cross_entropy_with_logits(label_guess.squeeze(-1), cls_labels.float(), pos_weight=torch.tensor([15]).to(self.device))
+						cls_loss = nn.functional.binary_cross_entropy_with_logits(label_guess, cls_labels.float(), pos_weight=torch.tensor([15]).to(self.device))
 
 						val_loss += lm_loss.item() + cls_loss.item()
 						cls_avg_loss += cls_loss.item()
 						mlm_avg_loss += lm_loss.item()
-
+						
 						mlm_accuracy = torch.cat((mlm_accuracy, (torch.argmax(logits, dim=2) == tokens)))
-						cls_accuracy = torch.cat((cls_accuracy, (torch.argmax(label_guess, dim=2) == cls_labels)))
+						cls_accuracy = torch.cat((cls_accuracy, ((label_guess > 0.5) == cls_labels.float())))
+					
 
 					mlm_accuracy = torch.mean(mlm_accuracy.float()).item()					
 					cls_accuracy = torch.mean(cls_accuracy.float()).item()

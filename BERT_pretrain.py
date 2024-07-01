@@ -21,8 +21,8 @@ epochs_pretraining = 10
 lr_pretraining = 5e-3
 
 epochs_post = 10
-lr_post = 1e-2
-logs_x_epoch = 1
+lr_post = 1e-5
+logs_x_epoch = 2
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -30,7 +30,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 dataset_config = DataConfig(
 					dataset_name=None, 
 					dict_size=pow(2, 12), 
-					tokenizer_type="wordpiece", 
+					tokenizer_type="bpe", 
 					batch_size=32, 
 					max_len=64, 
 					labels=None
@@ -50,7 +50,7 @@ model_config = ModelConfig(
 
 ########################################################################################
 
-for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "nli"]:
+for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "nli", "imdb"]:
 	dataset_config.dataset_name = DATASET_NAME
 
 	#load the dataset   
@@ -139,7 +139,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "n
 
 		print(f"{FOREGROUND_COLORS["BrightYellow"]}Testing the model{RESET}")
 		print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
-		predicted, avg_eval_loss = trainer.evaluate(classifier, test_dataloader)
+		predicted, avg_eval_loss = trainer.evaluate(test_dataloader)
 		print(f"{RESET}")
 
 
