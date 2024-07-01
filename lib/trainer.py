@@ -89,6 +89,7 @@ class BertTrainer:
 	def train(self, train_dataloader, eval_dataloader, num_epochs, log_freq: int, color = FOREGROUND_COLORS['Green']):
 		log_step = len(train_dataloader) // log_freq
 		
+		scaler = GradScaler()
 		scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=len(train_dataloader), num_training_steps=num_epochs*len(train_dataloader))
 
 		self.model.train()
@@ -99,21 +100,24 @@ class BertTrainer:
 			tqdm_train_loader = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{num_epochs}", leave=True)
 			for step_num, batch_data in enumerate(tqdm_train_loader):
 				
+				self.model.zero_grad()
+
 				tokens = batch_data["tokens"].to(self.device) 
 				masks  = batch_data["attention_mask"].to(self.device)
 				
 				masked_tokens, cls_labels = mask_tokens(tokens, self.model_config.vocab_size, self.device)
 				# masked_tokens, masks = split_and_randomize_phrases(masked_tokens, masks) #TEMPORARY REMOVED BECAUSE TOO COMPLICATED
 
-				#Model outputs (batch_size, seq_len, dict_size) and (batch_size, seq_len, 2)
-				logits, label_guess = self.model(masked_tokens, masks) 
-				
+				with autocast():
+					#Model outputs (batch_size, seq_len, dict_size) and (batch_size, seq_len, 2)
+					logits, label_guess = self.model(masked_tokens, masks) 
+			
+					lm_loss = self.lm_criterion(logits.transpose(1,2), tokens)
+					cls_loss = nn.functional.binary_cross_entropy_with_logits(label_guess.squeeze(-1), cls_labels.float(), pos_weight=torch.tensor([15]).to(self.device))
 
-				lm_loss = self.lm_criterion(logits.transpose(1,2), tokens)
-				cls_loss = nn.functional.binary_cross_entropy_with_logits(label_guess.squeeze(-1), cls_labels.float(), pos_weight=torch.tensor([15]).to(self.device))
+					batch_loss = lm_loss + cls_loss
 
-				batch_loss = lm_loss + cls_loss
-
+			
 				if step_num == 0:
 					train_loss = batch_loss.item()
 				else:
@@ -121,10 +125,21 @@ class BertTrainer:
 
 				tqdm_train_loader.set_postfix(loss = "{:.4f}".format(train_loss))	
 				
-				self.model.zero_grad()
-				batch_loss.backward()
-				self.optimizer.step()
+				
+				# Scales loss.  Calls backward() on scaled loss to create scaled gradients.
+				# Backward passes under autocast are not recommended.
+				# Backward ops run in the same dtype autocast chose for corresponding forward ops.
+				scaler.scale(batch_loss).backward()
+
+				# scaler.step() first unscales the gradients of the optimizer's assigned params.
+				# If these gradients do not contain infs or NaNs, optimizer.step() is then called,
+				# otherwise, optimizer.step() is skipped.
+				scaler.step(self.optimizer)
+				
+				scaler.update()
+				# Update learning rate
 				scheduler.step()
+
 
 				if step_num % log_step == (log_step - 1):
 					self.model.eval()
