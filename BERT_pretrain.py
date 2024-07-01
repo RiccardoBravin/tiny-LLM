@@ -20,8 +20,8 @@ from lib.trainer import BertTrainer, Trainer
 epochs_pretraining = 10
 lr_pretraining = 5e-3
 
-epochs_post = 15
-lr_post = 5e-4
+epochs_post = 10
+lr_post = 1e-2
 logs_x_epoch = 1
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -116,8 +116,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "n
 
 
 
-
-
+		
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
 

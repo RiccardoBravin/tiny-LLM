@@ -9,31 +9,34 @@ from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
 from lib.Models.models import *
 from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT
 
+from lib.trainer import Trainer
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-lr = 5e-3
+lr = 1e-3
 epochs = 10
 
 dataset_config = DataConfig(
-                    dataset_name="bull", 
+                    dataset_name="sst2", 
                     dict_size=pow(2, 12), 
                     tokenizer_type="wordpiece", #wordpiece #bpe #unigram 
-                    batch_size=64, 
+                    batch_size=32, 
                     max_len=512, 
                     labels=None
                 )
 
 model_config = ModelConfig(
                     model_name=None, 
-                    embedding_dimension=128, 
+                    embedding_dimension=64, 
                     reduced_embedding_dimension=16, 
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
-                    forward_expansion=0.25, 
-                    num_layers=1,
+                    forward_expansion=2, 
+                    num_layers=2,
                     vocab_size=dataset_config.dict_size
                 )
+
 
 #load the dataset
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Importing dataset{RESET}")
@@ -68,11 +71,11 @@ print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing mode
 # model = Brav(model_config)
 # model = Nano_Mlp_structured(model_config)
 # model = Bert_efficient(model_config)
-# model = Nano_Bert_Efficient(model_config)
+model = Nano_Bert_Efficient(model_config)
 # model = Gray_BERT_Efficient(model_config)
 # model = Mlp_structured(model_config)
 # model = Mamba_model(model_config)
-model = MamBra_model(model_config)
+# model = MamBra_model(model_config)
 
 model_config.model_name = model.__class__.__name__
 
@@ -83,21 +86,18 @@ print(f"{RESET}")
 
 cls = Classifier_rms(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
 
-test_val = torch.randint(0, dataset_config.dict_size, (1, dataset_config.max_len)).to(device)
-contains_nan = torch.isnan(cls(test_val, None)).any()
-if contains_nan:
-    print(f"{FOREGROUND_COLORS["BrightRed"]}Model contains NaN values{RESET}")
-    exit()
 
 # Training the model
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Training the model{RESET}")
 
-cls = trainer(cls, train_dataloader, validation_dataloader, lr=lr, epochs=epochs, logs_x_epoch=5)
+trainer = Trainer(cls, device, lr, model_config)
+
+cls = trainer.train(train_dataloader, validation_dataloader, epochs, 5)
 
 # Testing the model
 print(f"{FOREGROUND_COLORS["BrightYellow"]}Testing the model{RESET}")
 print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
-predicted, avg_eval_loss = evaluator(cls, test_dataloader)
+predicted, avg_eval_loss = trainer.evaluate(test_dataloader)
 print(f"{RESET}")
 
 
