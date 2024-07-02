@@ -1,0 +1,44 @@
+ModelConfig(model_name='Nano_Mlp_structured', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=8, max_length=128, forward_expansion=4, num_layers=3, vocab_size=4096)
+LR: 0.001
+EPOCHS: 10
+
+average eval loss:  1.4095
+Accuracy: 0.949
+F1: 0.949
+Precision: 0.952
+Recall: 0.949
+MCC: 0.941
+Confusion matrix:
+ [[198   0   1   0   0   1   0]
+ [  0 200   0   0   0   0   0]
+ [  0   7 190   1   0   1   1]
+ [  4   5   0 190   0   1   0]
+ [  0   2   0   0 197   1   0]
+ [  0   9   4   8   0 178   1]
+ [  1  10   7   0   0   6 176]]
+('Model params: 0.225M', 'Model buffers: 0.000M', 'Model size: 0.857MB')
+
+*******************************************
+
+ModelConfig(model_name='Nano_Mlp_structured', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=8, max_length=128, forward_expansion=4, num_layers=3, vocab_size=4096)
+LR: 0.001
+EPOCHS: 10
+
+average eval loss:  1.4182
+Accuracy: 0.949
+F1: 0.949
+Precision: 0.950
+Recall: 0.949
+MCC: 0.941
+Confusion matrix:
+ [[199   0   0   0   0   0   1]
+ [  0 196   1   2   1   0   0]
+ [  0   6 189   1   0   1   3]
+ [  7   1   1 190   0   1   0]
+ [  0   3   0   0 196   1   0]
+ [  0   5   2  11   1 179   2]
+ [  0   2   5   0   1  12 180]]
+('Model params: 0.225M', 'Model buffers: 0.000M', 'Model size: 0.857MB')
+
+*******************************************
+

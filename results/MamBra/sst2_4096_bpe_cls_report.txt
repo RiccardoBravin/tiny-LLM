@@ -1,0 +1,76 @@
+Model config for current run:
+ModelConfig(model_name='MamBra', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=0.25, num_layers=1, vocab_size=4096)
+LR: 0.005
+EPOCHS: 10
+
+*******************************************
+
+average eval loss:  0.4615
+Accuracy: 0.783
+F1: 0.783
+Precision: 0.784
+Recall: 0.783
+MCC: 0.567
+Confusion matrix:
+ [[684 228]
+ [167 742]]
+('Model params: 0.146M', 'Model buffers: 0.000M', 'Model size: 0.557MB')
+
+*******************************************
+
+average eval loss:  0.6081
+Accuracy: 0.734
+F1: 0.733
+Precision: 0.736
+Recall: 0.734
+MCC: 0.470
+Confusion matrix:
+ [[715 197]
+ [288 621]]
+('Model params: 0.146M', 'Model buffers: 0.000M', 'Model size: 0.557MB')
+
+*******************************************
+
+average eval loss:  0.4876
+Accuracy: 0.756
+F1: 0.755
+Precision: 0.757
+Recall: 0.756
+MCC: 0.513
+Confusion matrix:
+ [[723 189]
+ [256 653]]
+('Model params: 0.146M', 'Model buffers: 0.000M', 'Model size: 0.557MB')
+
+*******************************************
+
+average eval loss:  0.4819
+Accuracy: 0.769
+F1: 0.769
+Precision: 0.771
+Recall: 0.769
+MCC: 0.540
+Confusion matrix:
+ [[738 174]
+ [246 663]]
+('Model params: 0.146M', 'Model buffers: 0.000M', 'Model size: 0.557MB')
+
+*******************************************
+
+average eval loss:  0.4978
+Accuracy: 0.774
+F1: 0.774
+Precision: 0.774
+Recall: 0.774
+MCC: 0.548
+Confusion matrix:
+ [[715 197]
+ [215 694]]
+('Model params: 0.146M', 'Model buffers: 0.000M', 'Model size: 0.557MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************
+

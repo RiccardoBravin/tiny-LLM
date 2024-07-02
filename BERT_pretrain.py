@@ -157,7 +157,7 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "nli", "im
 
 		#save the classification report in a file for later use specifying the dataset, model hyperparameters
 		with open(f"results/{folder_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_pretr_report.txt", "a") as f:
-			f.write(f"{model}\n")
+			f.write(f"{model_config}\n")
 			f.write(f"LR: {lr_post}\n")
 			f.write(f"EPOCHS: {epochs_post}\n\n")
 			f.write(f"average eval loss: {avg_eval_loss: .4f}\n")

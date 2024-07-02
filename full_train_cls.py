@@ -13,7 +13,7 @@ from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
 from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT
 from lib.Models.models import *
 
-
+from lib.trainer import Trainer
 
 
 ########################################################################################
@@ -116,12 +116,12 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 
 			########################################################################################
 			print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Training{RESET}")
-			cls = trainer(cls, train_dataloader, validation_dataloader, lr=LR, epochs=EPOCHS, logs_x_epoch=3)
-
+			trainer = Trainer(cls, device, LR, config)
+			trainer.train(train_dataloader, validation_dataloader, EPOCHS, 3)
 
 			########################################################################################
 			print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Evaluation{RESET}")
-			predicted, avg_eval_loss = evaluator(cls, test_dataloader)
+			predicted, avg_eval_loss = trainer.evaluate(test_dataloader)
 
 			########################################################################################
 			metrics = calculate_metrics(test_dataloader, predicted)
