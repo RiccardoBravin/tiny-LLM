@@ -120,7 +120,7 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "nli", "im
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
 
-		classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
+		classifier = Smart_classifier(model, model_config.embedding_dimension, 16, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
 

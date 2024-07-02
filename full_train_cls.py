@@ -10,7 +10,7 @@ import torch
 from lib.configs import DataConfig, ModelConfig
 from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
-from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT
+from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Smart_classifier
 from lib.Models.models import *
 
 from lib.trainer import Trainer
@@ -25,7 +25,7 @@ dataset_config = DataConfig(
                     dict_size=pow(2, 12), 
                     tokenizer_type="bpe", 
                     batch_size=32, 
-                    max_len=256, 
+                    max_len=512, 
                     labels=None
                 )
 
@@ -61,10 +61,10 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 		# Nano_Mlp_structured,
 		# Brav,
 		# Bert_efficient,
-		# Nano_Bert_Efficient,
+		Nano_Bert_Efficient,
 		# Gray_BERT_Efficient,
 		# Mamba_model,
-		MamBra_model,
+		# MamBra_model,
 	]
 
 	configs = [
@@ -76,14 +76,14 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 		#    			forward_expansion=8, num_layers=6, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Bert_efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		# ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
-		#    			forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
+		   			forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Gray_BERT_Efficient", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		# 				forward_expansion=2, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size)
 		# ModelConfig( model_name="Mamba", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			 	forward_expansion=3, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
-		ModelConfig( model_name="MamBra", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
-		   			 	forward_expansion=0.25, num_layers=5, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
+		# ModelConfig( model_name="MamBra", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
+		#    			 	forward_expansion=0.25, num_layers=5, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
 			  	
 	]
 	
@@ -104,14 +104,15 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 
 		for model_class, config in zip(models, configs):
 			model = model_class(config)
-			cls = Classifier_rms(model, config.embedding_dimension , dataset_config.n_labels())
+			#cls = Classifier_rms(model, config.embedding_dimension , dataset_config.n_labels())
+			cls = Smart_classifier(model, model_out_sz=config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels())
 			cls.to(device)
 			
 			########################################################################################
 			print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Model {model.__class__.__name__} parameters{RESET}")
 
 			print(f"{FOREGROUND_COLORS["White"]}")
-			print_model_params(model)
+			print_model_params(cls)
 			print(f"{RESET}")
 
 			########################################################################################

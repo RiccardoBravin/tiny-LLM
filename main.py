@@ -7,22 +7,22 @@ from lib.configs import DataConfig, ModelConfig
 from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
 from lib.Models.models import *
-from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT
+from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Smart_classifier
 
 from lib.trainer import Trainer
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-lr = 1e-3
+lr = 5e-3
 epochs = 10
 
 dataset_config = DataConfig(
-                    dataset_name="sst2", 
+                    dataset_name="news", 
                     dict_size=pow(2, 12), 
-                    tokenizer_type="wordpiece", #wordpiece #bpe #unigram 
+                    tokenizer_type="bpe", #wordpiece #bpe #unigram 
                     batch_size=32, 
-                    max_len=512, 
+                    max_len=51, 
                     labels=None
                 )
 
@@ -33,7 +33,7 @@ model_config = ModelConfig(
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
                     forward_expansion=2, 
-                    num_layers=2,
+                    num_layers=1,
                     vocab_size=dataset_config.dict_size
                 )
 
@@ -71,28 +71,29 @@ print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing mode
 # model = Brav(model_config)
 # model = Nano_Mlp_structured(model_config)
 # model = Bert_efficient(model_config)
-model = Nano_Bert_Efficient(model_config)
+# model = Nano_Bert_Efficient(model_config)
 # model = Gray_BERT_Efficient(model_config)
 # model = Mlp_structured(model_config)
 # model = Mamba_model(model_config)
-# model = MamBra_model(model_config)
+model = MamBra_model(model_config)
 
 model_config.model_name = model.__class__.__name__
 
+cls = Smart_classifier(model, model_out_sz=model_config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels()).to(device)
+
+
 print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
-print_model_params(model)
+print_model_params(cls)
 print(f"{RESET}")
 
 
-cls = Classifier_rms(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
 
 
 # Training the model
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Training the model{RESET}")
 
 trainer = Trainer(cls, device, lr, model_config)
-
-cls = trainer.train(train_dataloader, validation_dataloader, epochs, 5)
+cls = trainer.train(train_dataloader, validation_dataloader, epochs, 3)
 
 # Testing the model
 print(f"{FOREGROUND_COLORS["BrightYellow"]}Testing the model{RESET}")

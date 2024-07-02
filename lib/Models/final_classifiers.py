@@ -153,3 +153,55 @@ class Classifier_last_token(nn.Module):
         x = self.act(x)
         x = self.fc(x)
         return x
+    
+class Smart_classifier(nn.Module):
+    def __init__(self, model:nn.Module, model_out_sz: int, hidden_state:int, labels_num:int):
+        r"""
+        Final classifier that differs from usual ones that either take the root mean square of the embeddings or the first token. 
+        This classifier implies a new layer that merges informations from all the embeddings in the sequence and then with a fc layer classifies the data
+        Args:
+            model: the model that will be used to generate the embeddings
+            model_out_sz: the output size of the model
+            labels_num: the number of labels to output
+        """
+        super().__init__()
+        self.model = model
+
+
+        self.fc_delta1 = nn.Linear(model_out_sz, 4)
+        self.fc_delta2 = nn.Linear(4, model_out_sz)
+
+        self.fc_B = nn.Linear(model_out_sz, hidden_state)
+
+        A = torch.arange(1, hidden_state + 1).repeat(model_out_sz,1) 
+        
+        self.A_log = nn.Parameter(torch.log(A))
+
+        self.norm = nn.LayerNorm(hidden_state)
+
+        self.fc = nn.Linear(model_out_sz, labels_num)
+
+    def forward(self, x:torch.Tensor, mask:torch.Tensor):
+        x = self.model(x, mask)
+
+        b, l, d_in = x.size()
+        n = self.A_log.shape[1]
+
+        A = -torch.exp(self.A_log.float())
+
+        delta = self.fc_delta1(x)
+        B = self.fc_B(x)
+
+        delta = torch.nn.functional.softplus(self.fc_delta2(delta)) #(batch, seq_len, d_model)
+        
+        deltaA = torch.exp(torch.einsum('b l d, d n -> b l d n', delta, A)) #(batch, seq_len, d_model, hidden_state)        
+        deltaB_x = torch.einsum('b l d, b l n, b l d -> b l d n', delta, B, x) #(batch, seq_len, d_model, hidden_state)
+
+        h = torch.zeros((b, d_in, n), device=deltaA.device)
+            
+        for i in range(l):
+            h = deltaA[:, i] * h + deltaB_x[:, i]
+        
+        y = self.fc(h.squeeze(2))
+        
+        return y
