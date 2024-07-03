@@ -24,7 +24,7 @@ dataset_config = DataConfig(
                     dataset_name=None, 
                     dict_size=pow(2, 12), 
                     tokenizer_type="bpe", 
-                    batch_size=32, 
+                    batch_size=256, 
                     max_len=512, 
                     labels=None
                 )
