@@ -167,15 +167,6 @@ class Smart_classifier(nn.Module):
         super().__init__()
         self.model = model
 
-
-    # dt_min: float = 0.001
-    # dt_max: float = 0.1
-    # dt_init: str = "random" # "random" or "constant"
-    # dt_scale: float = 1.0
-    # dt_init_floor = 1e-4
-
-    # rms_norm_eps: float = 1e-5
-
         self.fc_delta1 = nn.Linear(model_out_sz, 1)
         self.fc_delta2 = nn.Linear(1, model_out_sz)
 
