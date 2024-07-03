@@ -21,7 +21,7 @@ epochs_pretraining = 10
 lr_pretraining = 5e-3
 
 epochs_post = 10
-lr_post = 1e-5
+lr_post = 1e-3
 logs_x_epoch = 2
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -32,13 +32,13 @@ dataset_config = DataConfig(
 					dict_size=pow(2, 12), 
 					tokenizer_type="bpe", 
 					batch_size=32, 
-					max_len=64, 
+					max_len=512, 
 					labels=None
 				)
 
 model_config = ModelConfig(
 					model_name=None, 
-					embedding_dimension=64, 
+					embedding_dimension=128, 
 					reduced_embedding_dimension=16, 
 					number_of_heads=8, 
 					max_length=dataset_config.max_len, 
@@ -87,7 +87,8 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "nli", "im
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Initializing model{RESET}")
 		#model = Bert_efficient(model_config)
-		model = Nano_Bert_Efficient(model_config)
+		# model = Nano_Bert_Efficient(model_config)
+		model = Embedder_model(model_config)
 		
 		model_config.model_name = model.__class__.__name__
 		
@@ -120,7 +121,7 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "nli", "im
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
 
-		classifier = Smart_classifier(model, model_config.embedding_dimension, 16, dataset_config.n_labels())
+		classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
 

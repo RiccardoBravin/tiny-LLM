@@ -282,3 +282,23 @@ class MamBra_model(nn.Module):
         for encoder in self.mambra_layers:
             x = encoder.forward(x, mask) # + x
         return x
+
+class Embedder_model(nn.Module):
+    def __init__(self, model_config: ModelConfig, dropout=0.1):
+        """
+        Embedder and multilayer model using the MamBra_block
+        """
+
+        super().__init__()
+        self.d_model = model_config.embedding_dimension
+
+        # embedding for BERT, sum of positional, segment, token embeddings
+        self.embedder = embedders.Nano_embedder(model_config)
+
+
+    def forward(self, x, mask = None):
+        
+        # embedding the indexed sequence to sequence of vectors
+        x = self.embedder(x)
+
+        return x
