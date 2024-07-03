@@ -168,14 +168,29 @@ class Smart_classifier(nn.Module):
         self.model = model
 
 
-        self.fc_delta1 = nn.Linear(model_out_sz, 4)
-        self.fc_delta2 = nn.Linear(4, model_out_sz)
+    # dt_min: float = 0.001
+    # dt_max: float = 0.1
+    # dt_init: str = "random" # "random" or "constant"
+    # dt_scale: float = 1.0
+    # dt_init_floor = 1e-4
 
+    # rms_norm_eps: float = 1e-5
+
+        self.fc_delta1 = nn.Linear(model_out_sz, 1)
+        self.fc_delta2 = nn.Linear(1, model_out_sz)
+
+        nn.init.uniform_(self.fc_delta2.weight, -1, 1)
+        dt = torch.exp(torch.rand(model_out_sz) * 4.6 - 6.9).clamp(min=1e-4)
+        inv_dt = dt + torch.log(-torch.expm1(-dt))
+        with torch.no_grad():
+            self.fc_delta2.bias.copy_(inv_dt)
+        
         self.fc_B = nn.Linear(model_out_sz, hidden_state)
 
         A = torch.arange(1, hidden_state + 1).repeat(model_out_sz,1) 
         
         self.A_log = nn.Parameter(torch.log(A))
+        self.A_log._no_weight_decay = True
 
         self.norm = nn.LayerNorm(hidden_state)
 

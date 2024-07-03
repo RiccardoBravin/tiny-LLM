@@ -237,7 +237,7 @@ class Trainer:
 				
 				scaler.update()
 				# Update learning rate
-				scheduler.step()
+				# scheduler.step()
 				
 				if step_num % log_step == (log_step - 1):
 					self.model.eval()
@@ -261,7 +261,7 @@ class Trainer:
 					mcc = matthews_corrcoef(eval_dataloader.dataset["label"], guesses)
 					val_loss = val_loss / len(eval_dataloader)
 					
-					#scheduler.step(-mcc) 
+					scheduler.step(-mcc) 
 					
 					tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()} {color}")
 					self.model.train()
