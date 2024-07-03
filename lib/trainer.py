@@ -10,7 +10,11 @@ from torch.cuda.amp import GradScaler, autocast
 
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, matthews_corrcoef, confusion_matrix
 
-
+def checkpoint(model, filename):
+    torch.save(model.state_dict(), filename)
+    
+def resume(model, filename):
+    model.load_state_dict(torch.load(filename))
 
 def get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps, last_epoch=-1):
 			def lr_lambda(current_step):
@@ -201,6 +205,9 @@ class Trainer:
 		self.model.train()
 		train_loss = 0.0
 
+		min_loss = float('inf')
+
+
 		for epoch in range(num_epochs):
 
 			tqdm_train_loader = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{num_epochs}", leave=True)
@@ -262,10 +269,13 @@ class Trainer:
 					val_loss = val_loss / len(eval_dataloader)
 					
 					scheduler.step(-mcc) 
-					
+					if(val_loss < min_loss):
+						min_loss = val_loss
+						checkpoint(self.model, "best_model.pth")
+
 					tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()} {color}")
 					self.model.train()
-
+		resume(self.model, "best_model.pth")
 
 	def evaluate(self, test_dataloader):
 		
