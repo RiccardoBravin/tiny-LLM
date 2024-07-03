@@ -166,6 +166,7 @@ class Smart_classifier(nn.Module):
         """
         super().__init__()
         self.model = model
+        self.dropout = nn.Dropout(0.1)
 
         self.fc_delta1 = nn.Linear(model_out_sz, 1)
         self.fc_delta2 = nn.Linear(1, model_out_sz)
@@ -188,7 +189,9 @@ class Smart_classifier(nn.Module):
         self.fc = nn.Linear(model_out_sz, labels_num)
 
     def forward(self, x:torch.Tensor, mask:torch.Tensor):
+
         x = self.model(x, mask)
+        x = self.dropout(x)
 
         b, l, d_in = x.size()
         n = self.A_log.shape[1]

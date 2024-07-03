@@ -227,6 +227,8 @@ class Mamba_model(nn.Module):
         super().__init__()
         self.d_model = model_config.embedding_dimension
 
+        self.dropout = nn.Dropout(dropout)
+
         # embedding for BERT, sum of positional, segment, token embeddings
         self.embedder = embedders.Nano_embedder(model_config)
 
@@ -241,6 +243,8 @@ class Mamba_model(nn.Module):
         
         # embedding the indexed sequence to sequence of vectors
         x = self.embedder(x)
+        
+        x = self.dropout(x)
 
         # running over multiple transformer blocks
         x = self.mamba_layers(x)
