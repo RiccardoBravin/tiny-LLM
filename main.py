@@ -7,15 +7,17 @@ from lib.configs import DataConfig, ModelConfig
 from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
 from lib.Models.models import *
-from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Smart_classifier
+from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Smart_classifier, Tester_classifier
 
 from lib.trainer import Trainer
+
+import wandb
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 lr = 5e-3
-epochs = 30
+epochs = 10
 
 dataset_config = DataConfig(
                     dataset_name="emotion", 
@@ -36,6 +38,8 @@ model_config = ModelConfig(
                     num_layers=2,
                     vocab_size=dataset_config.dict_size
                 )
+
+# wandb.login()
 
 
 #load the dataset
@@ -71,23 +75,46 @@ print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing mode
 # model = Brav(model_config)
 # model = Nano_Mlp_structured(model_config)
 # model = Bert_efficient(model_config)
-model = Nano_Bert_Efficient(model_config)
+# model = Nano_Bert_Efficient(model_config)
 # model = Gray_BERT_Efficient(model_config)
 # model = Mlp_structured(model_config)
 # model = Mamba_model(model_config)
 # model = MamBra_model(model_config)
-# model = Embedder_model(model_config)
+model = Embedder_model(model_config)
 
 model_config.model_name = model.__class__.__name__
 
-cls = Classifier_rms(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
+# cls = Classifier_rms(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
 # cls = Smart_classifier(model, model_out_sz=model_config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels()).to(device)
-
+cls = Tester_classifier(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
 
 print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
 print_model_params(cls)
 print(f"{RESET}")
 
+
+# wandb.init(
+#     # set the wandb project where this run will be logged
+#     project="tester main",
+
+#     # track hyperparameters and run metadata
+#     config={
+#         "learning_rate": lr,
+#         "architecture": f"{model.__class__.__name__} + {cls.__class__.__name__}",
+#         "dataset": dataset_config.dataset_name,
+#         "epochs": epochs,
+#         "batch_size": dataset_config.batch_size,
+#         "vocab_size": dataset_config.dict_size,
+#         "max_len": dataset_config.max_len,
+#         "tokenizer": dataset_config.tokenizer_type,
+#         "model_embedding_dim": model_config.embedding_dimension,
+#         "model_reduced_embedding_dim": model_config.reduced_embedding_dimension,
+#         "model_number_of_heads": model_config.number_of_heads,
+#         "model_forward_expansion": model_config.forward_expansion,
+#         "model_num_layers": model_config.num_layers, 
+#     }
+# )
+# wandb.watch(cls, log="all")
 
 
 
@@ -124,3 +151,6 @@ print(f"{RESET}")
 # 	f.write(f"{metrics_to_str(metrics)}\n")
 # 	f.write(str(model_size(cls)))
 # 	f.write("\n\n*******************************************\n\n")
+
+
+print(cls.conv1d.weights)

@@ -11,10 +11,10 @@ from torch.cuda.amp import GradScaler, autocast
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, matthews_corrcoef, confusion_matrix
 
 def checkpoint(model, filename):
-    torch.save(model.state_dict(), filename)
-    
+	torch.save(model.state_dict(), filename)
+	
 def resume(model, filename):
-    model.load_state_dict(torch.load(filename))
+	model.load_state_dict(torch.load(filename))
 
 def get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps, last_epoch=-1):
 			def lr_lambda(current_step):
@@ -310,3 +310,4 @@ class Trainer:
 		print(f"average loss: {average_loss}\n")
 
 		return predicted.tolist(), average_loss;
+

@@ -302,3 +302,4 @@ class Embedder_model(nn.Module):
         x = self.embedder(x)
 
         return x
+

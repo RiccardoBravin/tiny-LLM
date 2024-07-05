@@ -34,7 +34,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 ########################################################################################
 
 
-for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", "snips", "nli"]:
+for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "nli"]:
 	dataset_config.dataset_name = DATASET_NAME
 
 

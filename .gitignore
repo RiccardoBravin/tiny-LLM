@@ -13,3 +13,4 @@ best_model.pth
 datasets/*
 !datasets/cyberbullying_tweets.csv
 
+*.pth
