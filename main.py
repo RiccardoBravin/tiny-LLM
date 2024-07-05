@@ -15,14 +15,14 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 lr = 5e-3
-epochs = 10
+epochs = 30
 
 dataset_config = DataConfig(
-                    dataset_name="news", 
+                    dataset_name="emotion", 
                     dict_size=pow(2, 12), 
                     tokenizer_type="bpe", #wordpiece #bpe #unigram 
-                    batch_size=32, 
-                    max_len=51, 
+                    batch_size=64, 
+                    max_len=128, 
                     labels=None
                 )
 
@@ -32,8 +32,8 @@ model_config = ModelConfig(
                     reduced_embedding_dimension=16, 
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
-                    forward_expansion=2, 
-                    num_layers=1,
+                    forward_expansion=3, 
+                    num_layers=2,
                     vocab_size=dataset_config.dict_size
                 )
 
@@ -71,15 +71,17 @@ print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing mode
 # model = Brav(model_config)
 # model = Nano_Mlp_structured(model_config)
 # model = Bert_efficient(model_config)
-# model = Nano_Bert_Efficient(model_config)
+model = Nano_Bert_Efficient(model_config)
 # model = Gray_BERT_Efficient(model_config)
 # model = Mlp_structured(model_config)
 # model = Mamba_model(model_config)
-model = MamBra_model(model_config)
+# model = MamBra_model(model_config)
+# model = Embedder_model(model_config)
 
 model_config.model_name = model.__class__.__name__
 
-cls = Smart_classifier(model, model_out_sz=model_config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels()).to(device)
+cls = Classifier_rms(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
+# cls = Smart_classifier(model, model_out_sz=model_config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels()).to(device)
 
 
 print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")

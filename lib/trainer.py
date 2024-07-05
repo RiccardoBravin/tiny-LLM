@@ -187,10 +187,12 @@ class BertTrainer:
 class Trainer:
 	def __init__(self, model, device, lr, model_config):
 		self.model = model
-		self.optimizer = AdamW(lr=lr, params=self.model.parameters())
+		self.optimizer = AdamW(lr=lr, params=self.model.parameters(), amsgrad=True)
 		self.device = device 
-		self.criterion = nn.CrossEntropyLoss().to(device)
+		
 		self.model_config = model_config
+		self.savepath = f"best_model_{model_config.model_name}_{model.__class__.__name__}.pth"
+
 
 	def train(self, train_dataloader, eval_dataloader, num_epochs, log_freq: int, color = FOREGROUND_COLORS['Green']):
 
@@ -198,14 +200,20 @@ class Trainer:
 		
 		scaler = GradScaler()
 
+
+		# Extract labels from the data
+		class_weights = torch.bincount(train_dataloader.dataset["label"])
+		class_weights = class_weights.sum() / class_weights  
+
 		# scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=len(train_dataloader), num_training_steps=num_epochs*len(train_dataloader))
 		scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, mode='min', factor=0.5, patience=log_freq)
-	
+		self.criterion = nn.CrossEntropyLoss(weight=class_weights).to(self.device)
+
 
 		self.model.train()
 		train_loss = 0.0
 
-		min_loss = float('inf')
+		max_mcc = 0
 
 
 		for epoch in range(num_epochs):
@@ -269,13 +277,13 @@ class Trainer:
 					val_loss = val_loss / len(eval_dataloader)
 					
 					scheduler.step(-mcc) 
-					if(val_loss < min_loss):
-						min_loss = val_loss
-						checkpoint(self.model, "best_model.pth")
+					if(max_mcc < mcc):
+						max_mcc = mcc
+						checkpoint(self.model, self.savepath)
 
 					tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()} {color}")
 					self.model.train()
-		resume(self.model, "best_model.pth")
+		resume(self.model, self.savepath)
 
 	def evaluate(self, test_dataloader):
 		

@@ -109,7 +109,7 @@ def dataset_selector(name:str):
 		train_data = dataset['train']
 		test_data = dataset['validation_matched']
 
-		#TODO join premise and hypotesis in the same text with a separator
+		#join premise and hypotesis in the same text with a separator
 		train_data = train_data.map(lambda x: {'text': x['premise'] + " [SEP] " + x['hypothesis']})
 		test_data = test_data.map(lambda x: {'text': x['premise'] + " [SEP] " + x['hypothesis']})
 
@@ -156,6 +156,20 @@ def dataset_selector(name:str):
 		# cleanup useless columns
 		train_data = train_data.remove_columns("category")
 		test_data = test_data.remove_columns("category")
+	elif name == "cola": # https://huggingface.co/datasets/nyu-mll/glue/viewer/cola
+		dataset = load_dataset("glue", "cola", cache_dir="./datasets")
+
+		train_data = dataset['train']
+		test_data = dataset['validation']
+
+		train_data = train_data.rename_column("sentence", "text").remove_columns("idx")
+		test_data = test_data.rename_column("sentence", "text").remove_columns("idx")
+
+	elif name == "emotion": #https://huggingface.co/datasets/dair-ai/emotion
+		dataset = load_dataset("dair-ai/emotion", "split", cache_dir="./datasets")
+
+		train_data = concatenate_datasets([dataset['train'], dataset['validation']])
+		test_data = dataset['test']
 
 	else:
 		raise ValueError("Dataset not found")
@@ -217,11 +231,11 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 	print(f"Tokenizer vocab size: {tokenizer.get_vocab_size()}")
 	assert(tokenizer.get_vocab_size() == config.dict_size)
 
-	# aux = tokenizer.encode_batch(train_dataset['text'][:100000])
-	# print(f"Average input length: {sum(map((lambda x: len(x.ids)), aux))/len(train_dataset['text'][:100000])}")
-	# print(f"Max input length: {max(map((lambda x: len(x.ids)), aux))}")
-	# print(f"Min input length: {min(map((lambda x: len(x.ids)), aux))}")
-	# del aux
+	aux = tokenizer.encode_batch(train_dataset['text'][:100000])
+	print(f"Average input length: {sum(map((lambda x: len(x.ids)), aux))/len(train_dataset['text'][:100000])}")
+	print(f"Max input length: {max(map((lambda x: len(x.ids)), aux))}")
+	print(f"Min input length: {min(map((lambda x: len(x.ids)), aux))}")
+	del aux
 	return tokenizer
 
 	

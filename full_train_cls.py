@@ -87,10 +87,10 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 		#    			 	forward_expansion=0.25, num_layers=5, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
 		# ModelConfig( model_name="Nano_Bert_Efficient_+_cls", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		# ModelConfig( model_name="Mamba_+_cls", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
-		#    			 	forward_expansion=3, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
-		ModelConfig( model_name="Embedder_only", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
-		   			 	forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
+		ModelConfig( model_name="Mamba_+_cls", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
+		   			 	forward_expansion=3, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
+		# ModelConfig( model_name="Embedder_only", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
+		#    			 	forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
 		
 			  	
 	]
@@ -112,8 +112,8 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "dbpedia", "nlu", 
 
 		for model_class, config in zip(models, configs):
 			model = model_class(config)
-			cls = Classifier_rms(model, config.embedding_dimension , dataset_config.n_labels())
-			# cls = Smart_classifier(model, model_out_sz=config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels())
+			# cls = Classifier_rms(model, config.embedding_dimension , dataset_config.n_labels())
+			cls = Smart_classifier(model, model_out_sz=config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels())
 			cls.to(device)
 			
 			########################################################################################
