@@ -165,10 +165,19 @@ def dataset_selector(name:str):
 		train_data = train_data.rename_column("sentence", "text").remove_columns("idx")
 		test_data = test_data.rename_column("sentence", "text").remove_columns("idx")
 
-	elif name == "emotion": #https://huggingface.co/datasets/dair-ai/emotion
+	elif name == "emotion_split": #https://huggingface.co/datasets/dair-ai/emotion
 		dataset = load_dataset("dair-ai/emotion", "split", cache_dir="./datasets")
 
 		train_data = concatenate_datasets([dataset['train'], dataset['validation']])
+		test_data = dataset['test']
+
+	elif name == "emotion_unsplit": #https://huggingface.co/datasets/dair-ai/emotion
+		dataset = load_dataset("dair-ai/emotion", "unsplit", cache_dir="./datasets")
+		dataset = dataset['train']
+
+		dataset = dataset.train_test_split(test_size=0.1)
+
+		train_data = dataset['train']
 		test_data = dataset['test']
 
 	else:
