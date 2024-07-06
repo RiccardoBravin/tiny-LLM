@@ -10,7 +10,7 @@ import torch
 from lib.configs import DataConfig, ModelConfig
 from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
-from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Smart_classifier
+from lib.Models.final_classifiers import *
 from lib.Models.models import *
 
 from lib.trainer import Trainer
@@ -34,7 +34,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 ########################################################################################
 
 
-for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "nli"]:
+for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "nli", "emotion_split"]:
 	dataset_config.dataset_name = DATASET_NAME
 
 
@@ -85,9 +85,9 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "n
 		#    			 	forward_expansion=3, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
 		# ModelConfig( model_name="MamBra", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			 	forward_expansion=0.25, num_layers=5, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
-		# ModelConfig( model_name="Nano_Bert_Efficient_+_cls", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
-		#    			forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		ModelConfig( model_name="Mamba_+_cls", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
+		ModelConfig( model_name="Nano_Bert_Efficient_+_conv", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
+		   			forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		ModelConfig( model_name="Mamba_+_conv", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		   			 	forward_expansion=3, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
 		# ModelConfig( model_name="Embedder_only", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			 	forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
@@ -113,7 +113,8 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "n
 		for model_class, config in zip(models, configs):
 			model = model_class(config)
 			# cls = Classifier_rms(model, config.embedding_dimension , dataset_config.n_labels())
-			cls = Smart_classifier(model, model_out_sz=config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels())
+			# cls = Smart_classifier(model, model_out_sz=config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels())
+			cls = Conv_classifier(model, model_out_sz=config.embedding_dimension, labels_num=dataset_config.n_labels())
 			cls.to(device)
 			
 			########################################################################################

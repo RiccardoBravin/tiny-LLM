@@ -217,7 +217,7 @@ class Smart_classifier(nn.Module):
     
 
 
-class Tester_classifier(nn.Module):
+class Conv_classifier(nn.Module):
     def __init__(self, model:nn.Module, model_out_sz: int, labels_num:int):
         r"""
         Classifier used for testing purposes 
@@ -245,6 +245,61 @@ class Tester_classifier(nn.Module):
         x = self.conv1d(x)
         x = x.transpose(1, 2)
 
+        x = torch.sqrt(torch.mean(torch.pow(x, 2), dim=1))
+        
+        x = self.act(x)
+        x = self.fc(x)
+        return x
+    
+
+class Conv_classifier_2(nn.Module):
+    def __init__(self, model:nn.Module, model_out_sz: int, labels_num:int):
+        r"""
+        Classifier used for testing purposes 
+        Args:
+            model: the model that will be used to generate the embeddings
+            model_out_sz: the output size of the model
+            labels_num: the number of labels to output
+        """
+        super().__init__()
+        self.model = model
+        self.d_conv_1 = 4
+        self.d_conv_2 = 16
+        self.d_conv_3 = 32
+
+        self.conv1d_1 = nn.Conv1d(in_channels=model_out_sz, out_channels=model_out_sz, 
+                              kernel_size=self.d_conv_1,
+                              groups=model_out_sz,
+                              padding=self.d_conv_1 - 1)
+        self.conv1d_2 = nn.Conv1d(in_channels=model_out_sz, out_channels=model_out_sz, 
+                              kernel_size=self.d_conv_2,
+                              groups=model_out_sz,
+                              padding=self.d_conv_2 - 1)
+        self.conv1d_3 = nn.Conv1d(in_channels=model_out_sz, out_channels=model_out_sz, 
+                              kernel_size=self.d_conv_3,
+                              groups=model_out_sz,
+                              padding=self.d_conv_3 - 1)
+        
+        
+        self.w = nn.Parameter(torch.ones(4))
+
+        self.act = nn.Sigmoid()
+        
+        self.fc = nn.Linear(model_out_sz, labels_num)
+
+    def forward(self, x:torch.Tensor, mask:torch.Tensor):
+        l = x.shape[1]
+
+        x = self.model(x, mask)
+
+        x = x.transpose(1, 2)
+        x_1 = self.conv1d_1(x)[:,:,:l]
+        x_2 = self.conv1d_2(x)[:,:,:l]
+        x_3 = self.conv1d_3(x)[:,:,:l]
+        x = self.w[0] * x_1 + self.w[1] * x_2 + self.w[2] * x_3 + x * self.w[3]
+        x = x.transpose(1, 2)
+
+        
         x = torch.sqrt(torch.mean(torch.pow(x, 2), dim=1))
         
         x = self.act(x)
