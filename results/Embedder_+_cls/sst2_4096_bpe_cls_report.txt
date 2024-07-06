@@ -1,0 +1,75 @@
+Model config for current run:
+ModelConfig(model_name='Embedder_+_cls', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=1, num_layers=1, vocab_size=4096)
+LR: 0.005
+EPOCHS: 10
+
+*******************************************
+
+average eval loss:  0.5052
+Accuracy: 0.740
+F1: 0.740
+Precision: 0.740
+Recall: 0.740
+MCC: 0.481
+Confusion matrix:
+ [[668 244]
+ [229 680]]
+('Model params: 0.134M', 'Model buffers: 0.000M', 'Model size: 0.511MB')
+
+*******************************************
+
+average eval loss:  0.5013
+Accuracy: 0.767
+F1: 0.767
+Precision: 0.768
+Recall: 0.767
+MCC: 0.535
+Confusion matrix:
+ [[683 229]
+ [195 714]]
+('Model params: 0.134M', 'Model buffers: 0.000M', 'Model size: 0.511MB')
+
+*******************************************
+
+average eval loss:  0.5081
+Accuracy: 0.756
+F1: 0.756
+Precision: 0.756
+Recall: 0.756
+MCC: 0.512
+Confusion matrix:
+ [[695 217]
+ [227 682]]
+('Model params: 0.134M', 'Model buffers: 0.000M', 'Model size: 0.511MB')
+
+*******************************************
+
+average eval loss:  0.6105
+Accuracy: 0.690
+F1: 0.687
+Precision: 0.698
+Recall: 0.690
+MCC: 0.387
+Confusion matrix:
+ [[539 373]
+ [192 717]]
+('Model params: 0.134M', 'Model buffers: 0.000M', 'Model size: 0.511MB')
+
+*******************************************
+
+average eval loss:  0.5116
+Accuracy: 0.747
+F1: 0.747
+Precision: 0.747
+Recall: 0.747
+MCC: 0.495
+Confusion matrix:
+ [[674 238]
+ [222 687]]
+('Model params: 0.134M', 'Model buffers: 0.000M', 'Model size: 0.511MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

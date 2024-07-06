@@ -17,20 +17,20 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 lr = 5e-3
-epochs = 10
+epochs = 20
 
 dataset_config = DataConfig(
-                    dataset_name="emotion", 
+                    dataset_name="qnli", 
                     dict_size=pow(2, 12), 
                     tokenizer_type="bpe", #wordpiece #bpe #unigram 
                     batch_size=64, 
-                    max_len=128, 
+                    max_len=512, 
                     labels=None
                 )
 
 model_config = ModelConfig(
                     model_name=None, 
-                    embedding_dimension=64, 
+                    embedding_dimension=128, 
                     reduced_embedding_dimension=16, 
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
@@ -66,7 +66,6 @@ validation_dataloader = encode_dataset(tokenizer, validation_dataset, dataset_co
 test_dataloader = encode_dataset(tokenizer, test_dataset, dataset_config.max_len, dataset_config.batch_size)
 
 train_dataloader.shuffle = True
-
 
 
 # Initializing model

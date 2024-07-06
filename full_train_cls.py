@@ -17,14 +17,14 @@ from lib.trainer import Trainer
 
 
 ########################################################################################
-EPOCHS = 10
+EPOCHS = 20
 LR = 5e-3
 
 dataset_config = DataConfig(
                     dataset_name=None, 
                     dict_size=pow(2, 12), 
                     tokenizer_type="bpe", 
-                    batch_size=256, 
+                    batch_size=128, 
                     max_len=512, 
                     labels=None
                 )

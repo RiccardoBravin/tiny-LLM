@@ -102,7 +102,7 @@ def dataset_selector(name:str):
 		test_data = test_data.rename_column("content", "text").remove_columns("title")
 
 		
-	elif name == "nli":#https://huggingface.co/datasets/nyu-mll/multi_nli
+	elif name == "mnli":#https://huggingface.co/datasets/nyu-mll/multi_nli
 		#volendo si può fare upgrade a https://huggingface.co/datasets/sentence-transformers/all-nli
 		dataset = load_dataset("nyu-mll/multi_nli", cache_dir="./datasets")
 
@@ -165,6 +165,20 @@ def dataset_selector(name:str):
 		train_data = train_data.rename_column("sentence", "text").remove_columns("idx")
 		test_data = test_data.rename_column("sentence", "text").remove_columns("idx")
 
+	elif name == "qnli":
+		dataset = load_dataset("glue", "qnli", cache_dir="./datasets")
+
+		train_data = dataset['train']
+		test_data = dataset['validation']
+
+		#join premise and hypotesis in the same text with a separator
+		train_data = train_data.map(lambda x: {'text': x['question'] + " [SEP] " + x['sentence']})
+		test_data = test_data.map(lambda x: {'text': x['question'] + " [SEP] " + x['sentence']})
+
+		train_data = train_data.remove_columns(['question', 'sentence', 'idx'])
+		test_data = test_data.remove_columns(['question', 'sentence', 'idx'])
+	
+	
 	elif name == "emotion_split": #https://huggingface.co/datasets/dair-ai/emotion
 		dataset = load_dataset("dair-ai/emotion", "split", cache_dir="./datasets")
 
@@ -179,6 +193,7 @@ def dataset_selector(name:str):
 
 		train_data = dataset['train']
 		test_data = dataset['test']
+
 
 	else:
 		raise ValueError("Dataset not found")
@@ -240,11 +255,11 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 	print(f"Tokenizer vocab size: {tokenizer.get_vocab_size()}")
 	assert(tokenizer.get_vocab_size() == config.dict_size)
 
-	aux = tokenizer.encode_batch(train_dataset['text'][:100000])
-	print(f"Average input length: {sum(map((lambda x: len(x.ids)), aux))/len(train_dataset['text'][:100000])}")
-	print(f"Max input length: {max(map((lambda x: len(x.ids)), aux))}")
-	print(f"Min input length: {min(map((lambda x: len(x.ids)), aux))}")
-	del aux
+	# aux = tokenizer.encode_batch(train_dataset['text'][:100000])
+	# print(f"Average input length: {sum(map((lambda x: len(x.ids)), aux))/len(train_dataset['text'][:100000])}")
+	# print(f"Max input length: {max(map((lambda x: len(x.ids)), aux))}")
+	# print(f"Min input length: {min(map((lambda x: len(x.ids)), aux))}")
+	# del aux
 	return tokenizer
 
 	
