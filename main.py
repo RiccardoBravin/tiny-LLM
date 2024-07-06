@@ -74,12 +74,12 @@ print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing mode
 # model = Brav(model_config)
 # model = Nano_Mlp_structured(model_config)
 # model = Bert_efficient(model_config)
-# model = Nano_Bert_Efficient(model_config)
+model = Nano_Bert_Efficient(model_config)
 # model = Gray_BERT_Efficient(model_config)
 # model = Mlp_structured(model_config)
-# model = Mamba_model(model_config)
+model = Mamba_model(model_config)
 # model = MamBra_model(model_config)
-model = Embedder_model(model_config)
+# model = Embedder_model(model_config)
 
 model_config.model_name = model.__class__.__name__
 
@@ -92,36 +92,12 @@ print_model_params(cls)
 print(f"{RESET}")
 
 
-# wandb.init(
-#     # set the wandb project where this run will be logged
-#     project="tester main",
-
-#     # track hyperparameters and run metadata
-#     config={
-#         "learning_rate": lr,
-#         "architecture": f"{model.__class__.__name__} + {cls.__class__.__name__}",
-#         "dataset": dataset_config.dataset_name,
-#         "epochs": epochs,
-#         "batch_size": dataset_config.batch_size,
-#         "vocab_size": dataset_config.dict_size,
-#         "max_len": dataset_config.max_len,
-#         "tokenizer": dataset_config.tokenizer_type,
-#         "model_embedding_dim": model_config.embedding_dimension,
-#         "model_reduced_embedding_dim": model_config.reduced_embedding_dimension,
-#         "model_number_of_heads": model_config.number_of_heads,
-#         "model_forward_expansion": model_config.forward_expansion,
-#         "model_num_layers": model_config.num_layers, 
-#     }
-# )
-# wandb.watch(cls, log="all")
-
-
 
 # Training the model
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Training the model{RESET}")
 
 trainer = Trainer(cls, device, lr, model_config)
-cls = trainer.train(train_dataloader, validation_dataloader, epochs, 3)
+trainer.train(train_dataloader, validation_dataloader, epochs, 3)
 
 # Testing the model
 print(f"{FOREGROUND_COLORS["BrightYellow"]}Testing the model{RESET}")
@@ -150,6 +126,3 @@ print(f"{RESET}")
 # 	f.write(f"{metrics_to_str(metrics)}\n")
 # 	f.write(str(model_size(cls)))
 # 	f.write("\n\n*******************************************\n\n")
-
-
-print(cls.conv1d.weights)
