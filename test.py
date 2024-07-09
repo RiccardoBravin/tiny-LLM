@@ -15,7 +15,7 @@ from lib.Models.final_classifiers import *
 from lib.Models.models import *
 
 
-from lib.trainer import BertTrainer, Trainer
+from lib.trainer import BertTrainer, Trainer, NewBertTrainer
 
 epochs_pretraining = 10
 lr_pretraining = 5e-3
@@ -81,15 +81,15 @@ train_dataloader.shuffle = True
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Initializing model{RESET}")
-model = Bert_efficient(model_config)
+# model = Bert_efficient(model_config)
 model = Nano_Bert_Efficient(model_config)
 # model = Embedder_model(model_config)
 
 model_config.model_name = model.__class__.__name__
 
 
-# cls = Classifier_BERT(model, model_config.embedding_dimension, dataset_config.dict_size)
-cls = Classifier_Nano_BERT(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size)
+# cls = Classifier_BERT(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
+cls = Classifier_Nano_BERT(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
 cls.to(device)
 print(f"Model {model.__class__.__name__} initialized on {device}")
 
@@ -101,7 +101,7 @@ print_model_params(model)
 
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Starting training{RESET}")
-trainer = BertTrainer(cls, device, lr_pretraining, model_config)
+trainer = NewBertTrainer(cls, device, lr_pretraining, model_config, dataset_config)
 trainer.train(train_dataloader, validation_dataloader, epochs_pretraining, log_freq=logs_x_epoch)
 
 
@@ -147,16 +147,17 @@ print(metrics_to_str(metrics))
 print(f"{RESET}")
 
 
-folder_name = f"mlm_{model_config.model_name}"
-if not os.path.exists(f"results/{folder_name}/"):
-	os.makedirs(f"results/{folder_name}/")
 
-#save the classification report in a file for later use specifying the dataset, model hyperparameters
-with open(f"results/{folder_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_pretr_report.txt", "a") as f:
-	f.write(f"{model_config}\n")
-	f.write(f"LR: {lr_post}\n")
-	f.write(f"EPOCHS: {epochs_post}\n\n")
-	f.write(f"average eval loss: {avg_eval_loss: .4f}\n")
-	f.write(f"{metrics_to_str(metrics)}\n")
-	f.write(str(model_size(classifier)))
-	f.write("\n\n*******************************************\n\n")
+# folder_name = f"mlm_{model_config.model_name}"
+# if not os.path.exists(f"results/{folder_name}/"):
+# 	os.makedirs(f"results/{folder_name}/")
+
+# # #save the classification report in a file for later use specifying the dataset, model hyperparameters
+# # with open(f"results/{folder_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_pretr_report.txt", "a") as f:
+# # 	f.write(f"{model_config}\n")
+# # 	f.write(f"LR: {lr_post}\n")
+# # 	f.write(f"EPOCHS: {epochs_post}\n\n")
+# # 	f.write(f"average eval loss: {avg_eval_loss: .4f}\n")
+# # 	f.write(f"{metrics_to_str(metrics)}\n")
+# # 	f.write(str(model_size(classifier)))
+# # 	f.write("\n\n*******************************************\n\n")

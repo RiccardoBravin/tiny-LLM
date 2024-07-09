@@ -22,10 +22,14 @@ class DataConfig:
     batch_size: int
     max_len: int
     labels: list
-
+    special_tokens: list | None = None
+    mask_tok_id:int = 3
+    pad_tok_id:int = 0
     def __post_init__(self):
         if self.tokenizer_type not in ["bpe", "wordpiece", "unigram"]:
             raise ValueError(f"The tokenizer type {self.tokenizer_type} is not supported, choose one of 'bpe', 'wordpiece', 'unigram'")
+        if self.special_tokens is None:
+            self.special_tokens = [0,1,2,3,4]
         
     def n_labels(self) -> int:
         return len(self.labels)
