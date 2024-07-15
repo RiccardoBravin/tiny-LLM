@@ -2,15 +2,16 @@ ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=64, reduced_em
 LR: 0.001
 EPOCHS: 10
 
-average eval loss:  0.8779
-Accuracy: 0.839
-F1: 0.839
-Precision: 0.839
-Recall: 0.839
-MCC: 0.678
+average eval loss:  0.8599
+Accuracy: 0.609
+F1: 0.602
+Precision: 0.614
+Recall: 0.609
+MCC: 0.416
 Confusion matrix:
- [[10455  2045]
- [ 1982 10518]]
+ [[2604  379  496]
+ [ 976 1357  790]
+ [ 820  374 2019]]
 ('Model params: 0.166M', 'Model buffers: 0.000M', 'Model size: 0.635MB')
 
 *******************************************
@@ -19,15 +20,16 @@ ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=64, reduced_em
 LR: 0.001
 EPOCHS: 10
 
-average eval loss:  0.6648
-Accuracy: 0.840
-F1: 0.840
-Precision: 0.840
-Recall: 0.840
-MCC: 0.680
+average eval loss:  0.9010
+Accuracy: 0.579
+F1: 0.574
+Precision: 0.577
+Recall: 0.579
+MCC: 0.368
 Confusion matrix:
- [[10693  1807]
- [ 2191 10309]]
+ [[2228  611  640]
+ [ 993 1347  783]
+ [ 674  433 2106]]
 ('Model params: 0.166M', 'Model buffers: 0.000M', 'Model size: 0.635MB')
 
 *******************************************

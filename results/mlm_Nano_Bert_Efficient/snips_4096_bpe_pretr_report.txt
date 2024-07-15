@@ -1,44 +1,44 @@
-ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=8, max_length=128, forward_expansion=2, num_layers=2, vocab_size=4096)
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=8, max_length=512, forward_expansion=2, num_layers=2, vocab_size=4096)
 LR: 0.001
 EPOCHS: 10
 
-average eval loss:  0.2247
-Accuracy: 0.973
-F1: 0.973
-Precision: 0.973
-Recall: 0.973
-MCC: 0.968
+average eval loss:  0.1695
+Accuracy: 0.983
+F1: 0.983
+Precision: 0.983
+Recall: 0.983
+MCC: 0.980
 Confusion matrix:
- [[199   0   0   1   0   0   0]
- [  1 199   0   0   0   0   0]
- [  0   2 189   2   0   4   3]
- [  3   0   0 195   0   1   1]
- [  0   1   0   0 199   0   0]
- [  0   0   0   8   1 190   1]
- [  0   1   0   0   0   8 191]]
-('Model params: 0.142M', 'Model buffers: 0.000M', 'Model size: 0.542MB')
+ [[200   0   0   0   0   0   0]
+ [  0 200   0   0   0   0   0]
+ [  0   2 195   0   0   3   0]
+ [  2   0   0 196   0   2   0]
+ [  0   0   0   0 199   1   0]
+ [  0   1   0   6   1 191   1]
+ [  0   0   0   0   0   5 195]]
+('Model params: 0.167M', 'Model buffers: 0.000M', 'Model size: 0.636MB')
 
 *******************************************
 
-ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=8, max_length=128, forward_expansion=2, num_layers=2, vocab_size=4096)
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=8, max_length=512, forward_expansion=2, num_layers=2, vocab_size=4096)
 LR: 0.001
 EPOCHS: 10
 
-average eval loss:  0.2082
-Accuracy: 0.976
-F1: 0.976
-Precision: 0.976
-Recall: 0.976
-MCC: 0.972
+average eval loss:  0.1029
+Accuracy: 0.981
+F1: 0.981
+Precision: 0.981
+Recall: 0.981
+MCC: 0.978
 Confusion matrix:
- [[197   0   1   1   0   0   1]
- [  0 200   0   0   0   0   0]
- [  0   2 193   0   0   2   3]
- [  3   1   0 191   0   4   1]
+ [[199   0   0   1   0   0   0]
+ [  1 199   0   0   0   0   0]
+ [  0   2 196   0   0   1   1]
+ [  3   1   0 191   0   5   0]
  [  0   0   0   0 200   0   0]
- [  0   0   0   8   1 191   0]
+ [  0   0   0   3   2 194   1]
  [  0   0   0   0   0   6 194]]
-('Model params: 0.142M', 'Model buffers: 0.000M', 'Model size: 0.542MB')
+('Model params: 0.167M', 'Model buffers: 0.000M', 'Model size: 0.636MB')
 
 *******************************************
 

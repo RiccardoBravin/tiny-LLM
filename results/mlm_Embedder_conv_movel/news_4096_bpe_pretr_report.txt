@@ -1,0 +1,38 @@
+ModelConfig(model_name='Embedder_conv_movel', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=8, max_length=512, forward_expansion=2, num_layers=2, vocab_size=4096)
+LR: 0.001
+EPOCHS: 10
+
+average eval loss:  0.2666
+Accuracy: 0.911
+F1: 0.910
+Precision: 0.911
+Recall: 0.911
+MCC: 0.881
+Confusion matrix:
+ [[1699   67   85   49]
+ [  13 1860   17   10]
+ [  56   24 1665  155]
+ [  47   19  137 1697]]
+('Model params: 0.136M', 'Model buffers: 0.000M', 'Model size: 0.518MB')
+
+*******************************************
+
+ModelConfig(model_name='Embedder_conv_movel', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=8, max_length=512, forward_expansion=2, num_layers=2, vocab_size=4096)
+LR: 0.001
+EPOCHS: 10
+
+average eval loss:  0.2644
+Accuracy: 0.909
+F1: 0.909
+Precision: 0.909
+Recall: 0.909
+MCC: 0.879
+Confusion matrix:
+ [[1697   66   85   52]
+ [  15 1858   18    9]
+ [  64   23 1663  150]
+ [  48   20  140 1692]]
+('Model params: 0.136M', 'Model buffers: 0.000M', 'Model size: 0.518MB')
+
+*******************************************
+
