@@ -173,45 +173,6 @@ class Nano_Bert_Efficient(nn.Module):
             x = encoder.forward(x, mask)
         return x
     
-class Gray_BERT_Efficient(nn.Module):
-    """
-    BERT model with custom gray code embedder
-    """
-
-    def __init__(self, model_config: ModelConfig, dropout=0.1):
-        """
-        Embedder and multilayer model using the BERT_block
-        """
-
-        super().__init__()
-        self.d_model = model_config.embedding_dimension
-
-        # embedding for BERT, sum of positional, segment, token embeddings
-        self.embedder = embedders.Gray_nano_embedder(model_config)
-
-        # multi-layers transformer blocks, deep network
-        self.encoder_blocks = torch.nn.ModuleList(
-            [structures.EncoderLayer(
-                            blocks.EfficientAttention(model_config.embedding_dimension, dropout), 
-                            model_config.embedding_dimension, 
-                            model_config.forward_expansion, 
-                            dropout) 
-                                    for _ in range(model_config.num_layers)])
-
-    def forward(self, x, mask):
-        
-        # embedding the indexed sequence to sequence of vectors
-        x = self.embedder(x)
-
-        # attention masking for padded token
-        # (batch_size, seq_len, seq_len)
-        mask = mask.unsqueeze(1).repeat(1, x.shape[1], 1)
-
-        # running over multiple transformer blocks
-        for encoder in self.encoder_blocks:
-            x = encoder.forward(x, mask)
-        return x
-    
 
 
 class Mamba_model(nn.Module):
@@ -303,3 +264,72 @@ class Embedder_model(nn.Module):
 
         return x
 
+
+class Embedder_conv_model(nn.Module):
+    
+    def __init__(self, model_config: ModelConfig, kernel_sz = 16, dropout=0.1):
+        """
+        Embedder and multilayer model using the MamBra_block
+        """
+
+        super().__init__()
+        self.d_model = model_config.embedding_dimension
+
+        # embedding for BERT, sum of positional, segment, token embeddings
+        self.embedder = embedders.Nano_embedder(model_config)
+
+        self.d_conv = kernel_sz
+
+        self.conv1d = nn.Conv1d(in_channels=model_config.embedding_dimension, out_channels=model_config.embedding_dimension, 
+                              kernel_size=self.d_conv,
+                              groups=model_config.embedding_dimension,
+                              padding=self.d_conv - 1)
+        
+
+    def forward(self, x, mask = None):
+        
+        l = x.shape[1]
+
+        # embedding the indexed sequence to sequence of vectors
+        x = self.embedder(x)
+        
+        x = x.transpose(1, 2)
+        x = self.conv1d(x)[:,:,:l]
+        x = x.transpose(1, 2)
+
+        return x
+
+class Embbert(nn.Module):
+    """
+    BERT inspired model that uses NanoBERT embedder, Efficient attention and Bottleneck and Inverted Bottleneck of MobileBERT
+    """
+
+    def __init__(self, model_config: ModelConfig, dropout=0.1):
+        """
+        Embedder and multilayer model using the BERT_block
+        """
+
+        super().__init__()
+        self.d_model = model_config.embedding_dimension
+
+        # embedding for BERT, sum of positional, segment, token embeddings
+        self.embedder = embedders.Nano_embedder(model_config)
+
+        # multi-layers transformer blocks, deep network
+        self.embbert_layers = torch.nn.ModuleList(
+            [structures.EmbBert_layer(model_config.embedding_dimension, model_config.forward_expansion) for _ in range(model_config.num_layers)]
+        )
+
+    def forward(self, x, mask):
+        
+        # embedding the indexed sequence to sequence of vectors
+        x = self.embedder(x)
+
+        # attention masking for padded token
+        # (batch_size, seq_len, seq_len)
+        mask = mask.unsqueeze(1).repeat(1, x.shape[1], 1)
+
+        # running over multiple transformer blocks
+        for layer in self.embbert_layers:
+            x = layer.forward(x, mask)
+        return x

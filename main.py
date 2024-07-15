@@ -7,21 +7,19 @@ from lib.configs import DataConfig, ModelConfig
 from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
 from lib.Models.models import *
-from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Smart_classifier, Tester_classifier
+from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT
 
 from lib.trainer import Trainer
-
-import wandb
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 lr = 5e-3
-epochs = 20
+epochs = 10
 
 dataset_config = DataConfig(
-                    dataset_name="qnli", 
-                    dict_size=pow(2, 12), 
+                    dataset_name="sst2", 
+                    dict_size=pow(2, 14), 
                     tokenizer_type="bpe", #wordpiece #bpe #unigram 
                     batch_size=64, 
                     max_len=512, 
@@ -30,16 +28,14 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
                     model_name=None, 
-                    embedding_dimension=128, 
+                    embedding_dimension=150, 
                     reduced_embedding_dimension=16, 
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
-                    forward_expansion=3, 
-                    num_layers=2,
+                    forward_expansion=4, 
+                    num_layers=1,
                     vocab_size=dataset_config.dict_size
                 )
-
-# wandb.login()
 
 
 #load the dataset
@@ -71,21 +67,20 @@ train_dataloader.shuffle = True
 # Initializing model
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing model{RESET}")
 
-# model = Brav(model_config)
 # model = Nano_Mlp_structured(model_config)
 # model = Bert_efficient(model_config)
-model = Nano_Bert_Efficient(model_config)
-# model = Gray_BERT_Efficient(model_config)
+# model = Nano_Bert_Efficient(model_config)
 # model = Mlp_structured(model_config)
-model = Mamba_model(model_config)
-# model = MamBra_model(model_config)
+# model = Mamba_model(model_config)
 # model = Embedder_model(model_config)
+# model = Embbert(model_config)
+model = Embedder_conv_model(model_config) 
 
 model_config.model_name = model.__class__.__name__
 
-# cls = Classifier_rms(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
+cls = Classifier_rms(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
 # cls = Smart_classifier(model, model_out_sz=model_config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels()).to(device)
-cls = Tester_classifier(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
+# cls = Tester_classifier(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
 
 print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
 print_model_params(cls)

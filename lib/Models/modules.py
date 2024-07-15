@@ -12,3 +12,13 @@ class RMSNorm(nn.Module):
         output = x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + self.eps) * self.weight
 
         return output
+    
+
+class NoNorm(nn.Module):
+    def __init__(self, feat_size, eps=None):
+        super().__init__()
+        self.bias = nn.Parameter(torch.zeros(feat_size))
+        self.weight = nn.Parameter(torch.ones(feat_size)/ feat_size)
+
+    def forward(self, input_tensor: torch.Tensor) -> torch.Tensor:
+        return input_tensor * self.weight + self.bias

@@ -5,7 +5,7 @@ from tqdm import tqdm
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
-from torch.optim import lr_scheduler, AdamW
+from torch.optim import lr_scheduler, AdamW, Adam
 from torch.cuda.amp import GradScaler, autocast
 
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, matthews_corrcoef, confusion_matrix
@@ -42,149 +42,6 @@ def mask_tokens(tokens, dataset_config:DataConfig, mask_prob = 0.15):
 	masked_tokens[masked_indices * randomized_indices] = torch.randint(5, dataset_config.dict_size, masked_tokens[masked_indices * randomized_indices].shape, device=tokens.device) # random token in the dictionary
 	
 	return masked_tokens, masked_indices
-
-
-# def split_and_randomize_phrases(tokens, masks):
-# 	#take the first half of the tokens and masks and shuffle them
-# 	half_batch = tokens.shape[0] // 2
-# 	counts = min([torch.count_nonzero(masks[i]) for i in range(half_batch)])//2 #could be redone since it is efficient but not so random
-
-# 	phrase_a = tokens[:half_batch, :counts]
-# 	phrase_b = tokens[:half_batch, counts:-1]
-# 	phrase_a_mask = masks[:half_batch, :counts]
-# 	phrase_b_mask = masks[:half_batch, counts:]
-
-
-# 	#randomize positions of b
-# 	# random_idx = torch.randperm(half_batch)
-# 	phrase_b = torch.roll(phrase_b, 1, dims=0)
-# 	phrase_b_mask = torch.roll(phrase_b_mask, 1, dims=0)
-# 	# phrase_b = phrase_b[random_idx]
-# 	# phrase_b_mask = phrase_b_mask[random_idx]
-
-# 	#add to all phrases_a the [SEP] token
-# 	phrase_a = torch.cat((phrase_a, torch.tensor([4]).repeat(half_batch, 1)), dim=1)
-
-
-# 	randomized_tokens = torch.cat((phrase_a, phrase_b), dim=1)
-# 	tokens = torch.cat((randomized_tokens, tokens[half_batch:]), dim=0)
-
-# 	randomized_masks = torch.cat((phrase_a_mask, phrase_b_mask), dim=1)
-# 	masks = torch.cat((randomized_masks, masks[half_batch:]), dim=0)
-
-# 	#add to all phrases in second half_batch the [SEP] token in a random position
-# 	counts = min([torch.count_nonzero(masks[i+half_batch]) for i in range(half_batch)])//2
-# 	sep_positions = torch.randint(1, counts, (half_batch,))
-	
-# 	tokens[half_batch:, sep_positions ] = 4
-	
-# 	tokens[:half_batch] = randomized_tokens
-# 	masks[:half_batch] = randomized_masks
-
-# 	return tokens, masks
-
-class BertTrainer:
-	
-	def __init__(self, model, device, lr, model_config):
-		
-		self.model = model
-		self.optimizer = AdamW(lr=lr, params=self.model.parameters())
-		self.device = device 
-		self.lm_criterion = nn.CrossEntropyLoss(ignore_index=0).to(device)
-		self.cls_criterion = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([6])).to(device)
-		self.model_config = model_config
-
-	def train(self, train_dataloader, eval_dataloader, num_epochs, log_freq: int, color = FOREGROUND_COLORS['Green']):
-		log_step = len(train_dataloader) // log_freq
-		
-		scaler = GradScaler()
-		scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=len(train_dataloader), num_training_steps=num_epochs*len(train_dataloader))
-
-		self.model.train()
-		train_loss = 0.0
-
-		for epoch in range(num_epochs):
-
-			tqdm_train_loader = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{num_epochs}", leave=True)
-			for step_num, batch_data in enumerate(tqdm_train_loader):
-				
-				self.model.zero_grad()
-
-				tokens = batch_data["tokens"].to(self.device) 
-				masks  = batch_data["attention_mask"].to(self.device)
-				
-				masked_tokens, cls_labels = mask_tokens(tokens, self.model_config.vocab_size, self.device)
-				# masked_tokens, masks = split_and_randomize_phrases(masked_tokens, masks) #TEMPORARY REMOVED BECAUSE TOO COMPLICATED
-
-				with autocast():
-					#Model outputs (batch_size, seq_len, dict_size) and (batch_size, seq_len, 2)
-					logits, label_guess = self.model(masked_tokens, masks) 
-			
-					lm_loss = self.lm_criterion(logits.transpose(1,2), tokens)
-					cls_loss = self.cls_criterion(label_guess.squeeze(-1), cls_labels.float())
-
-					batch_loss = lm_loss + cls_loss
-
-			
-				if step_num == 0:
-					train_loss = batch_loss.item()
-				else:
-					train_loss = 0.9 * train_loss + 0.1 * batch_loss.item()
-
-				tqdm_train_loader.set_postfix(loss = "{:.4f}".format(train_loss))	
-				
-				
-				# Scales loss.  Calls backward() on scaled loss to create scaled gradients.
-				# Backward passes under autocast are not recommended.
-				# Backward ops run in the same dtype autocast chose for corresponding forward ops.
-				scaler.scale(batch_loss).backward()
-
-				# scaler.step() first unscales the gradients of the optimizer's assigned params.
-				# If these gradients do not contain infs or NaNs, optimizer.step() is then called,
-				# otherwise, optimizer.step() is skipped.
-				scaler.step(self.optimizer)
-				
-				scaler.update()
-				# Update learning rate
-				scheduler.step()
-
-
-				if step_num % log_step == (log_step - 1):
-					self.model.eval()
-					mlm_accuracy = torch.Tensor([]).to(self.device)
-					cls_accuracy = torch.Tensor([]).to(self.device)
-					mlm_avg_loss = 0
-					cls_avg_loss = 0
-					val_loss = 0
-
-					for batch_val in eval_dataloader:
-						tokens = batch_val["tokens"].to(self.device) 
-						masks  = batch_val["attention_mask"].to(self.device)
-						
-						masked_tokens, cls_labels = mask_tokens(tokens, self.model_config.vocab_size, self.device)
-
-						logits, label_guess = self.model(masked_tokens, masks)
-						label_guess = label_guess.squeeze(-1)
-
-						lm_loss = self.lm_criterion(logits.transpose(1,2), tokens)
-						cls_loss = nn.functional.binary_cross_entropy_with_logits(label_guess, cls_labels.float(), pos_weight=torch.tensor([15]).to(self.device))
-
-						val_loss += lm_loss.item() + cls_loss.item()
-						cls_avg_loss += cls_loss.item()
-						mlm_avg_loss += lm_loss.item()
-
-						mlm_accuracy = torch.cat((mlm_accuracy, (torch.argmax(logits, dim=2) == tokens)))
-						cls_accuracy = torch.cat((cls_accuracy, ((label_guess > 0.5) == cls_labels.float())))
-					
-
-					mlm_accuracy = torch.mean(mlm_accuracy.float()).item()					
-					cls_accuracy = torch.mean(cls_accuracy.float()).item()
-					val_loss = val_loss / len(eval_dataloader)
-					cls_avg_loss = cls_avg_loss / len(eval_dataloader)
-					mlm_avg_loss = mlm_avg_loss / len(eval_dataloader)
-
-					tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, mlm loss: {mlm_avg_loss:.3f}, mlm accuracy: {mlm_accuracy:.3f}, cls loss: {cls_avg_loss:.3f}, cls accuracy: {cls_accuracy:.3f}, Lr: {scheduler.get_last_lr()} {color}")
-					self.model.train()
 
 
 class Trainer:
@@ -318,7 +175,7 @@ class Trainer:
 
 
 
-class NewBertTrainer:
+class BertTrainer:
 	
 	def __init__(self, model, device, lr, model_config, dataset_config, mask_prob = 0.15):
 		
@@ -338,6 +195,8 @@ class NewBertTrainer:
 		self.mask_prob = mask_prob
 
 	def train(self, train_dataloader, eval_dataloader, num_epochs, log_freq: int, color = FOREGROUND_COLORS['Green']):
+		print(f"{color}")
+		
 		log_step = len(train_dataloader) // log_freq
 		
 		scaler = GradScaler()

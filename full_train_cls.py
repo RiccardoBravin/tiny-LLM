@@ -112,9 +112,8 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "n
 
 		for model_class, config in zip(models, configs):
 			model = model_class(config)
-			# cls = Classifier_rms(model, config.embedding_dimension , dataset_config.n_labels())
-			# cls = Smart_classifier(model, model_out_sz=config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels())
-			cls = Conv_classifier(model, model_out_sz=config.embedding_dimension, labels_num=dataset_config.n_labels())
+			cls = Classifier_rms(model, config.embedding_dimension , dataset_config.n_labels())
+			# cls = Conv_classifier(model, model_out_sz=config.embedding_dimension, labels_num=dataset_config.n_labels())
 			cls.to(device)
 			
 			########################################################################################

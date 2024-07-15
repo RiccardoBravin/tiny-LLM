@@ -17,8 +17,8 @@ from lib.Models.models import *
 
 from lib.trainer import BertTrainer, Trainer
 
-epochs_pretraining = 10
-lr_pretraining = 5e-3
+epochs_pretraining = 30
+lr_pretraining = 5e-4
 
 epochs_post = 10
 lr_post = 1e-3
@@ -31,26 +31,26 @@ dataset_config = DataConfig(
 					dataset_name=None, 
 					dict_size=pow(2, 12), 
 					tokenizer_type="bpe", 
-					batch_size=32, 
-					max_len=512, 
+					batch_size=128, 
+					max_len=64, 
 					labels=None
 				)
 
 model_config = ModelConfig(
 					model_name=None, 
-					embedding_dimension=128, 
+					embedding_dimension=64, 
 					reduced_embedding_dimension=16, 
 					number_of_heads=8, 
 					max_length=dataset_config.max_len, 
-					forward_expansion=2, 
-					num_layers=1,
+					forward_expansion=0.5, 
+					num_layers=6,
 					vocab_size=dataset_config.dict_size
 				)
 
 
 ########################################################################################
 
-for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "nli", "imdb"]:
+for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "imdb", "emotion_split"]:
 	dataset_config.dataset_name = DATASET_NAME
 
 	#load the dataset   
@@ -87,14 +87,17 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "nli", "im
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Initializing model{RESET}")
 		#model = Bert_efficient(model_config)
-		# model = Nano_Bert_Efficient(model_config)
-		model = Embedder_model(model_config)
-		
+		model = Nano_Bert_Efficient(model_config)
+		# model = Embedder_model(model_config)
+		# model = Mamba_model(model_config)
+		# model = Embedder_conv_movel(model_config)
+		# model = Embbert(model_config)
+
 		model_config.model_name = model.__class__.__name__
 		
 
-		# cls = Classifier_BERT(model, model_config.embedding_dimension, dataset_config.dict_size)
-		cls = Classifier_Nano_BERT(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size)
+		# cls = Classifier_BERT(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
+		cls = Classifier_Nano_BERT(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
 		cls.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
 
@@ -106,7 +109,7 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "nli", "im
 
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Starting training{RESET}")
-		trainer = BertTrainer(cls, device, lr_pretraining, model_config)
+		trainer = BertTrainer(cls, device, lr_pretraining, model_config, dataset_config)
 		trainer.train(train_dataloader, validation_dataloader, epochs_pretraining, log_freq=logs_x_epoch)
 
 

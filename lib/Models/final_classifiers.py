@@ -42,7 +42,7 @@ class Classifier_BERT(nn.Module):
         self.lm_cls = nn.Linear(model_out_sz, dictionary_size)
         self.class_cls = nn.Linear(model_out_sz, num_labels)
 
-        self.lm_cls.weight = self.model.embedder.token.weight
+        #self.lm_cls.weight = self.model.embedder.token.weight
 
     def forward(self, x:torch.Tensor, mask:torch.Tensor):
         x = self.model(x, mask)
@@ -75,8 +75,8 @@ class Classifier_Nano_BERT(nn.Module):
         
         self.class_cls = nn.Linear(model_out_sz, num_labels)
 
-        self.reducer.weight = torch.nn.Parameter(self.model.embedder.expander.weight.T)
-        self.lm_cls.weight = self.model.embedder.token.weight
+        # self.reducer.weight = torch.nn.Parameter(self.model.embedder.expander.weight.T)
+        # self.lm_cls.weight = self.model.embedder.token.weight
 
     def forward(self, x:torch.Tensor, mask:torch.Tensor):
         x = self.model(x, mask)
@@ -159,6 +159,8 @@ class Classifier_last_token(nn.Module):
         x = self.fc(x)
         return x
     
+
+#REALLY BAD    
 class Smart_classifier(nn.Module):
     def __init__(self, model:nn.Module, model_out_sz: int, hidden_state:int, labels_num:int):
         r"""
@@ -221,7 +223,7 @@ class Smart_classifier(nn.Module):
         return y
     
 
-
+#VERY GOOD
 class Conv_classifier(nn.Module):
     def __init__(self, model:nn.Module, model_out_sz: int, labels_num:int):
         r"""
@@ -257,6 +259,7 @@ class Conv_classifier(nn.Module):
         return x
     
 
+#NOT SO GOOD
 class Conv_classifier_2(nn.Module):
     def __init__(self, model:nn.Module, model_out_sz: int, labels_num:int):
         r"""

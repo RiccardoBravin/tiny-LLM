@@ -18,15 +18,15 @@ from lib.Models.models import *
 from lib.electra import Electra
 
 
-epochs_pretraining = 30
-lr_pretraining = 5e-3
+epochs_pretraining = 50
+lr_pretraining = 1e-4
 
 epochs_post = 10
-lr_post = 1e-3
+lr_post = 2e-5
 logs_x_epoch = 2
 
 dataset_config = DataConfig(
-                    dataset_name="bull", 
+                    dataset_name="sst2", 
                     dict_size=pow(2, 12), 
                     tokenizer_type="bpe", 
                     batch_size=128, 
@@ -40,7 +40,7 @@ generator_config = ModelConfig(
                     reduced_embedding_dimension=16, 
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
-                    forward_expansion=2, 
+                    forward_expansion=0.2, 
                     num_layers=1,
                     vocab_size=dataset_config.dict_size
                 )
@@ -51,8 +51,8 @@ discriminator_config = ModelConfig(
                     reduced_embedding_dimension=generator_config.reduced_embedding_dimension, 
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
-                    forward_expansion=4, 
-                    num_layers=2,
+                    forward_expansion=0.5, 
+                    num_layers=10,
                     vocab_size=dataset_config.dict_size
                 )
 
@@ -92,16 +92,16 @@ print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Initializing model
 
 #choose generator model
 # generator = Brav(generator_config)
-generator = Bert_efficient(generator_config)
-# generator = Nano_Bert_Efficient(generator_config)
+#generator = Bert_efficient(generator_config)
+generator = Nano_Bert_Efficient(generator_config)
 # generator = Gray_BERT_Efficient(generator_config)
 # generator = Mlp_structured(generator_config)
 # generator = Mamba_model(generator_config)
 
 #choose discriminator model
 # discriminator = Brav(discriminator_config)
-discriminator = Bert_efficient(discriminator_config)
-# discriminator = Nano_Bert_Efficient(discriminator_config)
+#discriminator = Bert_efficient(discriminator_config)
+discriminator = Nano_Bert_Efficient(discriminator_config)
 # discriminator = Gray_BERT_Efficient(discriminator_config)
 # discriminator = Mlp_structured(discriminator_config)
 # discriminator = Mamba_model(discriminator_config)
@@ -176,7 +176,7 @@ for epoch in range(epochs_pretraining):
 	tqdm.write(f"{FOREGROUND_COLORS['BrightGreen']}Epoch {epoch+1}/{epochs_pretraining}")
 	
 	train_loss = 0
-	tqdm_train_loader = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{epochs_pretraining}", leave=False)
+	tqdm_train_loader = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{epochs_pretraining}", leave=True)
 
 	for step_num, batch_data in enumerate(tqdm_train_loader):
 

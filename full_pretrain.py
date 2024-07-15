@@ -58,7 +58,7 @@ discriminator_config = ModelConfig(
 
 ########################################################################################
 
-for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "nli"]:
+for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "emotion_split"]:
 	dataset_config.dataset_name = DATASET_NAME
 
 	#load the dataset   

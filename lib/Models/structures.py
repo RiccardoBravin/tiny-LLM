@@ -73,7 +73,7 @@ class EncoderLayer(nn.Module):
         self.layernorm1 = torch.nn.LayerNorm(d_model)
         self.layernorm2 = torch.nn.LayerNorm(d_model)
         self.attention = attention_module
-        self.ff = blocks.SwiGLU(d_model, ff_expansion*d_model)
+        self.ff = blocks.SwiGLU(d_model, int(ff_expansion*d_model))
         self.dropout = torch.nn.Dropout(dropout)
 
     def forward(self, embeddings, mask):
@@ -118,3 +118,45 @@ class MamBra_layer(nn.Module):
         y2 = self.down1(y2)
 
         return y1 + y2
+
+class EmbBert_layer(nn.Module):
+    def __init__(self, d_model, ff_expansion):
+        super().__init__()
+
+        #firs stage
+        self.contract = nn.Linear(d_model, d_model // ff_expansion)
+        self.attention = blocks.EmbBertAttention(d_model, ff_expansion)
+        self.norm1 = modules.NoNorm(d_model // ff_expansion)
+        
+
+        #second stage
+        self.fc = nn.Sequential(
+            nn.Linear(d_model // ff_expansion, d_model),
+            nn.ReLU(),# SILU in BERT original
+            nn.Linear(d_model, d_model // ff_expansion)
+        )
+        self.norm2 = modules.NoNorm(d_model // ff_expansion)
+
+        
+        #final stage
+        self.expand = torch.nn.Linear(d_model // ff_expansion, d_model)
+        self.norm3 = modules.NoNorm(d_model)
+        
+
+    def forward(self, embeddings, mask = None):
+        # embeddings: (batch_size, max_len, d_model)
+        # result: (batch_size, max_len, d_model)
+
+        #first stage
+        y1 = self.contract(embeddings)
+        y2 = self.attention(embeddings, embeddings, embeddings, mask)
+        y = self.norm1(y1 + y2)
+
+        #second stage
+        y1 = self.fc(y)
+        y = self.norm2(y1 + y)
+
+        #final stage
+        out = self.expand(y) + embeddings
+        
+        return self.norm3(out)

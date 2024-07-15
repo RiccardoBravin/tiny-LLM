@@ -28,7 +28,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 dataset_config = DataConfig(
-					dataset_name="sst2", #["sst2", "news", "bull", "limit", "nlu", "snips", "nli", "imdb"]
+					dataset_name="limit", #["sst2", "news", "bull", "limit", "nlu", "snips", "nli", "imdb"]
 					dict_size=pow(2, 12), 
 					tokenizer_type="bpe", 
 					batch_size=32, 
@@ -82,9 +82,22 @@ train_dataloader.shuffle = True
 ########################################################################################
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Initializing model{RESET}")
 # model = Bert_efficient(model_config)
-model = Nano_Bert_Efficient(model_config)
+# model = Nano_Bert_Efficient(model_config)
 # model = Embedder_model(model_config)
 
+class aux_model(torch.nn.Module):
+	def __init__(self, model_config):
+		super(aux_model, self).__init__()
+		self.embedder = torch.nn.Embedding(model_config.vocab_size, model_config.embedding_dimension),
+		self.layer =  torch.nn.TransformerEncoder(torch.nn.TransformerEncoderLayer(d_model=model_config.embedding_dimension, nhead=1, dim_feedforward=model_config.embedding_dimension*model_config.forward_expansion), num_layers=model_config.num_layers)
+
+	def forward(self, x):
+		x = self.embedder(x)
+		x = self.layer(x)
+		return x
+
+
+model = aux_model(model_config)
 model_config.model_name = model.__class__.__name__
 
 
