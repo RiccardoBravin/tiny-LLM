@@ -13,6 +13,9 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from lib.configs import ModelConfig, DataConfig
 
 
+from lib.grokfast import gradfilter_ema
+
+
 def checkpoint(model, filename):
 	torch.save(model.state_dict(), filename)
 	
@@ -66,7 +69,7 @@ class Trainer:
 		class_weights = class_weights.sum() / class_weights  
 
 		# scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=len(train_dataloader), num_training_steps=num_epochs*len(train_dataloader))
-		scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, mode='min', factor=0.5, patience=log_freq)
+		# scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, mode='min', factor=0.5, patience=log_freq)
 		self.criterion = nn.CrossEntropyLoss(weight=class_weights).to(self.device)
 
 
@@ -75,6 +78,7 @@ class Trainer:
 
 		max_mcc = 0
 
+		grads = None
 
 		for epoch in range(num_epochs):
 
@@ -104,6 +108,10 @@ class Trainer:
 				# Backward passes under autocast are not recommended.
 				# Backward ops run in the same dtype autocast chose for corresponding forward ops.
 				scaler.scale(batch_loss).backward()
+
+
+				grads = gradfilter_ema(self.model, grads=grads, alpha=0.98, lamb=2)
+
 
 				# scaler.step() first unscales the gradients of the optimizer's assigned params.
 				# If these gradients do not contain infs or NaNs, optimizer.step() is then called,
@@ -136,12 +144,13 @@ class Trainer:
 					mcc = matthews_corrcoef(eval_dataloader.dataset["label"], guesses)
 					val_loss = val_loss / len(eval_dataloader)
 					
-					scheduler.step(-mcc) 
+					# scheduler.step(-mcc) 
 					if(max_mcc < mcc):
 						max_mcc = mcc
 						checkpoint(self.model, self.savepath)
 
-					tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()} {color}")
+					# tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()} {color}")
+					tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f} {color}")
 					self.model.train()
 		resume(self.model, self.savepath)
 

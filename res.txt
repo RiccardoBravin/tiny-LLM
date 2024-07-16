@@ -1,164 +1,160 @@
-Results for model: BERT_Eff_Multihead
-		nlu
-F1 mean: 0.7993704201790399
-Accuracy mean: 0.808
-MCC mean: 0.7862037201260581
-		sst2
-F1 mean: 0.7882901613836101
-Accuracy mean: 0.7883027522935779
-MCC mean: 0.5767256866353796
-		blog
-F1 mean: 0.24789867894778692
-Accuracy mean: 0.3576483205429117
-MCC mean: 0.02794532207111118
-		bull
-F1 mean: 0.8305450231065633
-Accuracy mean: 0.8331236897274634
-MCC mean: 0.8012641631036084
-		imdb
-F1 mean: 0.8615009728381511
-Accuracy mean: 0.8615120000000001
-MCC mean: 0.7231385509801346
-		dbpedia
-F1 mean: 0.9763576348782449
-Accuracy mean: 0.9763685714285714
-MCC mean: 0.9745520047749917
-		news
-F1 mean: 0.9075661093368425
-Accuracy mean: 0.9077631578947368
-MCC mean: 0.8770764192654742
-		limit
-F1 mean: 0.7415935079178035
-Accuracy mean: 0.7372
-MCC mean: 0.4158386395843919
-		snips
-F1 mean: 0.9740051459421191
-Accuracy mean: 0.974
-MCC mean: 0.9697049802096283
-
-*************************************************
-
-Results for model: BERT_efficient
-		nlu
-F1 mean: 0.8631437304614362
-Accuracy mean: 0.863378640776699
-MCC mean: 0.8474951563004887
-		sst2
-F1 mean: 0.7836953555430652
-Accuracy mean: 0.7837155963302752
-MCC mean: 0.5674798462886008
-		blog
-F1 mean: 0.2498730433458889
-Accuracy mean: 0.34967518482379106
-MCC mean: 0.03930397900902288
-		bull
-F1 mean: 0.8422856597497871
-Accuracy mean: 0.8440251572327042
-MCC mean: 0.8136375082239935
-		imdb
-F1 mean: 0.857435737470803
-Accuracy mean: 0.857464
-MCC mean: 0.7152042347949698
-		dbpedia
-F1 mean: 0.9832075481359885
-Accuracy mean: 0.9832171428571428
-MCC mean: 0.9819269510505549
-		news
-F1 mean: 0.9113998629806348
-Accuracy mean: 0.9115526315789474
-MCC mean: 0.8821348032283503
-		limit
-F1 mean: 0.7405028638434382
-Accuracy mean: 0.7348000000000001
-MCC mean: 0.42041189221833364
-		snips
-F1 mean: 0.9831526912096257
-Accuracy mean: 0.9831428571428571
-MCC mean: 0.9803580838474065
-
-*************************************************
-
-Results for model: Gated_BERT
-		nlu
-F1 mean: 0.8217165943299142
-Accuracy mean: 0.8281165048543689
-MCC mean: 0.8075457620396552
-		sst2
-F1 mean: 0.43239290881931425
-Accuracy mean: 0.5649082568807339
-MCC mean: 0.11515071760735865
-		blog
-F1 mean: 0.2482887145444987
-Accuracy mean: 0.33500356022046995
-MCC mean: 0.03806107969409531
-		bull
-F1 mean: 0.8265879312864759
-Accuracy mean: 0.8278825995807129
-MCC mean: 0.7946670872903975
-		imdb
-F1 mean: 0.33333333333333326
-Accuracy mean: 0.5
+Results for model: Embedder_only
+		snips_4096
+F1 mean: 0.9634
+Accuracy mean: 0.9646000000000001
+MCC mean: 0.9582
+		emotion_split_4096
+F1 mean: 0.8944000000000001
+Accuracy mean: 0.8897999999999999
+MCC mean: 0.8593999999999999
+		bull_16384
+F1 mean: 0.8365
+Accuracy mean: 0.8401666666666666
+MCC mean: 0.8101666666666666
+		mnli_16384
+F1 mean: 0.5142
+Accuracy mean: 0.5124000000000001
+MCC mean: 0.278
+		nlu_10437
+F1 mean: 0.8766
+Accuracy mean: 0.8744
+MCC mean: 0.8614
+		limit_4096
+F1 mean: 0.7426
+Accuracy mean: 0.7368
+MCC mean: 0.42619999999999997
+		emotion_split_16384
+F1 mean: 0.8944000000000001
+Accuracy mean: 0.89
+MCC mean: 0.8592000000000001
+		nlu_4096
+F1 mean: 0.6984
+Accuracy mean: 0.747
+MCC mean: 0.7162
+		news_16384
+F1 mean: 0.914
+Accuracy mean: 0.9141999999999999
+MCC mean: 0.8855999999999999
+		nli_4096
+F1 mean: 0.4948
+Accuracy mean: 0.5012000000000001
+MCC mean: 0.25
+		snips_10437
+F1 mean: 0.9768000000000001
+Accuracy mean: 0.9768000000000001
+MCC mean: 0.9732
+		sst2_4096
+F1 mean: 0.332
+Accuracy mean: 0.499
 MCC mean: 0.0
-		dbpedia
-F1 mean: 0.983672902564874
-Accuracy mean: 0.9836771428571428
-MCC mean: 0.982422334892423
-		news
-F1 mean: 0.1
-Accuracy mean: 0.25
-MCC mean: 0.0
-		limit
-F1 mean: 0.6301751212523807
-Accuracy mean: 0.7048
-MCC mean: 0.16460689486207097
-		snips
-F1 mean: 0.9734593351449424
-Accuracy mean: 0.9734285714285715
-MCC mean: 0.9690365067853852
+		bull_4096
+F1 mean: 0.836
+Accuracy mean: 0.8382
+MCC mean: 0.8066000000000001
+		sst2_16384
+F1 mean: 0.781
+Accuracy mean: 0.7816666666666667
+MCC mean: 0.5658888888888889
+		imdb_4096
+F1 mean: 0.8682000000000001
+Accuracy mean: 0.8682000000000001
+MCC mean: 0.7368
+		limit_16384
+F1 mean: 0.722
+Accuracy mean: 0.7118
+MCC mean: 0.4226
+		imdb_16384
+F1 mean: 0.876
+Accuracy mean: 0.8762000000000001
+MCC mean: 0.7532
+		news_4096
+F1 mean: 0.905
+Accuracy mean: 0.9052
+MCC mean: 0.8736
 
 *************************************************
 
-Results for model: MLPSwiGLU
-		race
-F1 mean: 0.253899721448468
-Accuracy mean: 0.253899721448468
-MCC mean: -0.0038075735436577758
-		nlu
-F1 mean: 0.7655922330097088
-Accuracy mean: 0.7655922330097088
-MCC mean: 0.7445778626616052
-		sst2
-F1 mean: 0.781651376146789
-Accuracy mean: 0.781651376146789
-MCC mean: 0.5638695934943849
-		blog
-F1 mean: 0.03995885967456947
-Accuracy mean: 0.03995885967456947
-MCC mean: 0.02005255994718933
-		bull
-F1 mean: 0.7961425576519916
-Accuracy mean: 0.7961425576519916
-MCC mean: 0.7584447821277871
-		imdb
-F1 mean: 0.8287280000000001
-Accuracy mean: 0.8287280000000001
-MCC mean: 0.657613674967237
-		dbpedia
-F1 mean: 0.9707657142857145
-Accuracy mean: 0.9707657142857145
-MCC mean: 0.9685248569531197
-		news
-F1 mean: 0.896921052631579
-Accuracy mean: 0.896921052631579
-MCC mean: 0.8628752371411276
-		limit
-F1 mean: 0.6769999999999999
-Accuracy mean: 0.6769999999999999
-MCC mean: 0.3583559469894591
-		snips
-F1 mean: 0.9641428571428572
-Accuracy mean: 0.9641428571428572
-MCC mean: 0.9582721241759611
+Results for model: Embedder_+_conv
+		bull_16384
+F1 mean: 0.8299999999999998
+Accuracy mean: 0.8373999999999999
+MCC mean: 0.8089999999999999
+		mnli_16384
+F1 mean: 0.5438000000000001
+Accuracy mean: 0.545
+MCC mean: 0.3186
+		nlu_10437
+F1 mean: 0.876
+Accuracy mean: 0.8747999999999999
+MCC mean: 0.8614
+		emotion_split_16384
+F1 mean: 0.8802
+Accuracy mean: 0.8775999999999999
+MCC mean: 0.8404
+		news_16384
+F1 mean: 0.9164
+Accuracy mean: 0.9164
+MCC mean: 0.8888
+		snips_10437
+F1 mean: 0.9805999999999999
+Accuracy mean: 0.9805999999999999
+MCC mean: 0.9776
+		sst2_16384
+F1 mean: 0.7836000000000001
+Accuracy mean: 0.784
+MCC mean: 0.5704
+		limit_16384
+F1 mean: 0.7285999999999999
+Accuracy mean: 0.7194
+MCC mean: 0.4314
+		imdb_16384
+F1 mean: 0.8842000000000001
+Accuracy mean: 0.8842000000000001
+MCC mean: 0.7704000000000001
+
+*************************************************
+
+Results for model: Nano_Bert_Efficient
+		snips_4096
+F1 mean: 0.9736
+Accuracy mean: 0.9736
+MCC mean: 0.9693999999999999
+		emotion_split_4096
+F1 mean: 0.8274000000000001
+Accuracy mean: 0.8224
+MCC mean: 0.7736
+		limit_4096
+F1 mean: 0.7382
+Accuracy mean: 0.7356
+MCC mean: 0.4032
+		nlu_4096
+F1 mean: 0.833
+Accuracy mean: 0.833
+MCC mean: 0.8138
+		nli_4096
+F1 mean: 0.5248
+Accuracy mean: 0.5294000000000001
+MCC mean: 0.29500000000000004
+		sst2_4096
+F1 mean: 0.7712
+Accuracy mean: 0.7712
+MCC mean: 0.5438000000000001
+		bull_4096
+F1 mean: 0.827
+Accuracy mean: 0.8301999999999999
+MCC mean: 0.7988000000000001
+		imdb_4096
+F1 mean: 0.8564
+Accuracy mean: 0.8564
+MCC mean: 0.7146
+		news_4096
+F1 mean: 0.9052
+Accuracy mean: 0.9052
+MCC mean: 0.8736
+		dbpedia_4096
+F1 mean: 0.9826
+Accuracy mean: 0.9826
+MCC mean: 0.9810000000000001
 
 *************************************************
 

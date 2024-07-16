@@ -19,7 +19,7 @@ from lib.electra import Electra
 
 
 epochs_pretraining = 30
-lr_pretraining = 5e-3
+lr_pretraining = 5e-4
 
 epochs_post = 15
 lr_post = 5e-4
@@ -269,7 +269,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "m
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
 
-		classifier = Classifier_BERT(discriminator, discriminator_config.embedding_dimension, dataset_config.n_labels())
+		classifier = Classifier_rms(discriminator, discriminator_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model initialized on {device}")
 

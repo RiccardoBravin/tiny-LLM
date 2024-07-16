@@ -49,13 +49,16 @@ class Nano_embedder(nn.Module):
         # (m, seq_len) --> (m, seq_len, embed_size)
         # padding_idx is not updated during training, remains as fixed pad (0)
         self.token = torch.nn.Embedding(model_config.vocab_size, model_config.reduced_embedding_dimension, padding_idx=0)
-        self.expander = torch.nn.Linear(model_config.reduced_embedding_dimension, model_config.embedding_dimension, bias=False)
-        self.position = torch.nn.Embedding(model_config.max_length, model_config.embedding_dimension)
+        self.tok_expander = torch.nn.Linear(model_config.reduced_embedding_dimension, model_config.embedding_dimension, bias=False)
+        
+        self.position = torch.nn.Embedding(model_config.max_length, model_config.reduced_embedding_dimension)
+        self.pos_expander = torch.nn.Linear(model_config.reduced_embedding_dimension, model_config.embedding_dimension, bias=False)
+
        
     def forward(self, tokens):
         #build the positions tensor of the tokens
-        positions = torch.arange(tokens.size(1)).unsqueeze(0).expand_as(tokens).to(tokens.device)
+        positions = torch.arange(tokens.size(1), device=tokens.device).unsqueeze(0).expand_as(tokens)#.to(tokens.device)
 
-        x = self.expander(self.token(tokens)) + self.position(positions)
+        x = self.tok_expander(self.token(tokens)) + self.pos_expander(self.position(positions))
         return x
     

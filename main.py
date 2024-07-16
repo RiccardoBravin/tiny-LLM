@@ -14,7 +14,7 @@ from lib.trainer import Trainer
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-lr = 5e-3
+lr = 5e-4
 epochs = 10
 
 dataset_config = DataConfig(
@@ -22,18 +22,18 @@ dataset_config = DataConfig(
                     dict_size=pow(2, 14), 
                     tokenizer_type="bpe", #wordpiece #bpe #unigram 
                     batch_size=64, 
-                    max_len=512, 
+                    max_len=256, 
                     labels=None
                 )
 
 model_config = ModelConfig(
                     model_name=None, 
-                    embedding_dimension=150, 
+                    embedding_dimension=96, 
                     reduced_embedding_dimension=16, 
                     number_of_heads=8, 
                     max_length=dataset_config.max_len, 
-                    forward_expansion=4, 
-                    num_layers=1,
+                    forward_expansion=0.5, 
+                    num_layers=4,
                     vocab_size=dataset_config.dict_size
                 )
 
@@ -69,12 +69,12 @@ print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing mode
 
 # model = Nano_Mlp_structured(model_config)
 # model = Bert_efficient(model_config)
-# model = Nano_Bert_Efficient(model_config)
+model = Nano_Bert_Efficient(model_config)
 # model = Mlp_structured(model_config)
 # model = Mamba_model(model_config)
 # model = Embedder_model(model_config)
 # model = Embbert(model_config)
-model = Embedder_conv_model(model_config) 
+# model = Embedder_conv_model(model_config) 
 
 model_config.model_name = model.__class__.__name__
 

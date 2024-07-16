@@ -1,3 +1,5 @@
+from colors import ATTRIBUTES, FOREGROUND_COLORS, RESET
+
 from datasets import load_dataset, Dataset, concatenate_datasets
 from tokenizers import Tokenizer
 from torch.utils.data import DataLoader
@@ -209,7 +211,8 @@ def dataset_selector(name:str):
 def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 	try:
 		tokenizer = Tokenizer.from_file(f"tokenizers/{config.tokenizer_type}_{config.dataset_name}_{config.dict_size}.json")
-		
+		assert(tokenizer.get_vocab_size() == config.dict_size)
+		print(f"Tokenizer vocab size: {tokenizer.get_vocab_size()}")
 	except:
 		from tokenizers.models import BPE, WordPiece, Unigram
 
@@ -244,16 +247,19 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 
 		#train the tokenizer
 		tokenizer.train_from_iterator(train_dataset['text'], trainer=trainer)
-		assert(tokenizer.get_vocab_size() == config.dict_size)
-
+		print(f"Tokenizer vocab size: {tokenizer.get_vocab_size()}")
+		
+		try:
+			assert(tokenizer.get_vocab_size() == config.dict_size)
+		except:
+			print(f"{FOREGROUND_COLORS["BrightRed"]}DICTIONARY SIZE TOO BIG FOR DATASET, RESORTING TO LOWER SIZE{RESET}")
+			config.dict_size = tokenizer.get_vocab_size()
+		
 		#save the tokenizer
 		if not os.path.exists("tokenizers"):
 			os.makedirs("tokenizers")
 		tokenizer.save(f"tokenizers/{config.tokenizer_type}_{config.dataset_name}_{config.dict_size}.json")
 
-
-	print(f"Tokenizer vocab size: {tokenizer.get_vocab_size()}")
-	assert(tokenizer.get_vocab_size() == config.dict_size)
 
 	# aux = tokenizer.encode_batch(train_dataset['text'][:100000])
 	# print(f"Average input length: {sum(map((lambda x: len(x.ids)), aux))/len(train_dataset['text'][:100000])}")
