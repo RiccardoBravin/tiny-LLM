@@ -1,0 +1,100 @@
+Model config for current run:
+ModelConfig(model_name='Embedder_+_conv', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=16384)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.1059
+Accuracy: 0.966
+F1: 0.966
+Precision: 0.967
+Recall: 0.966
+MCC: 0.961
+Confusion matrix:
+ [[199   0   0   1   0   0   0]
+ [  1 199   0   0   0   0   0]
+ [  0   3 196   0   0   1   0]
+ [  4   0   0 186   0  10   0]
+ [  0   1   1   0 198   0   0]
+ [  0   0   1   7   1 185   6]
+ [  0   1   0   0   0   9 190]]
+('Model params: 0.349M', 'Model buffers: 0.000M', 'Model size: 1.332MB')
+
+*******************************************
+
+average eval loss:  0.0772
+Accuracy: 0.979
+F1: 0.979
+Precision: 0.980
+Recall: 0.979
+MCC: 0.976
+Confusion matrix:
+ [[199   0   0   1   0   0   0]
+ [  1 199   0   0   0   0   0]
+ [  0   3 194   0   0   1   2]
+ [  2   1   0 196   0   0   1]
+ [  0   0   0   0 200   0   0]
+ [  0   0   0   8   0 187   5]
+ [  0   0   1   1   0   2 196]]
+('Model params: 0.349M', 'Model buffers: 0.000M', 'Model size: 1.332MB')
+
+*******************************************
+
+average eval loss:  0.0876
+Accuracy: 0.977
+F1: 0.977
+Precision: 0.977
+Recall: 0.977
+MCC: 0.973
+Confusion matrix:
+ [[199   0   0   1   0   0   0]
+ [  0 199   1   0   0   0   0]
+ [  0   3 194   0   0   2   1]
+ [  2   0   0 192   0   6   0]
+ [  0   0   0   0 200   0   0]
+ [  0   0   1   6   0 190   3]
+ [  0   0   0   0   0   6 194]]
+('Model params: 0.349M', 'Model buffers: 0.000M', 'Model size: 1.332MB')
+
+*******************************************
+
+average eval loss:  0.0705
+Accuracy: 0.981
+F1: 0.981
+Precision: 0.981
+Recall: 0.981
+MCC: 0.978
+Confusion matrix:
+ [[199   0   0   1   0   0   0]
+ [  0 200   0   0   0   0   0]
+ [  0   2 196   0   0   1   1]
+ [  0   0   2 195   0   3   0]
+ [  0   0   0   0 200   0   0]
+ [  0   0   0   5   0 190   5]
+ [  0   1   0   0   0   5 194]]
+('Model params: 0.349M', 'Model buffers: 0.000M', 'Model size: 1.332MB')
+
+*******************************************
+
+average eval loss:  0.0841
+Accuracy: 0.978
+F1: 0.978
+Precision: 0.978
+Recall: 0.978
+MCC: 0.974
+Confusion matrix:
+ [[199   0   0   1   0   0   0]
+ [  0 200   0   0   0   0   0]
+ [  0   2 196   0   0   0   2]
+ [  3   1   0 195   0   1   0]
+ [  0   0   0   0 199   1   0]
+ [  0   1   0   5   0 190   4]
+ [  0   0   1   1   0   8 190]]
+('Model params: 0.349M', 'Model buffers: 0.000M', 'Model size: 1.332MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

@@ -5,67 +5,67 @@ EPOCHS: 50
 
 *******************************************
 
-average eval loss:  0.5418
-Accuracy: 0.732
-F1: 0.731
-Precision: 0.734
-Recall: 0.732
-MCC: 0.466
+average eval loss:  0.6769
+Accuracy: 0.569
+F1: 0.584
+Precision: 0.641
+Recall: 0.569
+MCC: 0.154
 Confusion matrix:
- [[711 201]
- [287 622]]
+ [[374 312]
+ [119 195]]
 ('Model params: 0.336M', 'Model buffers: 0.000M', 'Model size: 1.280MB')
 
 *******************************************
 
-average eval loss:  0.5177
-Accuracy: 0.747
-F1: 0.746
-Precision: 0.753
-Recall: 0.747
-MCC: 0.500
+average eval loss:  0.6794
+Accuracy: 0.566
+F1: 0.582
+Precision: 0.636
+Recall: 0.566
+MCC: 0.144
 Confusion matrix:
- [[751 161]
- [299 610]]
+ [[375 311]
+ [123 191]]
 ('Model params: 0.336M', 'Model buffers: 0.000M', 'Model size: 1.280MB')
 
 *******************************************
 
-average eval loss:  0.6984
-Accuracy: 0.749
-F1: 0.749
-Precision: 0.750
-Recall: 0.749
-MCC: 0.499
+average eval loss:  0.6716
+Accuracy: 0.585
+F1: 0.599
+Precision: 0.630
+Recall: 0.585
+MCC: 0.135
 Confusion matrix:
- [[714 198]
- [259 650]]
+ [[416 270]
+ [145 169]]
 ('Model params: 0.336M', 'Model buffers: 0.000M', 'Model size: 1.280MB')
 
 *******************************************
 
-average eval loss:  0.6063
-Accuracy: 0.680
-F1: 0.675
-Precision: 0.691
-Recall: 0.680
-MCC: 0.371
+average eval loss:  0.6383
+Accuracy: 0.603
+F1: 0.616
+Precision: 0.697
+Recall: 0.603
+MCC: 0.264
 Confusion matrix:
- [[732 180]
- [403 506]]
+ [[369 317]
+ [ 80 234]]
 ('Model params: 0.336M', 'Model buffers: 0.000M', 'Model size: 1.280MB')
 
 *******************************************
 
-average eval loss:  0.5603
-Accuracy: 0.735
-F1: 0.735
-Precision: 0.735
-Recall: 0.735
-MCC: 0.470
+average eval loss:  0.6751
+Accuracy: 0.573
+F1: 0.588
+Precision: 0.649
+Recall: 0.573
+MCC: 0.169
 Confusion matrix:
- [[694 218]
- [265 644]]
+ [[372 314]
+ [113 201]]
 ('Model params: 0.336M', 'Model buffers: 0.000M', 'Model size: 1.280MB')
 
 *******************************************
