@@ -270,7 +270,7 @@ class EmbBertAttention(nn.Module):
         self.query = nn.Linear(d_model, d_model)
         self.output_linear = nn.Linear(d_model, d_model // ff_expansion)
         
-
+        
     def forward(self, query:torch.Tensor, key:torch.Tensor, value:torch.Tensor, mask:torch.Tensor):
         """
         Usually query, key, value are the same tensor.
@@ -293,7 +293,7 @@ class EmbBertAttention(nn.Module):
         scores = scores.masked_fill(mask == 0, float("-inf")) 
         
         # softmax to put attention weight for all non-pad tokens
-        weights = nn.functional.softmax(scores, dim=-1)           
+        weights = nn.functional.softmax(scores, dim=-1)       
         weights = self.dropout(weights)
         
         # (batch_size, max_len, max_len) matmul (batch_size, d_model, max_len) --> (batch_size, d_model, max_len)

@@ -119,28 +119,33 @@ class MamBra_layer(nn.Module):
 
         return y1 + y2
 
+
 class EmbBert_layer(nn.Module):
     def __init__(self, d_model, ff_expansion):
         super().__init__()
 
+        self.act = torch.nn.SiLU()
+
         #firs stage
-        self.contract = nn.Linear(d_model, d_model // ff_expansion)
+        self.norm = modules.RMSNorm(d_model) #MAYBE USE RMS NORM???
+        
+        #second 1 stage
+        self.d_conv = 16
+        self.conv1d = nn.Conv1d(in_channels=d_model, out_channels=d_model, 
+                            kernel_size=self.d_conv,
+                            groups=d_model,
+                            padding=self.d_conv - 1)
+        
         self.attention = blocks.EmbBertAttention(d_model, ff_expansion)
-        self.norm1 = modules.NoNorm(d_model // ff_expansion)
         
-
-        #second stage
+        
+        #second 2 stage
         self.fc = nn.Sequential(
-            nn.Linear(d_model // ff_expansion, d_model),
+            nn.Linear(d_model, int(d_model*ff_expansion)),
             nn.ReLU(),# SILU in BERT original
-            nn.Linear(d_model, d_model // ff_expansion)
+            nn.Linear(int(d_model*ff_expansion), d_model)
         )
-        self.norm2 = modules.NoNorm(d_model // ff_expansion)
 
-        
-        #final stage
-        self.expand = torch.nn.Linear(d_model // ff_expansion, d_model)
-        self.norm3 = modules.NoNorm(d_model)
         
 
     def forward(self, embeddings, mask = None):
@@ -148,15 +153,22 @@ class EmbBert_layer(nn.Module):
         # result: (batch_size, max_len, d_model)
 
         #first stage
-        y1 = self.contract(embeddings)
-        y2 = self.attention(embeddings, embeddings, embeddings, mask)
-        y = self.norm1(y1 + y2)
+        l = embeddings.shape[1]
+        x = self.norm(embeddings)
 
-        #second stage
-        y1 = self.fc(y)
-        y = self.norm2(y1 + y)
+        #second 1 stage
+        y1 = x.transpose(1, 2)
+        y1 = self.conv1d(y1)[:,:,:l]
+        y1 = y1.transpose(1, 2)
+        y1 = self.act(y1)
+        
+        y1 = self.attention(y1, y1, y1, mask)
+
+
+        #second 2 stage
+        y2 = self.fc(x) 
 
         #final stage
-        out = self.expand(y) + embeddings
+        y = y1 + y2
         
-        return self.norm3(out)
+        return y

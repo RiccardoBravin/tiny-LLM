@@ -1,0 +1,10 @@
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.5, num_layers=2, vocab_size=16384)
+LR: 0.0001
+EPOCHS: 30
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

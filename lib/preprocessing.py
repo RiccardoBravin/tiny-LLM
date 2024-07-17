@@ -15,15 +15,6 @@ def dataset_selector(name:str):
 
 		train_data = dataset['train']
 		test_data = dataset['test']
-
-	elif name == "sst2":	#https://huggingface.co/datasets/SetFit/sst2
-		dataset = load_dataset("SetFit/sst2", cache_dir="./datasets")
-
-		train_data = concatenate_datasets([dataset['train'], dataset['validation']])
-		test_data = dataset['test']
-
-		train_data = train_data.remove_columns("label_text")
-		test_data = test_data.remove_columns("label_text")	
 		 
 	elif name == "news":#https://huggingface.co/datasets/fancyzhx/ag_news
 		dataset = load_dataset("fancyzhx/ag_news", cache_dir="./datasets")
@@ -94,31 +85,6 @@ def dataset_selector(name:str):
 		train_data = train_data.remove_columns(["id", "motion", "motion_entities"])
 		test_data = test_data.remove_columns(["id", "motion", "motion_entities"])
 
-	elif name == "dbpedia":	#https://huggingface.co/datasets/fancyzhx/dbpedia_14
-		dataset = load_dataset("fancyzhx/dbpedia_14", cache_dir="./datasets")
-
-		train_data = dataset['train']
-		test_data = dataset['test']
-
-		train_data = train_data.rename_column("content", "text").remove_columns("title")
-		test_data = test_data.rename_column("content", "text").remove_columns("title")
-
-		
-	elif name == "mnli":#https://huggingface.co/datasets/nyu-mll/multi_nli
-		#volendo si può fare upgrade a https://huggingface.co/datasets/sentence-transformers/all-nli
-		dataset = load_dataset("nyu-mll/multi_nli", cache_dir="./datasets")
-
-		train_data = dataset['train']
-		test_data = dataset['validation_matched']
-
-		#join premise and hypotesis in the same text with a separator
-		train_data = train_data.map(lambda x: {'text': x['premise'] + " [SEP] " + x['hypothesis']})
-		test_data = test_data.map(lambda x: {'text': x['premise'] + " [SEP] " + x['hypothesis']})
-
-		train_data = train_data.remove_columns(['promptID', 'pairID', 'premise', 'premise_binary_parse', 'premise_parse', 'hypothesis', 'hypothesis_binary_parse', 'hypothesis_parse', 'genre'])
-		test_data = test_data.remove_columns(['promptID', 'pairID', 'premise', 'premise_binary_parse', 'premise_parse', 'hypothesis', 'hypothesis_binary_parse', 'hypothesis_parse', 'genre'])
-
-
 	elif name == "nlu": #https://huggingface.co/datasets/xingkunliuxtracta/nlu_evaluation_data
 		dataset = load_dataset("xingkunliuxtracta/nlu_evaluation_data", cache_dir="./datasets", trust_remote_code=True)
 
@@ -158,15 +124,7 @@ def dataset_selector(name:str):
 		# cleanup useless columns
 		train_data = train_data.remove_columns("category")
 		test_data = test_data.remove_columns("category")
-	elif name == "cola": # https://huggingface.co/datasets/nyu-mll/glue/viewer/cola
-		dataset = load_dataset("glue", "cola", cache_dir="./datasets")
-
-		train_data = dataset['train']
-		test_data = dataset['validation']
-
-		train_data = train_data.rename_column("sentence", "text").remove_columns("idx")
-		test_data = test_data.rename_column("sentence", "text").remove_columns("idx")
-
+	
 	elif name == "qnli":
 		dataset = load_dataset("glue", "qnli", cache_dir="./datasets")
 
@@ -195,6 +153,30 @@ def dataset_selector(name:str):
 
 		train_data = dataset['train']
 		test_data = dataset['test']
+
+	elif name == "mnli":#https://huggingface.co/datasets/nyu-mll/multi_nli
+		#volendo si può fare upgrade a https://huggingface.co/datasets/sentence-transformers/all-nli
+		dataset = load_dataset("nyu-mll/multi_nli", cache_dir="./datasets")
+
+		train_data = dataset['train']
+		test_data = dataset['validation_matched']
+
+		#join premise and hypotesis in the same text with a separator
+		train_data = train_data.map(lambda x: {'text': x['premise'] + " [SEP] " + x['hypothesis']})
+		test_data = test_data.map(lambda x: {'text': x['premise'] + " [SEP] " + x['hypothesis']})
+
+		train_data = train_data.remove_columns(['promptID', 'pairID', 'premise', 'premise_binary_parse', 'premise_parse', 'hypothesis', 'hypothesis_binary_parse', 'hypothesis_parse', 'genre'])
+		test_data = test_data.remove_columns(['promptID', 'pairID', 'premise', 'premise_binary_parse', 'premise_parse', 'hypothesis', 'hypothesis_binary_parse', 'hypothesis_parse', 'genre'])
+
+	elif name == "cola": # https://huggingface.co/datasets/nyu-mll/glue/viewer/cola
+		dataset = load_dataset("glue", "cola", cache_dir="./datasets")
+
+		train_data = dataset['train']
+		test_data = dataset['validation']
+
+		train_data = train_data.rename_column("sentence", "text").remove_columns("idx")
+		test_data = test_data.rename_column("sentence", "text").remove_columns("idx")
+	#TODO: add all GLUe datasets with correct format
 
 
 	else:

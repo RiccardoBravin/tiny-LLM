@@ -50,7 +50,7 @@ model_config = ModelConfig(
 
 ########################################################################################
 
-for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "imdb", "emotion_split"]:
+for DATASET_NAME in ["imdb","sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "emotion_split"]:
 	dataset_config.dataset_name = DATASET_NAME
 
 	#load the dataset   
@@ -96,8 +96,8 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "i
 		model_config.model_name = model.__class__.__name__
 		
 
-		# cls = Classifier_BERT(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
-		cls = Classifier_Nano_BERT(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
+		# cls = Classifier_BERT_pretraining(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
+		cls = Classifier_Nano_BERT_pretraining(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
 		cls.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
 
@@ -123,8 +123,8 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "i
 		
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
-
-		classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
+		classifier = Classifier_BERT_post(model, model_config.embedding_dimension, dataset_config.n_labels())
+		# classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
 

@@ -13,9 +13,6 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from lib.configs import ModelConfig, DataConfig
 
 
-from lib.grokfast import gradfilter_ema
-
-
 def checkpoint(model, filename):
 	torch.save(model.state_dict(), filename)
 	
@@ -78,7 +75,6 @@ class Trainer:
 
 		max_mcc = 0
 
-		grads = None
 
 		for epoch in range(num_epochs):
 
@@ -107,18 +103,17 @@ class Trainer:
 				# Scales loss.  Calls backward() on scaled loss to create scaled gradients.
 				# Backward passes under autocast are not recommended.
 				# Backward ops run in the same dtype autocast chose for corresponding forward ops.
-				scaler.scale(batch_loss).backward()
-
-
-				grads = gradfilter_ema(self.model, grads=grads, alpha=0.98, lamb=2)
-
+				#scaler.scale(batch_loss).backward()
+				batch_loss.backward()
 
 				# scaler.step() first unscales the gradients of the optimizer's assigned params.
 				# If these gradients do not contain infs or NaNs, optimizer.step() is then called,
 				# otherwise, optimizer.step() is skipped.
-				scaler.step(self.optimizer)
+				#scaler.step(self.optimizer)
+				self.optimizer.step()
+
 				
-				scaler.update()
+				# scaler.update()
 				# Update learning rate
 				# scheduler.step()
 				
@@ -260,14 +255,19 @@ class BertTrainer:
 				# Scales loss.  Calls backward() on scaled loss to create scaled gradients.
 				# Backward passes under autocast are not recommended.
 				# Backward ops run in the same dtype autocast chose for corresponding forward ops.
-				scaler.scale(batch_loss).backward()
+				#scaler.scale(batch_loss).backward()
+				batch_loss.backward()
 
 				# scaler.step() first unscales the gradients of the optimizer's assigned params.
 				# If these gradients do not contain infs or NaNs, optimizer.step() is then called,
 				# otherwise, optimizer.step() is skipped.
-				scaler.step(self.optimizer)
+				# scaler.step(self.optimizer)
+				self.optimizer.step()
+
+
+				#scaler.update()
 				
-				scaler.update()
+				
 				# Update learning rate
 				scheduler.step()
 
