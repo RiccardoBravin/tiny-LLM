@@ -1,0 +1,85 @@
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.25, num_layers=2, vocab_size=8240)
+LR: 0.0005
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.9429
+Accuracy: 0.552
+F1: 0.566
+Precision: 0.592
+Recall: 0.552
+MCC: 0.042
+Confusion matrix:
+ [[143 179]
+ [288 433]]
+('Model params: 0.187M', 'Model buffers: 0.000M', 'Model size: 0.712MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.25, num_layers=2, vocab_size=8240)
+LR: 0.0005
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.8235
+Accuracy: 0.579
+F1: 0.591
+Precision: 0.610
+Recall: 0.579
+MCC: 0.085
+Confusion matrix:
+ [[147 175]
+ [264 457]]
+('Model params: 0.187M', 'Model buffers: 0.000M', 'Model size: 0.712MB')
+
+*******************************************
+
+average eval loss:  0.7394
+Accuracy: 0.593
+F1: 0.593
+Precision: 0.594
+Recall: 0.593
+MCC: 0.049
+Confusion matrix:
+ [[112 210]
+ [215 506]]
+('Model params: 0.187M', 'Model buffers: 0.000M', 'Model size: 0.712MB')
+
+*******************************************
+
+average eval loss:  0.9994
+Accuracy: 0.562
+F1: 0.572
+Precision: 0.588
+Recall: 0.562
+MCC: 0.034
+Confusion matrix:
+ [[130 192]
+ [265 456]]
+('Model params: 0.187M', 'Model buffers: 0.000M', 'Model size: 0.712MB')
+
+*******************************************
+
+average eval loss:  0.8813
+Accuracy: 0.556
+F1: 0.568
+Precision: 0.587
+Recall: 0.556
+MCC: 0.033
+Confusion matrix:
+ [[134 188]
+ [275 446]]
+('Model params: 0.187M', 'Model buffers: 0.000M', 'Model size: 0.712MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

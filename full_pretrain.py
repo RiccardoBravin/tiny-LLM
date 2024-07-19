@@ -11,7 +11,7 @@ from tqdm import tqdm
 from lib.configs import DataConfig, ModelConfig
 from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
-from lib.Models.final_classifiers import Classifier_rms, Classifier_BERT, Classifier_for_electra, Classifier_post_electra
+from lib.Models.final_classifiers import Classifier_rms, Classifier_for_electra, Classifier_post_electra
 from lib.Models.models import *
 
 
@@ -22,46 +22,49 @@ epochs_pretraining = 30
 lr_pretraining = 5e-4
 
 epochs_post = 15
-lr_post = 5e-4
+lr_post = 5e-3
 logs_x_epoch = 1
 
+TRAINING_CYCLES = 2
+
 dataset_config = DataConfig(
-					dataset_name=None, 
-					dict_size=pow(2, 12), 
-					tokenizer_type="bpe", 
-					batch_size=128, 
-					max_len=512, 
+					dataset_name=None,
+					dict_size=pow(2, 14),
+					tokenizer_type="bpe",
+					batch_size=128,
+					max_len=256,
 					labels=None
 				)
 
 generator_config = ModelConfig(
-					model_name=None, 
-					embedding_dimension=128, 
-					reduced_embedding_dimension=16, 
-					number_of_heads=8, 
-					max_length=dataset_config.max_len, 
-					forward_expansion=0.25, 
+					model_name=None,
+					embedding_dimension=96,
+					reduced_embedding_dimension=16,
+					number_of_heads=8,
+					max_length=dataset_config.max_len,
+					forward_expansion=0.1,
 					num_layers=1,
 					vocab_size=dataset_config.dict_size
 				)
 
 discriminator_config = ModelConfig(
-					model_name=None, 
-					embedding_dimension=generator_config.embedding_dimension, 
-					reduced_embedding_dimension=generator_config.reduced_embedding_dimension, 
-					number_of_heads=8, 
-					max_length=dataset_config.max_len, 
-					forward_expansion=0.25, 
-					num_layers=5,
+					model_name=None,
+					embedding_dimension=generator_config.embedding_dimension,
+					reduced_embedding_dimension=generator_config.reduced_embedding_dimension,
+					number_of_heads=8,
+					max_length=dataset_config.max_len,
+					forward_expansion=0.25,
+					num_layers=2,
 					vocab_size=dataset_config.dict_size
 				)
 
 ########################################################################################
 
-for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "emotion_split"]:
+# for DATASET_NAME in ["imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split"]:
+for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli"]: #GLUE
 	dataset_config.dataset_name = DATASET_NAME
 
-	#load the dataset   
+	#load the dataset
 	print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Importing dataset {DATASET_NAME}{RESET}")
 	train_dataset, test_dataset = dataset_selector(dataset_config.dataset_name)
 	dataset_config.labels = train_dataset.unique("label")
@@ -87,7 +90,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "m
 	train_dataloader.shuffle = True
 
 	train_n = 0
-	while train_n < 5:
+	while train_n < TRAINING_CYCLES:
 		loss_nan = False
 
 		print(f"\n\n{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}--------------------- STARTING TRAINING CYCLE {train_n} ---------------------{RESET}\n")
@@ -104,17 +107,17 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "m
 		#choose generator model
 		# generator = Brav(generator_config)
 		# generator = Bert_efficient(generator_config)
-		# generator = Nano_Bert_Efficient(generator_config)
+		generator = Nano_Bert_Efficient(generator_config)
 		# generator = Mlp_structured(generator_config)
-		generator = MamBra_model(generator_config)
+		# generator = MamBra_model(generator_config)
 
 
 		#choose discriminator model
 		# discriminator = Brav(discriminator_config)
 		# discriminator = Bert_efficient(discriminator_config)
-		# discriminator = Nano_Bert_Efficient(discriminator_config)
+		discriminator = Nano_Bert_Efficient(discriminator_config)
 		# discriminator = Mlp_structured(discriminator_config)
-		discriminator = MamBra_model(discriminator_config)
+		# discriminator = MamBra_model(discriminator_config)
 
 		generator_config.model_name = generator.__class__.__name__
 		discriminator_config.model_name = discriminator.__class__.__name__
@@ -192,7 +195,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "m
 
 			for step_num, batch_data in enumerate(tqdm_train_loader):
 
-				tokens = batch_data["tokens"].to(device) 
+				tokens = batch_data["tokens"].to(device)
 				masks  = batch_data["attention_mask"].to(device)
 				labels = batch_data["label"].to(device)
 
@@ -208,7 +211,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "m
 
 				loss.backward()
 				optimizer.step()
-				scheduler.step()	
+				scheduler.step()
 
 				metrics = {
 					'loss': (loss.item(), '{:8.5f}'),
@@ -227,7 +230,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "m
 
 
 				loss_str = "{:.4f}".format(train_loss)
-				tqdm_train_loader.set_postfix(loss = loss_str)			
+				tqdm_train_loader.set_postfix(loss = loss_str)
 				if step_num % log_step == (log_step - 1):
 					electra.eval()
 					val_gen_loss = 0
@@ -236,7 +239,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "m
 					val_disc_accuracy = 0
 					val_loss = 0
 					for batch_val in validation_dataloader:
-						tokens = batch_val["tokens"].to(device) 
+						tokens = batch_val["tokens"].to(device)
 						masks  = batch_val["attention_mask"].to(device)
 						labels_val = batch_val["label"].to(device)
 
@@ -257,7 +260,7 @@ for DATASET_NAME in ["imdb", "sst2", "news", "bull", "limit", "nlu", "snips", "m
 					tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Gen loss: {val_gen_loss:.3f}, Disc loss: {val_disc_loss:.3f}, Gen acc: {val_gen_accuracy:.3f}, Disc acc: {val_disc_accuracy:.3f}, Lr: {scheduler.get_last_lr()[0]:.6f}{FOREGROUND_COLORS['Green']}")
 					electra.train()
 
-		print(f"{RESET}")	
+		print(f"{RESET}")
 
 		#######################################################################################
 

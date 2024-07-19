@@ -4,16 +4,16 @@ import os
 import pathlib
 import re
 
-models = ["Embedder_only", "Embedder_+_conv", "Nano_Bert_Efficient"]
+models = ["Embedder_only", "Embedder_+_conv", "Nano_Bert_Efficient", "mlm_Nano_Bert_Efficient"]
 
 for model in models:
     print(f"Results for model: {model}")
 
-    # For each file inside the results/model directory 
+    # For each file inside the results/model directory
     for file in os.listdir(f"results/{model}"):
         #keep from the file name only what is after cls_ and before _classification...
         #file_name = file.split("_")[0]
-        file_name = re.split(r"^([\w]+_\d+)", file)[1]
+        file_name = re.split(r"^([\w-]+_\d+)", file)[1]
         print(f"\t\t{file_name}")
 
         #for each file extract the float values after the keywords "f1",and "accuracy"

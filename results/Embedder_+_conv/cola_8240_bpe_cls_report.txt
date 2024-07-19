@@ -1,0 +1,50 @@
+Model config for current run:
+ModelConfig(model_name='Embedder_+_conv', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=16384)
+LR: 0.001
+EPOCHS: 30
+
+*******************************************
+
+
+average eval loss:  0.7205
+Accuracy: 0.639
+F1: 0.630
+Precision: 0.624
+Recall: 0.639
+MCC: 0.118
+Confusion matrix:
+ [[110 212]
+ [165 556]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.706MB')
+
+*******************************************
+average eval loss:  0.7289
+Accuracy: 0.553
+F1: 0.570
+Precision: 0.623
+Recall: 0.553
+MCC: 0.109
+Confusion matrix:
+ [[185 137]
+ [329 392]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.706MB')
+
+*******************************************
+
+
+average eval loss:  1.4135
+Accuracy: 0.523
+F1: 0.541
+Precision: 0.595
+Recall: 0.523
+MCC: 0.048
+Confusion matrix:
+ [[172 150]
+ [348 373]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.706MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

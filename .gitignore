@@ -14,3 +14,7 @@ datasets/*
 !datasets/cyberbullying_tweets.csv
 
 *.pth
+
+pyrightconfig.json
+
+res.*

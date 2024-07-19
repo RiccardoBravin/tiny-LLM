@@ -18,16 +18,16 @@ from lib.trainer import Trainer
 
 ########################################################################################
 EPOCHS = 30
-LR = 1e-4
-
+LR = 5e-3
+TRAINING_CYCLES = 4
 
 
 dataset_config = DataConfig(
-					dataset_name=None, 
-					dict_size=pow(2, 14), 
-					tokenizer_type="bpe", 
-					batch_size=128, 
-					max_len=256, 
+					dataset_name=None,
+					dict_size=pow(2, 14),
+					tokenizer_type="bpe",
+					batch_size=128,
+					max_len=256,
 					labels=None
 				)
 dict_size_aux = dataset_config.dict_size
@@ -36,17 +36,19 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 ########################################################################################
 
 
-for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "imdb", "emotion_split"]:
+# for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
+for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
+
 
 	dataset_config.dataset_name = DATASET_NAME
 	dataset_config.dict_size = dict_size_aux
 
 	print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Loading dataset {DATASET_NAME} {RESET}")
-	
+
 	print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
 	train_dataset, test_dataset = dataset_selector(dataset_config.dataset_name)
 	dataset_config.labels = train_dataset.unique("label")
-	
+
 	tokenizer = make_tokenizer(dataset_config, train_dataset)
 
 	validation_dataset = train_dataset.train_test_split(test_size=0.1)
@@ -68,9 +70,9 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "i
 		# Gray_BERT_Efficient,
 		# Mamba_model,
 		# MamBra_model,
-		# Embedder_model,
-		# Embedder_conv_model,
-		Embbert,
+		Embedder_model,
+		Embedder_conv_model,
+		# Embbert,
 	]
 
 	configs = [
@@ -78,26 +80,26 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "i
 		#    			forward_expansion=8, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Nano_Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=4, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		# ModelConfig( model_name="Brav", embedding_dimension=32, reduced_embedding_dimension=16, number_of_heads=None,  
+		# ModelConfig( model_name="Brav", embedding_dimension=32, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=8, num_layers=6, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Bert_efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None,
-		#    			forward_expansion=0.5, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		#    			forward_expansion=0.25, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Mamba", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
-		#    			 	forward_expansion=3, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
+		#    			 	forward_expansion=3, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="MamBra", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
-		#    			 	forward_expansion=0.25, num_layers=5, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
+		#    			 	forward_expansion=0.25, num_layers=5, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Nano_Bert_Efficient_+_conv", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		ModelConfig( model_name="Embbert", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
-		   			 	forward_expansion=2, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
-		# ModelConfig( model_name="Embedder_only", embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None,
-		# 				forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
-		# ModelConfig( model_name="Embedder_+_conv", embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None,
-		# 				forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),	
+		# ModelConfig( model_name="Embbert", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
+		#    			 	forward_expansion=2, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		ModelConfig( model_name="Embedder_only", embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None,
+						forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		ModelConfig( model_name="Embedder_+_conv", embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None,
+						forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 	]
-	
+
 	for config in configs:
 		if not os.path.exists(f"results/{config.model_name}/"):
 				os.makedirs(f"results/{config.model_name}/")
@@ -109,16 +111,16 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "i
 			f.write(f"\n*******************************************\n\n")
 
 
-	for train_set in range(5):
+	for train_set in range(TRAINING_CYCLES):
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}------------------- Training session {train_set} -------------------{RESET}")
-	
+
 
 		for model_class, config in zip(models, configs):
 			model = model_class(config)
 			cls = Classifier_rms(model, config.embedding_dimension, dataset_config.n_labels())
 			# cls = Conv_classifier(model, model_out_sz=config.embedding_dimension, labels_num=dataset_config.n_labels())
 			cls.to(device)
-			
+
 			########################################################################################
 			print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Model {model.__class__.__name__} parameters{RESET}")
 
@@ -140,7 +142,7 @@ for DATASET_NAME in ["sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "i
 			print(metrics_to_str(metrics))
 
 			########################################################################################
-			
+
 			#save the classification report in a file for later use specifying the dataset, model hyperparameters
 			with open(f"results/{config.model_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_cls_report.txt", "a") as f:
 				f.write(f"average eval loss: {avg_eval_loss: .4f}\n")

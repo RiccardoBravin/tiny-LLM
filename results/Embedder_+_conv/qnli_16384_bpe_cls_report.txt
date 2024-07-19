@@ -1,0 +1,85 @@
+Model config for current run:
+ModelConfig(model_name='Embedder_+_conv', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=16384)
+LR: 0.001
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.6550
+Accuracy: 0.606
+F1: 0.606
+Precision: 0.606
+Recall: 0.606
+MCC: 0.212
+Confusion matrix:
+ [[1535 1167]
+ [ 984 1777]]
+('Model params: 0.348M', 'Model buffers: 0.000M', 'Model size: 1.327MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************
+Model config for current run:
+ModelConfig(model_name='Embedder_+_conv', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=16384)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.6565
+Accuracy: 0.608
+F1: 0.601
+Precision: 0.614
+Recall: 0.608
+MCC: 0.220
+Confusion matrix:
+ [[1284 1418]
+ [ 725 2036]]
+('Model params: 0.348M', 'Model buffers: 0.000M', 'Model size: 1.327MB')
+
+*******************************************
+
+average eval loss:  0.6617
+Accuracy: 0.602
+F1: 0.591
+Precision: 0.612
+Recall: 0.602
+MCC: 0.212
+Confusion matrix:
+ [[1181 1521]
+ [ 655 2106]]
+('Model params: 0.348M', 'Model buffers: 0.000M', 'Model size: 1.327MB')
+
+*******************************************
+
+average eval loss:  0.6578
+Accuracy: 0.606
+F1: 0.598
+Precision: 0.613
+Recall: 0.606
+MCC: 0.218
+Confusion matrix:
+ [[1258 1444]
+ [ 708 2053]]
+('Model params: 0.348M', 'Model buffers: 0.000M', 'Model size: 1.327MB')
+
+*******************************************
+
+average eval loss:  0.6582
+Accuracy: 0.602
+F1: 0.588
+Precision: 0.616
+Recall: 0.602
+MCC: 0.216
+Confusion matrix:
+ [[1119 1583]
+ [ 590 2171]]
+('Model params: 0.348M', 'Model buffers: 0.000M', 'Model size: 1.327MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

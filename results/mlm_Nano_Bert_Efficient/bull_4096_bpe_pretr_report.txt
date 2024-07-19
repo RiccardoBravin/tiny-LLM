@@ -40,3 +40,24 @@ Confusion matrix:
 
 *******************************************
 
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=8, max_length=256, forward_expansion=0.5, num_layers=4, vocab_size=4096)
+LR: 0.0005
+EPOCHS: 10
+
+average eval loss:  0.3969
+Accuracy: 0.830
+F1: 0.827
+Precision: 0.834
+Recall: 0.830
+MCC: 0.799
+Confusion matrix:
+ [[626   5   3  74   1  86]
+ [  6 715   0   5   2   1]
+ [  7   4 785   1   0  17]
+ [ 48   2   0 661   2  74]
+ [  3   0   0   3 810  28]
+ [353   2   1  37  44 364]]
+('Model params: 0.291M', 'Model buffers: 0.000M', 'Model size: 1.112MB')
+
+*******************************************
+

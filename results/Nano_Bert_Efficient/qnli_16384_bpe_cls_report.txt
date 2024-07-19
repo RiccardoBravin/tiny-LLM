@@ -1,0 +1,85 @@
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.25, num_layers=2, vocab_size=16384)
+LR: 0.0005
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.5630
+Accuracy: 0.729
+F1: 0.729
+Precision: 0.733
+Recall: 0.729
+MCC: 0.463
+Confusion matrix:
+ [[2134  568]
+ [ 910 1851]]
+('Model params: 0.317M', 'Model buffers: 0.000M', 'Model size: 1.209MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.25, num_layers=2, vocab_size=16384)
+LR: 0.0005
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.7834
+Accuracy: 0.621
+F1: 0.620
+Precision: 0.621
+Recall: 0.621
+MCC: 0.241
+Confusion matrix:
+ [[1586 1116]
+ [ 956 1805]]
+('Model params: 0.317M', 'Model buffers: 0.000M', 'Model size: 1.209MB')
+
+*******************************************
+
+average eval loss:  0.7537
+Accuracy: 0.619
+F1: 0.619
+Precision: 0.619
+Recall: 0.619
+MCC: 0.238
+Confusion matrix:
+ [[1634 1068]
+ [1012 1749]]
+('Model params: 0.317M', 'Model buffers: 0.000M', 'Model size: 1.209MB')
+
+*******************************************
+
+average eval loss:  0.6625
+Accuracy: 0.613
+F1: 0.613
+Precision: 0.613
+Recall: 0.613
+MCC: 0.225
+Confusion matrix:
+ [[1643 1059]
+ [1057 1704]]
+('Model params: 0.317M', 'Model buffers: 0.000M', 'Model size: 1.209MB')
+
+*******************************************
+
+average eval loss:  0.5761
+Accuracy: 0.730
+F1: 0.728
+Precision: 0.739
+Recall: 0.730
+MCC: 0.469
+Confusion matrix:
+ [[2213  489]
+ [ 984 1777]]
+('Model params: 0.317M', 'Model buffers: 0.000M', 'Model size: 1.209MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

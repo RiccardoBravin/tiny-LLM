@@ -18,42 +18,44 @@ from lib.Models.models import *
 from lib.trainer import BertTrainer, Trainer
 
 epochs_pretraining = 30
-lr_pretraining = 5e-4
+lr_pretraining = 1e-4
 
 epochs_post = 10
-lr_post = 1e-3
+lr_post = 5e-4
 logs_x_epoch = 2
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 dataset_config = DataConfig(
-					dataset_name=None, 
-					dict_size=pow(2, 12), 
-					tokenizer_type="bpe", 
-					batch_size=128, 
-					max_len=256, 
+					dataset_name=None,
+					dict_size=pow(2, 14),
+					tokenizer_type="bpe",
+					batch_size=128,
+					max_len=256,
 					labels=None
 				)
 
 model_config = ModelConfig(
-					model_name=None, 
-					embedding_dimension=64, 
-					reduced_embedding_dimension=16, 
-					number_of_heads=8, 
-					max_length=dataset_config.max_len, 
-					forward_expansion=0.5, 
-					num_layers=6,
+					model_name=None,
+					embedding_dimension=96,
+					reduced_embedding_dimension=16,
+					number_of_heads=8,
+					max_length=dataset_config.max_len,
+					forward_expansion=0.25,
+					num_layers=2,
 					vocab_size=dataset_config.dict_size
 				)
 
 
 ########################################################################################
 
-for DATASET_NAME in ["imdb","sst2", "news", "bull", "limit", "nlu", "snips", "mnli", "emotion_split"]:
+# for DATASET_NAME in ["imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split"]:
+for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli"]: #GLUE
+
 	dataset_config.dataset_name = DATASET_NAME
 
-	#load the dataset   
+	#load the dataset
 	print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Importing dataset {DATASET_NAME}{RESET}")
 	train_dataset, test_dataset = dataset_selector(dataset_config.dataset_name)
 	dataset_config.labels = train_dataset.unique("label")
@@ -80,7 +82,7 @@ for DATASET_NAME in ["imdb","sst2", "news", "bull", "limit", "nlu", "snips", "mn
 
 	train_n = 0
 	while train_n < 2:
-		
+
 		print(f"\n\n{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}--------------------- STARTING TRAINING CYCLE {train_n} ---------------------{RESET}\n")
 
 
@@ -94,7 +96,7 @@ for DATASET_NAME in ["imdb","sst2", "news", "bull", "limit", "nlu", "snips", "mn
 		# model = Embbert(model_config)
 
 		model_config.model_name = model.__class__.__name__
-		
+
 
 		# cls = Classifier_BERT_pretraining(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
 		cls = Classifier_Nano_BERT_pretraining(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
@@ -113,18 +115,18 @@ for DATASET_NAME in ["imdb","sst2", "news", "bull", "limit", "nlu", "snips", "mn
 		trainer.train(train_dataloader, validation_dataloader, epochs_pretraining, log_freq=logs_x_epoch)
 
 
-		print(f"{RESET}")	
+		print(f"{RESET}")
 
 
 
 
 
 
-		
+
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
-		classifier = Classifier_BERT_post(model, model_config.embedding_dimension, dataset_config.n_labels())
-		# classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
+		# classifier = Classifier_BERT_post(model, model_config.embedding_dimension, dataset_config.n_labels())
+		classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
 

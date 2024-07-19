@@ -15,7 +15,7 @@ from lib.configs import ModelConfig, DataConfig
 
 def checkpoint(model, filename):
 	torch.save(model.state_dict(), filename)
-	
+
 def resume(model, filename):
 	model.load_state_dict(torch.load(filename))
 
@@ -30,17 +30,17 @@ def get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_st
 
 
 def mask_tokens(tokens, dataset_config:DataConfig, mask_prob = 0.15):
-	
+
 	mlm_probability = torch.full(tokens.shape, mask_prob, device=tokens.device)
 	mlm_probability = mlm_probability * (tokens > len(dataset_config.special_tokens)) #set to 0 the probability of masking the special tokens
-	
+
 	masked_indices = torch.bernoulli(mlm_probability).bool() # 15% of the tokens are 1 and 85% are 0
 	randomized_indices = torch.bernoulli(masked_indices * 0.4).bool().to(tokens.device) # 40% of the 15% are 1 and 60% are 0
-	
+
 	masked_tokens = tokens.clone()
 	masked_tokens[masked_indices * (~randomized_indices)] = 3 # [MASK] token is 3
 	masked_tokens[masked_indices * randomized_indices] = torch.randint(5, dataset_config.dict_size, masked_tokens[masked_indices * randomized_indices].shape, device=tokens.device) # random token in the dictionary
-	
+
 	return masked_tokens, masked_indices
 
 
@@ -48,8 +48,8 @@ class Trainer:
 	def __init__(self, model, device, lr, model_config):
 		self.model = model
 		self.optimizer = AdamW(lr=lr, params=self.model.parameters(), amsgrad=True)
-		self.device = device 
-		
+		self.device = device
+
 		self.model_config = model_config
 		self.savepath = f"best_model_{model_config.model_name}_{model.__class__.__name__}.pth"
 
@@ -57,13 +57,13 @@ class Trainer:
 	def train(self, train_dataloader, eval_dataloader, num_epochs, log_freq: int, color = FOREGROUND_COLORS['Green']):
 
 		log_step = len(train_dataloader) // log_freq
-		
+
 		scaler = GradScaler()
 
 
 		# Extract labels from the data
 		class_weights = torch.bincount(train_dataloader.dataset["label"])
-		class_weights = class_weights.sum() / class_weights  
+		class_weights = class_weights.sum() / class_weights
 
 		# scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=len(train_dataloader), num_training_steps=num_epochs*len(train_dataloader))
 		# scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, mode='min', factor=0.5, patience=log_freq)
@@ -80,26 +80,25 @@ class Trainer:
 
 			tqdm_train_loader = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{num_epochs}", leave=True)
 			for step_num, batch_data in enumerate(tqdm_train_loader):
-				
+
 				self.model.zero_grad()
 
-				tokens = batch_data["tokens"].to(self.device) 
+				tokens = batch_data["tokens"].to(self.device)
 				masks  = batch_data["attention_mask"].to(self.device)
 				labels = batch_data["label"].to(self.device)
-				
-				with autocast():
-					#Model outputs (batch_size, n_labels)
-					y = self.model(tokens, masks) 
-					batch_loss = self.criterion(y, labels)
-	
-				
+
+				#Model outputs (batch_size, n_labels)
+				y = self.model(tokens, masks)
+				batch_loss = self.criterion(y, labels)
+
+
 				if step_num == 0:
 					train_loss = batch_loss.item()
 				else:
 					train_loss = 0.9 * train_loss + 0.1 * batch_loss.item()
 
-				tqdm_train_loader.set_postfix(loss = "{:.4f}".format(train_loss))	
-				
+				tqdm_train_loader.set_postfix(loss = "{:.4f}".format(train_loss))
+
 				# Scales loss.  Calls backward() on scaled loss to create scaled gradients.
 				# Backward passes under autocast are not recommended.
 				# Backward ops run in the same dtype autocast chose for corresponding forward ops.
@@ -112,19 +111,19 @@ class Trainer:
 				#scaler.step(self.optimizer)
 				self.optimizer.step()
 
-				
+
 				# scaler.update()
 				# Update learning rate
 				# scheduler.step()
-				
+
 				if step_num % log_step == (log_step - 1):
 					self.model.eval()
 
 					guesses = torch.Tensor([]).to(self.device)
 					val_loss = 0
-					
+
 					for batch_val in eval_dataloader:
-						tokens = batch_val["tokens"].to(self.device) 
+						tokens = batch_val["tokens"].to(self.device)
 						masks  = batch_val["attention_mask"].to(self.device)
 						labels_val = batch_val["label"].to(self.device)
 
@@ -138,8 +137,8 @@ class Trainer:
 					val_accuracy = accuracy_score(eval_dataloader.dataset["label"], guesses)
 					mcc = matthews_corrcoef(eval_dataloader.dataset["label"], guesses)
 					val_loss = val_loss / len(eval_dataloader)
-					
-					# scheduler.step(-mcc) 
+
+					# scheduler.step(-mcc)
 					if(max_mcc < mcc):
 						max_mcc = mcc
 						checkpoint(self.model, self.savepath)
@@ -150,7 +149,7 @@ class Trainer:
 		resume(self.model, self.savepath)
 
 	def evaluate(self, test_dataloader):
-		
+
 		self.model.eval()
 		predicted = torch.Tensor([]).to(self.device)
 
@@ -160,7 +159,7 @@ class Trainer:
 		with torch.no_grad():
 			for step_num, batch_data in enumerate(tqdm_test_loader):
 
-				tokens = batch_data["tokens"].to(self.device) 
+				tokens = batch_data["tokens"].to(self.device)
 				masks  = batch_data["attention_mask"].to(self.device)
 				labels = batch_data["label"].to(self.device)
 
@@ -180,35 +179,34 @@ class Trainer:
 
 
 class BertTrainer:
-	
+
 	def __init__(self, model, device, lr, model_config, dataset_config, mask_prob = 0.15):
-		
-		self.device = device 
-		
+
+		self.device = device
+
 		self.model = model
 		self.model_config = model_config
-		
+
 
 		self.optimizer = AdamW(lr=lr, params=self.model.parameters())
-		
+
 		self.lm_criterion = nn.CrossEntropyLoss(ignore_index=0).to(device)
 
-		
+
 		self.dataset_config = dataset_config
 
 		self.mask_prob = mask_prob
 
 	def train(self, train_dataloader, eval_dataloader, num_epochs, log_freq: int, color = FOREGROUND_COLORS['Green']):
 		print(f"{color}")
-		
+
 		log_step = len(train_dataloader) // log_freq
-		
-		scaler = GradScaler()
-		scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=len(train_dataloader), num_training_steps=num_epochs*len(train_dataloader))
+
+		#scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=len(train_dataloader), num_training_steps=num_epochs*len(train_dataloader))
 
 		# Extract labels from the data
 		class_weights = torch.bincount(train_dataloader.dataset["label"])
-		class_weights = class_weights.sum() / class_weights  
+		class_weights = class_weights.sum() / class_weights
 
 		# scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=len(train_dataloader), num_training_steps=num_epochs*len(train_dataloader))
 		cls_criterion = nn.CrossEntropyLoss(weight=class_weights).to(self.device)
@@ -217,41 +215,41 @@ class BertTrainer:
 		self.model.train()
 		train_loss = 0.0
 
-		
+
 		for epoch in range(num_epochs):
 
 			tqdm_train_loader = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{num_epochs}", leave=True)
 			for step_num, batch_data in enumerate(tqdm_train_loader):
-				
+
 				self.model.zero_grad()
 
-				tokens = batch_data["tokens"].to(self.device) 
+				tokens = batch_data["tokens"].to(self.device)
 				masks  = batch_data["attention_mask"].to(self.device)
 				lables = batch_data["label"].to(self.device)
-				
+
 				masked_tokens, masks_mask = mask_tokens(tokens, self.dataset_config)
-				
+
 
 				with autocast():
 					#Model outputs (batch_size, seq_len, dict_size) and (batch_size, seq_len, 2)
-					logits, label_guess = self.model(masked_tokens, masks) 
+					logits, label_guess = self.model(masked_tokens, masks)
 
-					tokens[~masks_mask] = 0 
+					tokens[~masks_mask] = 0
 
 					lm_loss = self.lm_criterion(logits.transpose(1,2), tokens)
 					cls_loss = cls_criterion(label_guess.squeeze(-1), lables)
 
 					batch_loss = lm_loss + cls_loss
 
-			
+
 				if step_num == 0:
 					train_loss = batch_loss.item()
 				else:
 					train_loss = 0.9 * train_loss + 0.1 * batch_loss.item()
 
-				tqdm_train_loader.set_postfix(loss = "{:.4f}".format(train_loss))	
-				
-				
+				tqdm_train_loader.set_postfix(loss = "{:.4f}".format(train_loss))
+
+
 				# Scales loss.  Calls backward() on scaled loss to create scaled gradients.
 				# Backward passes under autocast are not recommended.
 				# Backward ops run in the same dtype autocast chose for corresponding forward ops.
@@ -266,10 +264,10 @@ class BertTrainer:
 
 
 				#scaler.update()
-				
-				
+
+
 				# Update learning rate
-				scheduler.step()
+				#scheduler.step()
 
 
 				if step_num % log_step == (log_step - 1):
@@ -281,7 +279,7 @@ class BertTrainer:
 					val_loss = 0
 
 					for batch_val in eval_dataloader:
-						tokens = batch_val["tokens"].to(self.device) 
+						tokens = batch_val["tokens"].to(self.device)
 						masks  = batch_val["attention_mask"].to(self.device)
 						lables_val = batch_val["label"].to(self.device)
 
@@ -301,13 +299,14 @@ class BertTrainer:
 
 						mlm_accuracy = torch.cat((mlm_accuracy, (torch.argmax(logits, dim=2)[masks_mask] == tokens[masks_mask])))
 						cls_accuracy = torch.cat((cls_accuracy, (torch.argmax(label_guess, dim=1) == lables_val)))
-					
 
-					mlm_accuracy = torch.mean(mlm_accuracy.float()).item()					
+
+					mlm_accuracy = torch.mean(mlm_accuracy.float()).item()
 					cls_accuracy = torch.mean(cls_accuracy.float()).item()
 					val_loss = val_loss / len(eval_dataloader)
 					cls_avg_loss = cls_avg_loss / len(eval_dataloader)
 					mlm_avg_loss = mlm_avg_loss / len(eval_dataloader)
 
-					tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, mlm loss: {mlm_avg_loss:.3f}, mlm accuracy: {mlm_accuracy:.3f}, cls loss: {cls_avg_loss:.3f}, cls accuracy: {cls_accuracy:.3f}, Lr: {scheduler.get_last_lr()} {color}")
+					#tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, mlm loss: {mlm_avg_loss:.3f}, mlm accuracy: {mlm_accuracy:.3f}, cls loss: {cls_avg_loss:.3f}, cls accuracy: {cls_accuracy:.3f}, Lr: {scheduler.get_last_lr()} {color}")
+					tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, mlm loss: {mlm_avg_loss:.3f}, mlm accuracy: {mlm_accuracy:.3f}, cls loss: {cls_avg_loss:.3f}, cls accuracy: {cls_accuracy:.3f}{color}")
 					self.model.train()

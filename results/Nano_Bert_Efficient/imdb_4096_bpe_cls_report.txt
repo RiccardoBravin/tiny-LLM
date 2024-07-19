@@ -73,3 +73,52 @@ Confusion matrix:
 **************************************************
 ==================================================
 **************************************************
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=0.25, num_layers=5, vocab_size=4096)
+LR: 0.0001
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=0.25, num_layers=5, vocab_size=4096)
+LR: 0.0001
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=0.25, num_layers=5, vocab_size=4096)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=0.25, num_layers=5, vocab_size=4096)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=0.25, num_layers=5, vocab_size=4096)
+LR: 0.0005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=0.25, num_layers=5, vocab_size=4096)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=512, forward_expansion=0.25, num_layers=5, vocab_size=4096)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+

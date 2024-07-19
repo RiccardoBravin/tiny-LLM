@@ -1,0 +1,36 @@
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=8, max_length=256, forward_expansion=0.25, num_layers=2, vocab_size=16384)
+LR: 0.0005
+EPOCHS: 10
+
+average eval loss:  0.9130
+Accuracy: 0.571
+F1: 0.572
+Precision: 0.580
+Recall: 0.571
+MCC: 0.357
+Confusion matrix:
+ [[2233  878  352]
+ [1017 1639  473]
+ [ 813  684 1743]]
+('Model params: 0.317M', 'Model buffers: 0.000M', 'Model size: 1.210MB')
+
+*******************************************
+
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=8, max_length=256, forward_expansion=0.25, num_layers=2, vocab_size=16384)
+LR: 0.0005
+EPOCHS: 10
+
+average eval loss:  0.8693
+Accuracy: 0.607
+F1: 0.607
+Precision: 0.608
+Recall: 0.607
+MCC: 0.410
+Confusion matrix:
+ [[2224  755  484]
+ [ 703 1815  611]
+ [ 626  685 1929]]
+('Model params: 0.317M', 'Model buffers: 0.000M', 'Model size: 1.210MB')
+
+*******************************************
+
