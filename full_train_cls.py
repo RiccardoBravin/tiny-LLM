@@ -18,7 +18,7 @@ from lib.trainer import Trainer
 
 ########################################################################################
 EPOCHS = 30
-LR = 5e-3
+LR = 2e-3
 TRAINING_CYCLES = 4
 
 
@@ -71,7 +71,7 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 		# Mamba_model,
 		# MamBra_model,
 		Embedder_model,
-		Embedder_conv_model,
+		# mbedder_conv_model,
 		# Embbert,
 	]
 
@@ -96,8 +96,8 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 		#    			 	forward_expansion=2, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		ModelConfig( model_name="Embedder_only", embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None,
 						forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		ModelConfig( model_name="Embedder_+_conv", embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None,
-						forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		# ModelConfig( model_name="Embedder_+_conv", embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None,
+		# 	 			forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 	]
 
 	for config in configs:
@@ -117,8 +117,9 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 
 		for model_class, config in zip(models, configs):
 			model = model_class(config)
-			cls = Classifier_rms(model, config.embedding_dimension, dataset_config.n_labels())
+			# cls = Classifier_rms(model, config.embedding_dimension, dataset_config.n_labels())
 			# cls = Conv_classifier(model, model_out_sz=config.embedding_dimension, labels_num=dataset_config.n_labels())
+			cls = Conv_classifier_2(model, model_out_sz=config.embedding_dimension, labels_num=dataset_config.n_labels())
 			cls.to(device)
 
 			########################################################################################

@@ -60,3 +60,107 @@ Confusion matrix:
 
 *******************************************
 
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.0005
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.001
+EPOCHS: 30
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.002
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  1.2711
+Accuracy: 0.619
+F1: 0.615
+Precision: 0.610
+Recall: 0.619
+MCC: 0.087
+Confusion matrix:
+ [[110 212]
+ [185 536]]
+('Model params: 0.185M', 'Model buffers: 0.000M', 'Model size: 0.706MB')
+
+*******************************************
+
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8240)
+LR: 0.002
+EPOCHS: 30
+
+*******************************************
+
