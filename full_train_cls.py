@@ -24,8 +24,8 @@ TRAINING_CYCLES = 4
 
 dataset_config = DataConfig(
 					dataset_name=None,
-					dict_size=pow(2, 14),
-					tokenizer_type="bpe",
+					dict_size=pow(2, 13),
+					tokenizer_type="wordpiece",
 					batch_size=128,
 					max_len=256,
 					labels=None
@@ -37,7 +37,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
-for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
+# for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
+for DATASET_NAME in ["rte", "wnli", "stsb"]: #GLUE
 
 
 	dataset_config.dataset_name = DATASET_NAME
@@ -117,9 +118,8 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 
 		for model_class, config in zip(models, configs):
 			model = model_class(config)
-			# cls = Classifier_rms(model, config.embedding_dimension, dataset_config.n_labels())
+			cls = Classifier_rms(model, config.embedding_dimension, dataset_config.n_labels())
 			# cls = Conv_classifier(model, model_out_sz=config.embedding_dimension, labels_num=dataset_config.n_labels())
-			cls = Conv_classifier_2(model, model_out_sz=config.embedding_dimension, labels_num=dataset_config.n_labels())
 			cls.to(device)
 
 			########################################################################################
