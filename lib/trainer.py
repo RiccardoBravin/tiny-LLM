@@ -45,20 +45,20 @@ def mask_tokens(tokens, dataset_config:DataConfig, mask_prob = 0.15):
 
 
 class Trainer:
-	def __init__(self, model, device, lr, model_config):
+	def __init__(self, model:nn.Module, device, model_config:ModelConfig):
 		self.model = model
-		self.optimizer = AdamW(lr=lr, params=self.model.parameters(), amsgrad=True)
+		self.optimizer = AdamW(lr=model_config.learning_rate, params=self.model.parameters(), amsgrad=True)
 		self.device = device
 
 		self.model_config = model_config
-		self.savepath = f"best_model_{model_config.model_name}_{model.__class__.__name__}.pth"
+		self.savepath = f"trained_models/best_model_{model_config.model_name}_{model.__class__.__name__}.pth"
 
 
 	def train(self, train_dataloader, eval_dataloader, num_epochs, log_freq: int, color = FOREGROUND_COLORS['Green']):
 
 		log_step = len(train_dataloader) // log_freq
 
-		scaler = GradScaler()
+		#scaler = GradScaler()
 
 
 		# Extract labels from the data

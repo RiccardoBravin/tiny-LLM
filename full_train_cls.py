@@ -8,7 +8,7 @@ import torch
 
 #CUSTOM
 from lib.configs import DataConfig, ModelConfig
-from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
+from lib.utils import model_size, print_model_params, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
 from lib.Models.final_classifiers import *
 from lib.Models.models import *
@@ -18,7 +18,6 @@ from lib.trainer import Trainer
 
 ########################################################################################
 EPOCHS = 30
-LR = 2e-3
 TRAINING_CYCLES = 4
 
 
@@ -38,8 +37,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
 # for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
-for DATASET_NAME in ["rte", "wnli", "stsb"]: #GLUE
-
+# for DATASET_NAME in ["qnli", "wnli", "stsb"]: #GLUE
+for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split" ]:  #ALL DATASETS
 
 	dataset_config.dataset_name = DATASET_NAME
 	dataset_config.dict_size = dict_size_aux
@@ -67,12 +66,12 @@ for DATASET_NAME in ["rte", "wnli", "stsb"]: #GLUE
 		# Nano_Mlp_structured,
 		# Brav,
 		# Bert_efficient,
-		# Nano_Bert_Efficient,
+		Nano_Bert_Efficient,
 		# Gray_BERT_Efficient,
 		# Mamba_model,
 		# MamBra_model,
 		Embedder_model,
-		# mbedder_conv_model,
+		Embedder_conv_model,
 		# Embbert,
 	]
 
@@ -85,8 +84,8 @@ for DATASET_NAME in ["rte", "wnli", "stsb"]: #GLUE
 		#    			forward_expansion=8, num_layers=6, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Bert_efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		# ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None,
-		#    			forward_expansion=0.25, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
+		   			forward_expansion=0.5, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		# ModelConfig( model_name="Mamba", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			 	forward_expansion=3, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="MamBra", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
@@ -95,10 +94,10 @@ for DATASET_NAME in ["rte", "wnli", "stsb"]: #GLUE
 		#    			forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Embbert", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			 	forward_expansion=2, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		ModelConfig( model_name="Embedder_only", embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None,
-						forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		# ModelConfig( model_name="Embedder_+_conv", embedding_dimension=256, reduced_embedding_dimension=20, number_of_heads=None,
-		# 	 			forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		ModelConfig( model_name="Embedder_only", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None,
+						forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
+		ModelConfig( model_name="Embedder_+_conv", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None,
+			 			forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
 	]
 
 	for config in configs:
@@ -107,7 +106,6 @@ for DATASET_NAME in ["rte", "wnli", "stsb"]: #GLUE
 
 		with open(f"results/{config.model_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_cls_report.txt", "a") as f:
 			f.write(f"Model config for current run:\n{config}\n")
-			f.write(f"LR: {LR}\n")
 			f.write(f"EPOCHS: {EPOCHS}\n")
 			f.write(f"\n*******************************************\n\n")
 
@@ -118,7 +116,8 @@ for DATASET_NAME in ["rte", "wnli", "stsb"]: #GLUE
 
 		for model_class, config in zip(models, configs):
 			model = model_class(config)
-			cls = Classifier_rms(model, config.embedding_dimension, dataset_config.n_labels())
+			# cls = Classifier_rms(model, config.embedding_dimension, dataset_config.n_labels())
+			cls = Classifier_BERT_post(model, config.embedding_dimension, dataset_config.n_labels())
 			# cls = Conv_classifier(model, model_out_sz=config.embedding_dimension, labels_num=dataset_config.n_labels())
 			cls.to(device)
 
@@ -131,7 +130,7 @@ for DATASET_NAME in ["rte", "wnli", "stsb"]: #GLUE
 
 			########################################################################################
 			print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Training{RESET}")
-			trainer = Trainer(cls, device, LR, config)
+			trainer = Trainer(cls, device, config)
 			trainer.train(train_dataloader, validation_dataloader, EPOCHS, 3)
 
 			########################################################################################

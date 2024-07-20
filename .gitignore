@@ -5,7 +5,7 @@ venv
 stpiece
 tokenizers
 
-best_model.pth
+trained_models
 
 **/__pycache__
 

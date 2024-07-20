@@ -10,7 +10,7 @@ class ModelConfig:
     forward_expansion: float
     num_layers: int
     vocab_size: int
-
+    learning_rate: float
     def feed_forward_hidden(self) -> int:
         return int(self.embedding_dimension * self.forward_expansion)
 
