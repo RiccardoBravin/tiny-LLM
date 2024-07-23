@@ -1,6 +1,0 @@
-Model config for current run:
-ModelConfig(model_name='Embedder_+_conv', embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8192, learning_rate=0.002)
-EPOCHS: 30
-
-*******************************************
-

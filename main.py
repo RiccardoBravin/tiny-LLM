@@ -4,23 +4,22 @@ import torch
 import os
 
 from lib.configs import DataConfig, ModelConfig
-from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
+from lib.utils import model_size, print_model_params, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
 from lib.Models.models import *
-from lib.Models.final_classifiers import Classifier_rms
+from lib.Models.final_classifiers import *
 
 from lib.trainer import Trainer
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-lr = 5e-4
-epochs = 10
+EPOCHS = 10
 
 dataset_config = DataConfig(
-                    dataset_name="sst2",
-                    dict_size=pow(2, 14),
-                    tokenizer_type="bpe", #wordpiece #bpe #unigram
+                    dataset_name="bull",
+                    dict_size=pow(2, 13),
+                    tokenizer_type="wordpiece", #wordpiece #bpe #unigram
                     batch_size=64,
                     max_len=256,
                     labels=None
@@ -28,13 +27,14 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
                     model_name=None,
-                    embedding_dimension=96,
-                    reduced_embedding_dimension=16,
-                    number_of_heads=8,
+                    embedding_dimension=320,
+                    reduced_embedding_dimension=32,
+                    number_of_heads=1,
                     max_length=dataset_config.max_len,
                     forward_expansion=0.5,
-                    num_layers=4,
-                    vocab_size=dataset_config.dict_size
+                    num_layers=5,
+                    vocab_size=dataset_config.dict_size,
+                    learning_rate=4e-3
                 )
 
 
@@ -69,18 +69,18 @@ print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing mode
 
 # model = Nano_Mlp_structured(model_config)
 # model = Bert_efficient(model_config)
-model = Nano_Bert_Efficient(model_config)
+# model = Nano_Bert_Efficient(model_config)
 # model = Mlp_structured(model_config)
 # model = Mamba_model(model_config)
-# model = Embedder_model(model_config)
+model = Embedder_model(model_config)
 # model = Embbert(model_config)
 # model = Embedder_conv_model(model_config)
 
 model_config.model_name = model.__class__.__name__
 
-cls = Classifier_rms(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
-# cls = Smart_classifier(model, model_out_sz=model_config.embedding_dimension, hidden_state=1, labels_num=dataset_config.n_labels()).to(device)
-# cls = Tester_classifier(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
+cls = Classifier_max(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
+# cls = Classifier_rms(model, model_out_sz=model_config.embedding_dimension, labels_num=dataset_config.n_labels()).to(device)
+
 
 print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
 print_model_params(cls)
@@ -91,8 +91,8 @@ print(f"{RESET}")
 # Training the model
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Training the model{RESET}")
 
-trainer = Trainer(cls, device, lr, model_config)
-trainer.train(train_dataloader, validation_dataloader, epochs, 3)
+trainer = Trainer(cls, device, model_config)
+trainer.train(train_dataloader, validation_dataloader, EPOCHS, 3)
 
 # Testing the model
 print(f"{FOREGROUND_COLORS["BrightYellow"]}Testing the model{RESET}")

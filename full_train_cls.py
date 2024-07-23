@@ -62,7 +62,7 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 	train_dataloader.shuffle = True
 
 	models = [
-		# Mlp_structured,
+		# BERT_original,
 		# Nano_Mlp_structured,
 		# Brav,
 		# Bert_efficient,
@@ -76,8 +76,8 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 	]
 
 	configs = [
-		# ModelConfig( model_name="Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
-		#    			forward_expansion=8, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
+		# ModelConfig( model_name="BERT_original", embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=2,
+		#    			forward_expansion=1, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		# ModelConfig( model_name="Nano_Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
 		#    			forward_expansion=4, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
 		# ModelConfig( model_name="Brav", embedding_dimension=32, reduced_embedding_dimension=16, number_of_heads=None,
@@ -117,8 +117,9 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 		for model_class, config in zip(models, configs):
 			model = model_class(config)
 			# cls = Classifier_rms(model, config.embedding_dimension, dataset_config.n_labels())
-			cls = Classifier_BERT_post(model, config.embedding_dimension, dataset_config.n_labels())
-			# cls = Conv_classifier(model, model_out_sz=config.embedding_dimension, labels_num=dataset_config.n_labels())
+			# cls = Classifier_BERT_post(model, config.embedding_dimension, dataset_config.n_labels())
+			cls = Classifier_max(model, model_out_sz=config.embedding_dimension, labels_num=dataset_config.n_labels())
+			
 			cls.to(device)
 
 			########################################################################################

@@ -272,7 +272,7 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
 
-		classifier = Classifier_rms(discriminator, discriminator_config.embedding_dimension, dataset_config.n_labels())
+		classifier = Classifier_max(discriminator, discriminator_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model initialized on {device}")
 

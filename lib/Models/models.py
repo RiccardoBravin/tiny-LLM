@@ -11,7 +11,7 @@ import lib.Models.modules as modules
 from   lib.Models.mamba import Mamba, MambaConfig
 
 
-class Mlp_structured(nn.Module):
+class BERT_original(nn.Module):
     
     def __init__(self, model_config: ModelConfig, dropout=0.1):
         """
@@ -22,41 +22,21 @@ class Mlp_structured(nn.Module):
         self.embedder = embedders.STD_embedder(model_config)
 
         # multi-layers transformer blocks, deep network
-        self.encoder_blocks = torch.nn.ModuleList([blocks.SwiGLU(model_config.embedding_dimension, model_config.feed_forward_hidden()) for _ in range(model_config.num_layers)])
-        self.norms = torch.nn.ModuleList([modules.RMSNorm(model_config.embedding_dimension) for _ in range(model_config.num_layers)])
-
-    def forward(self, x, mask):
-        # embedding the indexed sequence to sequence of vectors
-        x = self.embedder(x)
-
-        # running over multiple transformer blocks with skip connection and normalization
-        for encoder, norm in zip(self.encoder_blocks, self.norms):
-            x = encoder.forward(x) + x
-            x = norm(x)
-        return x
-
-class Nano_Mlp_structured(nn.Module):
+        encoder_layer = nn.TransformerEncoderLayer(d_model=model_config.embedding_dimension, 
+                                                   nhead=model_config.number_of_heads,
+                                                   dim_feedforward=model_config.feed_forward_hidden(),
+                                                   batch_first=True) 
+ 
+        self.bert_layers = torch.nn.TransformerEncoder(encoder_layer, num_layers=model_config.num_layers, enable_nested_tensor=False)
     
-    def __init__(self, model_config: ModelConfig, dropout=0.1):
-        """
-        Embedder and multilayer model using the SwiGLU_block
-        """
-        super().__init__()
-        # embedding for BERT, sum of positional, segment, token embeddings
-        self.embedder = embedders.Nano_embedder(model_config)
-
-        # multi-layers transformer blocks, deep network
-        self.encoder_blocks = torch.nn.ModuleList([blocks.SwiGLU(model_config.embedding_dimension, model_config.feed_forward_hidden()) for _ in range(model_config.num_layers)])
-        self.norms = torch.nn.ModuleList([modules.RMSNorm(model_config.embedding_dimension) for _ in range(model_config.num_layers)])
-
+    
     def forward(self, x, mask):
         # embedding the indexed sequence to sequence of vectors
         x = self.embedder(x)
 
-        # running over multiple transformer blocks with skip connection and normalization
-        for encoder, norm in zip(self.encoder_blocks, self.norms):
-            x = encoder.forward(x) + x
-            x = norm(x)
+        # applying the transformer layers
+        x = self.bert_layers(x, mask)
+
         return x
 
 

@@ -25,6 +25,32 @@ class Classifier_rms(nn.Module):
         x = self.fc(x)
         return x
 
+class Classifier_max(nn.Module):
+
+    def __init__(self, model:nn.Module, model_out_sz: int, labels_num:int):
+        r"""
+        Classifier that uses the root mean square of the embeddings along the sequence length to classify the data
+        Args:
+            model: the model that will be used to generate the embeddings
+            model_out_sz: the output size of the model
+            labels_num: the number of labels to output
+        """
+        super().__init__()
+        self.model = model
+        self.act = nn.Sigmoid()
+        self.fc = nn.Linear(model_out_sz, labels_num)
+
+
+    def forward(self, x:torch.Tensor, mask:torch.Tensor):
+        x = self.model(x, mask)
+
+        x = torch.max(x, dim=1).values
+
+        x = self.act(x)
+        x = self.fc(x)
+        return x
+
+
 class Classifier_BERT_post(nn.Module):
 
     def __init__(self, model:nn.Module, model_out_sz: int, num_labels:int):

@@ -180,7 +180,7 @@ class Trainer:
 
 class BertTrainer:
 
-	def __init__(self, model, device, lr, model_config, dataset_config, mask_prob = 0.15):
+	def __init__(self, model:nn.Module, device, model_config: ModelConfig, dataset_config: DataConfig, mask_prob: float = 0.15):
 
 		self.device = device
 
@@ -188,7 +188,7 @@ class BertTrainer:
 		self.model_config = model_config
 
 
-		self.optimizer = AdamW(lr=lr, params=self.model.parameters())
+		self.optimizer = AdamW(lr=model_config.pretraining_lr , params=self.model.parameters())
 
 		self.lm_criterion = nn.CrossEntropyLoss(ignore_index=0).to(device)
 
@@ -214,7 +214,6 @@ class BertTrainer:
 
 		self.model.train()
 		train_loss = 0.0
-
 
 		for epoch in range(num_epochs):
 

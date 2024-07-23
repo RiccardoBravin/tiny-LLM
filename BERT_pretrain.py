@@ -9,19 +9,18 @@ from tqdm import tqdm
 
 #CUSTOM
 from lib.configs import DataConfig, ModelConfig
-from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
+from lib.utils import model_size, print_model_params, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
+
+from lib.trainer import BertTrainer, Trainer
+
 from lib.Models.final_classifiers import *
 from lib.Models.models import *
 
 
-from lib.trainer import BertTrainer, Trainer
+epochs_pretraining = 1
+epochs_finetuning = 10
 
-epochs_pretraining = 30
-lr_pretraining = 1e-4
-
-epochs_post = 10
-lr_post = 5e-4
 logs_x_epoch = 2
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -31,7 +30,7 @@ dataset_config = DataConfig(
 					dataset_name=None,
 					dict_size=pow(2, 14),
 					tokenizer_type="bpe",
-					batch_size=128,
+					batch_size=32,
 					max_len=256,
 					labels=None
 				)
@@ -44,7 +43,9 @@ model_config = ModelConfig(
 					max_length=dataset_config.max_len,
 					forward_expansion=0.25,
 					num_layers=2,
-					vocab_size=dataset_config.dict_size
+					vocab_size=dataset_config.dict_size,
+					learning_rate = 5e-4,
+					pretraining_lr=1e-4,
 				)
 
 
@@ -111,7 +112,7 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Starting training{RESET}")
-		trainer = BertTrainer(cls, device, lr_pretraining, model_config, dataset_config)
+		trainer = BertTrainer(cls, device, model_config, dataset_config)
 		trainer.train(train_dataloader, validation_dataloader, epochs_pretraining, log_freq=logs_x_epoch)
 
 
@@ -126,7 +127,7 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
 		# classifier = Classifier_BERT_post(model, model_config.embedding_dimension, dataset_config.n_labels())
-		classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
+		classifier = Classifier_max(model, model_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
 
@@ -137,8 +138,8 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 		########################################################################################
 
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Starting training{RESET}")
-		trainer = Trainer(classifier, device, lr_post, model_config)
-		trainer.train(train_dataloader, validation_dataloader, epochs_post, log_freq=logs_x_epoch, color=FOREGROUND_COLORS["BrightMagenta"])
+		trainer = Trainer(classifier, device, model_config)
+		trainer.train(train_dataloader, validation_dataloader, epochs_finetuning, log_freq=logs_x_epoch, color=FOREGROUND_COLORS["BrightMagenta"])
 
 
 		########################################################################################
@@ -162,10 +163,10 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 			os.makedirs(f"results/{folder_name}/")
 
 		#save the classification report in a file for later use specifying the dataset, model hyperparameters
-		with open(f"results/{folder_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_pretr_report.txt", "a") as f:
+		with open(f"results/{folder_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_pretraining.txt", "a") as f:
 			f.write(f"{model_config}\n")
-			f.write(f"LR: {lr_post}\n")
-			f.write(f"EPOCHS: {epochs_post}\n\n")
+			f.write(f"EPOCHS pretraining: {epochs_pretraining}\n")
+			f.write(f"EPOCHS finetuning: {epochs_finetuning}\n\n")
 			f.write(f"average eval loss: {avg_eval_loss: .4f}\n")
 			f.write(f"{metrics_to_str(metrics)}\n")
 			f.write(str(model_size(classifier)))
