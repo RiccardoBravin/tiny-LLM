@@ -18,7 +18,7 @@ from lib.Models.final_classifiers import *
 from lib.Models.models import *
 
 
-epochs_pretraining = 1
+epochs_pretraining = 10
 epochs_finetuning = 10
 
 logs_x_epoch = 2
@@ -28,8 +28,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 dataset_config = DataConfig(
 					dataset_name=None,
-					dict_size=pow(2, 14),
-					tokenizer_type="bpe",
+					dict_size=pow(2, 13),
+					tokenizer_type="wordpiece",
 					batch_size=32,
 					max_len=256,
 					labels=None
@@ -37,14 +37,14 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=96,
+					embedding_dimension=128,
 					reduced_embedding_dimension=16,
-					number_of_heads=8,
+					number_of_heads=1,
 					max_length=dataset_config.max_len,
-					forward_expansion=0.25,
-					num_layers=2,
+					forward_expansion=0.5,
+					num_layers=5,
 					vocab_size=dataset_config.dict_size,
-					learning_rate = 5e-4,
+					learning_rate = 8e-4,
 					pretraining_lr=1e-4,
 				)
 
@@ -126,8 +126,8 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
-		# classifier = Classifier_BERT_post(model, model_config.embedding_dimension, dataset_config.n_labels())
-		classifier = Classifier_max(model, model_config.embedding_dimension, dataset_config.n_labels())
+		classifier = Classifier_BERT_post(model, model_config.embedding_dimension, dataset_config.n_labels())
+		# classifier = Classifier_max(model, model_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
 

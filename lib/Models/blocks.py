@@ -256,7 +256,7 @@ class MamBravBlock(torch.nn.Module):
 
 
 class EmbBertAttention(nn.Module):
-    def __init__(self, d_model:int, ff_expansion:int, dropout=0.1):
+    def __init__(self, d_model:int, hid_d_model:int, dropout=0.1):
         """
         Efficient Attention block that is taken from the paper and modified to suit Mobile BERT idea 
         Args:
@@ -268,7 +268,7 @@ class EmbBertAttention(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
         self.query = nn.Linear(d_model, d_model)
-        self.output_linear = nn.Linear(d_model, d_model // ff_expansion)
+        self.output_linear = nn.Linear(d_model, hid_d_model)
         
         
     def forward(self, query:torch.Tensor, key:torch.Tensor, value:torch.Tensor, mask:torch.Tensor):
@@ -299,5 +299,6 @@ class EmbBertAttention(nn.Module):
         # (batch_size, max_len, max_len) matmul (batch_size, d_model, max_len) --> (batch_size, d_model, max_len)
         context = torch.matmul(weights, value)
         
-        return self.output_linear(context) # (batch_size, max_len, d_model) as input
+        # (batch_size, max_len, d_model) -> (batch_size, max_len, d_model // ff_expansion)
+        return self.output_linear(context)
     

@@ -9,53 +9,56 @@ from tqdm import tqdm
 
 #CUSTOM
 from lib.configs import DataConfig, ModelConfig
-from lib.utils import model_size, print_model_params, trainer, evaluator, calculate_metrics, metrics_to_str
+from lib.utils import model_size, print_model_params, calculate_metrics, metrics_to_str
 from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset
-from lib.Models.final_classifiers import Classifier_rms, Classifier_for_electra, Classifier_post_electra
+from lib.Models.final_classifiers import Classifier_max, Classifier_for_electra, Classifier_post_electra
 from lib.Models.models import *
 
+from lib.trainer import Trainer
 
 from lib.electra import Electra
 
 
-epochs_pretraining = 30
-lr_pretraining = 5e-4
+epochs_pretraining = 10
+epochs_finetuning = 10
 
-epochs_post = 15
-lr_post = 5e-3
 logs_x_epoch = 1
 
 TRAINING_CYCLES = 2
 
 dataset_config = DataConfig(
 					dataset_name=None,
-					dict_size=pow(2, 14),
+					dict_size=pow(2, 13),
 					tokenizer_type="bpe",
-					batch_size=128,
+					batch_size=32,
 					max_len=256,
 					labels=None
 				)
 
 generator_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=96,
+					embedding_dimension=128,
 					reduced_embedding_dimension=16,
-					number_of_heads=8,
+					number_of_heads=1,
 					max_length=dataset_config.max_len,
-					forward_expansion=0.1,
+					forward_expansion=0.5,
 					num_layers=1,
-					vocab_size=dataset_config.dict_size
+					vocab_size=dataset_config.dict_size,
+					learning_rate=5e-4,
+					pretraining_lr=5e-4,
 				)
 
 discriminator_config = ModelConfig(
 					model_name=None,
 					embedding_dimension=generator_config.embedding_dimension,
 					reduced_embedding_dimension=generator_config.reduced_embedding_dimension,
-					number_of_heads=8,
+					number_of_heads=1,
 					max_length=dataset_config.max_len,
-					forward_expansion=0.25,
-					num_layers=2,
-					vocab_size=dataset_config.dict_size
+					forward_expansion=0.5,
+					num_layers=5,
+					vocab_size=dataset_config.dict_size,
+					learning_rate=generator_config.learning_rate,
+					pretraining_lr=generator_config.pretraining_lr,
 				)
 
 ########################################################################################
@@ -181,7 +184,7 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 				]
 				return optimizer_grouped_parameters
 
-		optimizer = torch.optim.AdamW(get_params_without_weight_decay_ln(electra.named_parameters(), weight_decay=0.1), lr=lr_pretraining)
+		optimizer = torch.optim.AdamW(get_params_without_weight_decay_ln(electra.named_parameters(), weight_decay=0.1), lr=generator_config.pretraining_lr)
 		scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=len(train_dataloader), num_training_steps=epochs_pretraining*len(train_dataloader)*2)
 
 
@@ -273,6 +276,7 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
 
 		classifier = Classifier_max(discriminator, discriminator_config.embedding_dimension, dataset_config.n_labels())
+		# classifier = Classifier_post_electra(discriminator, discriminator_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model initialized on {device}")
 
@@ -284,14 +288,14 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 		########################################################################################
 
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Starting training{RESET}")
-
-		trainer(classifier, train_dataloader, validation_dataloader, lr=lr_post, epochs=epochs_post, logs_x_epoch=logs_x_epoch, color=FOREGROUND_COLORS["BrightMagenta"])
+		trainer = Trainer(classifier, device, discriminator_config)
+		trainer.train(train_dataloader, validation_dataloader, epochs_finetuning, log_freq=logs_x_epoch, color=FOREGROUND_COLORS["BrightMagenta"])
 
 		########################################################################################
 
 		print(f"{FOREGROUND_COLORS["BrightYellow"]}Testing the model{RESET}")
 		print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
-		predicted, avg_eval_loss = evaluator(classifier, test_dataloader)
+		predicted, avg_eval_loss = trainer.evaluate(test_dataloader)
 		print(f"{RESET}")
 
 
@@ -310,8 +314,7 @@ for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", 
 		#save the classification report in a file for later use specifying the dataset, model hyperparameters
 		with open(f"results/{folder_name}/{dataset_config.dataset_name}_{dataset_config.dict_size}_{dataset_config.tokenizer_type}_pretr_report.txt", "a") as f:
 			f.write(f"{discriminator_config}\n")
-			f.write(f"LR: {lr_post}\n")
-			f.write(f"EPOCHS: {epochs_post}\n\n")
+			f.write(f"EPOCHS: {epochs_finetuning}\n\n")
 			f.write(f"average eval loss: {avg_eval_loss: .4f}\n")
 			f.write(f"{metrics_to_str(metrics)}\n")
 			f.write(str(model_size(classifier)))

@@ -20,7 +20,7 @@ def model_size(model):
 		buffer_size += buffer.nelement() * buffer.element_size()
 		
 	size_all_mb = (param_size + buffer_size) / 1024**2
-	return "Model params: {:.3f}M".format(param_count/1e6), "Model buffers: {:.3f}M".format(buffer_size/1e6), "Model size: {:.3f}MB".format(size_all_mb)
+	return "Model params: {:.3f}K".format(param_count/1e3), "Model buffers: {:.3f}K".format(buffer_size/1e3), "Model size: {:.3f}MB".format(size_all_mb)
 
 
 def print_model_params(model):

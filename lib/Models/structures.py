@@ -131,7 +131,7 @@ class MamBra_layer(nn.Module):
 
 
 class EmbBert_layer(nn.Module):
-    def __init__(self, d_model, ff_expansion):
+    def __init__(self, d_model, hid_d_model):
         super().__init__()
 
         self.act = torch.nn.SiLU()
@@ -146,15 +146,15 @@ class EmbBert_layer(nn.Module):
                             groups=d_model,
                             padding=self.d_conv - 1)
 
-        self.attention = blocks.EmbBertAttention(d_model, ff_expansion)
+        self.attention = blocks.EmbBertAttention(d_model, hid_d_model)
 
 
         #second 2 stage
-        self.fc = nn.Sequential(
-            nn.Linear(d_model, int(d_model*ff_expansion)),
-            nn.ReLU(),# SILU in BERT original
-            nn.Linear(int(d_model*ff_expansion), d_model)
-        )
+        self.fc_up = nn.Linear(d_model, hid_d_model)
+        
+        #final aggregation
+        self.fc_down = nn.Linear(hid_d_model, d_model)
+
 
 
 
@@ -168,7 +168,7 @@ class EmbBert_layer(nn.Module):
 
         #second 1 stage
         y1 = x.transpose(1, 2)
-        y1 = self.conv1d(y1)[:,:,:l]
+        y1 = self.conv1d(y1)[:,:,:l] #could try to make value skip the convolution so in attention use the original embeddings
         y1 = y1.transpose(1, 2)
         y1 = self.act(y1)
 
@@ -176,9 +176,11 @@ class EmbBert_layer(nn.Module):
 
 
         #second 2 stage
-        y2 = self.fc(x)
+        y2 = self.fc_up(x)
+        y2 = self.act(y2)
 
         #final stage
-        y = y1 + y2
+        y = self.fc_down(y1 + y2)
+
 
         return y

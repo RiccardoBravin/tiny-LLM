@@ -65,7 +65,6 @@ class Classifier_BERT_post(nn.Module):
         self.model = model
 
         self.class_cls = nn.Sequential(
-            nn.Linear(model_out_sz, model_out_sz),
             nn.Tanh(),
             nn.Linear(model_out_sz, num_labels),
         )
@@ -97,7 +96,6 @@ class Classifier_BERT_pretraining(nn.Module):
 
 
         self.class_cls = nn.Sequential(
-            nn.Linear(model_out_sz, model_out_sz),
             nn.Tanh(),
             nn.Linear(model_out_sz, num_labels),
         )
@@ -135,7 +133,6 @@ class Classifier_Nano_BERT_pretraining(nn.Module):
         self.lm_cls = nn.Linear(reduced_embedding_dimension, dictionary_size)
 
         self.class_cls = nn.Sequential(
-            nn.Linear(model_out_sz, model_out_sz),
             nn.Tanh(),
             nn.Linear(model_out_sz, num_labels),
         )

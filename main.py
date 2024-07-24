@@ -27,14 +27,14 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
                     model_name=None,
-                    embedding_dimension=320,
-                    reduced_embedding_dimension=32,
+                    embedding_dimension=128,
+                    reduced_embedding_dimension=16,
                     number_of_heads=1,
                     max_length=dataset_config.max_len,
-                    forward_expansion=0.5,
-                    num_layers=5,
+                    forward_expansion=0.33,
+                    num_layers=6,
                     vocab_size=dataset_config.dict_size,
-                    learning_rate=4e-3
+                    learning_rate=1e-3
                 )
 
 
@@ -67,13 +67,11 @@ train_dataloader.shuffle = True
 # Initializing model
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Initializing model{RESET}")
 
-# model = Nano_Mlp_structured(model_config)
-# model = Bert_efficient(model_config)
+# model = BERT_original(model_config)
 # model = Nano_Bert_Efficient(model_config)
-# model = Mlp_structured(model_config)
 # model = Mamba_model(model_config)
-model = Embedder_model(model_config)
-# model = Embbert(model_config)
+# model = Embedder_model(model_config)
+model = Embbert(model_config)
 # model = Embedder_conv_model(model_config)
 
 model_config.model_name = model.__class__.__name__

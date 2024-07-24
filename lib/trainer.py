@@ -29,19 +29,38 @@ def get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_st
 
 
 
-def mask_tokens(tokens, dataset_config:DataConfig, mask_prob = 0.15):
+def mask_tokens(tokens, dataset_config:DataConfig):
 
-	mlm_probability = torch.full(tokens.shape, mask_prob, device=tokens.device)
-	mlm_probability = mlm_probability * (tokens > len(dataset_config.special_tokens)) #set to 0 the probability of masking the special tokens
+	#where tokens are masked
+	mask = torch.ones_like(tokens, device=tokens.device) * (tokens > len(dataset_config.special_tokens))
+	
+	aux = torch.count_nonzero(mask, dim=1).tolist()
+	aux = [(torch.randperm(aux[i]-1) + 1)[:max(1,aux[i]//6)] for i in range(tokens.shape[0])] #1/6 ~ 16% of the tokens are masked with at least 1 taken
 
-	masked_indices = torch.bernoulli(mlm_probability).bool() # 15% of the tokens are 1 and 85% are 0
-	randomized_indices = torch.bernoulli(masked_indices * 0.4).bool().to(tokens.device) # 40% of the 15% are 1 and 60% are 0
+	
+	masked_indices = torch.zeros_like(tokens, device=tokens.device)
+	for i in range(tokens.shape[0]):
+		masked_indices[i, aux[i]] = 1
+	
+	#where inside the mask tokens are randomized
+	random_indices = torch.bernoulli(masked_indices * 0.3).bool().to(tokens.device) # 30% of the 15% are 1 and 70% are 0 
+	#where inside the mask tokens are replaced with themselves
+	equal_indices = torch.bernoulli(random_indices * 0.5).bool().to(tokens.device) # 50% of the 30% are 1 and 50% are 0
+
+
+	#making the three masks mutually exclusive
+	masked_indices = (masked_indices * (~random_indices)).bool()
+	random_indices = random_indices * (~equal_indices) 
+
 
 	masked_tokens = tokens.clone()
-	masked_tokens[masked_indices * (~randomized_indices)] = 3 # [MASK] token is 3
-	masked_tokens[masked_indices * randomized_indices] = torch.randint(5, dataset_config.dict_size, masked_tokens[masked_indices * randomized_indices].shape, device=tokens.device) # random token in the dictionary
+	masked_tokens[masked_indices] = 3 # [MASK] token is 3
+	masked_tokens[random_indices] = torch.randint(5, dataset_config.dict_size, masked_tokens[random_indices].shape, device=tokens.device) # random token in the dictionary
+	masked_tokens[equal_indices] = tokens[equal_indices] # token is replaced with itself
 
-	return masked_tokens, masked_indices
+	mask = masked_indices + random_indices + equal_indices
+
+	return masked_tokens, mask.bool()
 
 
 class Trainer:
@@ -73,7 +92,7 @@ class Trainer:
 		self.model.train()
 		train_loss = 0.0
 
-		max_mcc = 0
+		max_mcc = -1
 
 
 		for epoch in range(num_epochs):

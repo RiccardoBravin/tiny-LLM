@@ -33,9 +33,9 @@ class BERT_original(nn.Module):
     def forward(self, x, mask):
         # embedding the indexed sequence to sequence of vectors
         x = self.embedder(x)
-
+        
         # applying the transformer layers
-        x = self.bert_layers(x, mask)
+        x = self.bert_layers(x)
 
         return x
 
@@ -297,7 +297,7 @@ class Embbert(nn.Module):
 
         # multi-layers transformer blocks, deep network
         self.embbert_layers = torch.nn.ModuleList(
-            [structures.EmbBert_layer(model_config.embedding_dimension, model_config.forward_expansion) for _ in range(model_config.num_layers)]
+            [structures.EmbBert_layer(model_config.embedding_dimension, model_config.feed_forward_hidden()) for _ in range(model_config.num_layers)]
         )
 
     def forward(self, x, mask):
