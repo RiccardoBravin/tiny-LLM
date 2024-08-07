@@ -1,0 +1,78 @@
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8192, learning_rate=0.002, pretraining_lr=None)
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.0662
+Accuracy: 0.981
+F1: 0.981
+Precision: 0.981
+Recall: 0.981
+MCC: 0.978
+Confusion matrix:
+ [[199   0   0   1   0   0   0]
+ [  0 200   0   0   0   0   0]
+ [  0   2 196   0   0   1   1]
+ [  2   0   0 197   0   1   0]
+ [  0   0   0   0 199   1   0]
+ [  0   1   0   4   0 191   4]
+ [  1   1   1   0   1   4 192]]
+('Model params: 294.023K', 'Model buffers: 0.000K', 'Model size: 1.122MB')
+
+*******************************************
+
+average eval loss:  0.0693
+Accuracy: 0.976
+F1: 0.976
+Precision: 0.976
+Recall: 0.976
+MCC: 0.972
+Confusion matrix:
+ [[199   0   0   1   0   0   0]
+ [  0 200   0   0   0   0   0]
+ [  0   3 194   0   0   2   1]
+ [  3   0   1 194   0   2   0]
+ [  0   0   0   0 199   1   0]
+ [  0   0   0   7   1 188   4]
+ [  0   0   1   0   0   7 192]]
+('Model params: 294.023K', 'Model buffers: 0.000K', 'Model size: 1.122MB')
+
+*******************************************
+
+average eval loss:  0.0699
+Accuracy: 0.982
+F1: 0.982
+Precision: 0.982
+Recall: 0.982
+MCC: 0.979
+Confusion matrix:
+ [[199   0   0   1   0   0   0]
+ [  1 199   0   0   0   0   0]
+ [  0   3 194   0   0   1   2]
+ [  2   0   0 194   0   4   0]
+ [  0   0   0   0 200   0   0]
+ [  0   0   0   4   0 194   2]
+ [  0   0   0   0   0   5 195]]
+('Model params: 294.023K', 'Model buffers: 0.000K', 'Model size: 1.122MB')
+
+*******************************************
+
+average eval loss:  0.0783
+Accuracy: 0.978
+F1: 0.978
+Precision: 0.978
+Recall: 0.978
+MCC: 0.974
+Confusion matrix:
+ [[199   0   0   1   0   0   0]
+ [  0 199   1   0   0   0   0]
+ [  0   2 196   0   0   1   1]
+ [  2   0   0 195   0   3   0]
+ [  0   1   0   0 199   0   0]
+ [  0   0   0   7   0 189   4]
+ [  0   0   1   0   0   7 192]]
+('Model params: 294.023K', 'Model buffers: 0.000K', 'Model size: 1.122MB')
+
+*******************************************
+

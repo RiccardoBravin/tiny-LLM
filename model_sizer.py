@@ -21,12 +21,13 @@ dataset_config = DataConfig(
 
 
 model_config = ModelConfig( 
-                    model_name="BERT", 
-                    embedding_dimension=128,
+                    model_name="EMBBERT", 
+                    embedding_dimension=48,
                     reduced_embedding_dimension=16,
                     number_of_heads=1,
-		            forward_expansion=0.33,
-                    num_layers=6,
+		            forward_expansion=2,
+                    d_state=4,
+                    num_layers=4,
                     max_length=dataset_config.max_len, 
                     vocab_size=dataset_config.dict_size,
                     learning_rate=1e-3,
@@ -37,8 +38,8 @@ model_config = ModelConfig(
 # model = Embedder_model(model_config)
 # model = Embedder_conv_model(model_config)
 # model = Nano_Bert_Efficient(model_config)
-# model = Mamba_model(model_config)
-model = Embbert(model_config)
+model = Mamba_model(model_config)
+# model = Embbert(model_config)
 
 
 cls = Classifier_max(model, model_config.embedding_dimension, dataset_config.n_labels())

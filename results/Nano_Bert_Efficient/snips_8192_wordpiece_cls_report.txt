@@ -1,0 +1,78 @@
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.7, num_layers=4, vocab_size=8192, learning_rate=0.001, pretraining_lr=None)
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.1534
+Accuracy: 0.960
+F1: 0.960
+Precision: 0.960
+Recall: 0.960
+MCC: 0.953
+Confusion matrix:
+ [[199   1   0   0   0   0   0]
+ [  0 198   1   0   0   0   1]
+ [  0   6 190   0   0   2   2]
+ [  1   1   2 188   0   6   2]
+ [  1   2   0   0 197   0   0]
+ [  1   1   1   5   4 184   4]
+ [  0   3   1   0   0   8 188]]
+('Model params: 366.699K', 'Model buffers: 0.000K', 'Model size: 1.399MB')
+
+*******************************************
+
+average eval loss:  0.1212
+Accuracy: 0.971
+F1: 0.971
+Precision: 0.972
+Recall: 0.971
+MCC: 0.967
+Confusion matrix:
+ [[198   0   0   2   0   0   0]
+ [  0 196   2   0   1   1   0]
+ [  0   5 193   0   0   1   1]
+ [  3   0   3 193   0   0   1]
+ [  0   2   1   0 196   1   0]
+ [  0   1   1   6   0 190   2]
+ [  1   1   0   0   0   4 194]]
+('Model params: 366.699K', 'Model buffers: 0.000K', 'Model size: 1.399MB')
+
+*******************************************
+
+average eval loss:  0.1442
+Accuracy: 0.964
+F1: 0.964
+Precision: 0.964
+Recall: 0.964
+MCC: 0.958
+Confusion matrix:
+ [[195   1   0   2   2   0   0]
+ [  1 196   0   1   2   0   0]
+ [  0   4 193   0   0   2   1]
+ [  1   0   0 195   1   2   1]
+ [  0   0   0   0 200   0   0]
+ [  0   0   1  10   2 186   1]
+ [  0   3   1   0   0  12 184]]
+('Model params: 366.699K', 'Model buffers: 0.000K', 'Model size: 1.399MB')
+
+*******************************************
+
+average eval loss:  0.1423
+Accuracy: 0.965
+F1: 0.965
+Precision: 0.965
+Recall: 0.965
+MCC: 0.959
+Confusion matrix:
+ [[200   0   0   0   0   0   0]
+ [  0 198   0   0   0   2   0]
+ [  0   4 192   0   1   1   2]
+ [  2   0   0 194   0   4   0]
+ [  0   1   0   0 198   1   0]
+ [  2   3   1   7   0 180   7]
+ [  0   2   1   0   0   8 189]]
+('Model params: 366.699K', 'Model buffers: 0.000K', 'Model size: 1.399MB')
+
+*******************************************
+

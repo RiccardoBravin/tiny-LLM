@@ -1,0 +1,77 @@
+Model config for current run:
+ModelConfig(model_name='Embedder_+_conv', embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8192, learning_rate=0.002, pretraining_lr=None)
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.3084
+Accuracy: 0.904
+F1: 0.905
+Precision: 0.908
+Recall: 0.904
+MCC: 0.874
+Confusion matrix:
+ [[547   6   3  21   4   0]
+ [  4 630  42   5   4  10]
+ [  1  28 126   2   1   1]
+ [  5   7   0 259   3   1]
+ [  9   1   0   8 189  17]
+ [  3   0   0   0   6  57]]
+('Model params: 299.142K', 'Model buffers: 0.000K', 'Model size: 1.141MB')
+
+*******************************************
+
+average eval loss:  0.3668
+Accuracy: 0.892
+F1: 0.894
+Precision: 0.899
+Recall: 0.892
+MCC: 0.859
+Confusion matrix:
+ [[538  13   3  21   3   3]
+ [  6 624  49   4   3   9]
+ [  1  23 129   3   1   2]
+ [  9   7   1 250   6   2]
+ [ 11   3   0   9 183  18]
+ [  0   2   0   0   4  60]]
+('Model params: 299.142K', 'Model buffers: 0.000K', 'Model size: 1.141MB')
+
+*******************************************
+
+average eval loss:  0.4608
+Accuracy: 0.894
+F1: 0.894
+Precision: 0.896
+Recall: 0.894
+MCC: 0.861
+Confusion matrix:
+ [[536  16   3  19   7   0]
+ [  1 645  40   1   4   4]
+ [  1  41 114   2   1   0]
+ [ 11   9   2 241  11   1]
+ [  6   2   0   4 209   3]
+ [  0   6   0   1  15  44]]
+('Model params: 299.142K', 'Model buffers: 0.000K', 'Model size: 1.141MB')
+
+*******************************************
+
+average eval loss:  0.3996
+Accuracy: 0.888
+F1: 0.890
+Precision: 0.893
+Recall: 0.888
+MCC: 0.853
+Confusion matrix:
+ [[537   7   7  22   5   3]
+ [  5 631  46   4   2   7]
+ [  2  25 128   2   1   1]
+ [ 14   9   2 241   8   1]
+ [ 11   4   0   7 186  16]
+ [  3   4   0   0   5  54]]
+('Model params: 299.142K', 'Model buffers: 0.000K', 'Model size: 1.141MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

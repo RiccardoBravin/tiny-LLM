@@ -1,0 +1,61 @@
+Model config for current run:
+ModelConfig(model_name='BERT_original', embedding_dimension=80, reduced_embedding_dimension=None, number_of_heads=2, max_length=256, forward_expansion=2, num_layers=2, vocab_size=2048, learning_rate=0.001, pretraining_lr=None)
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.7062
+Accuracy: 0.681
+F1: 0.692
+Precision: 0.756
+Recall: 0.681
+MCC: 0.399
+Confusion matrix:
+ [[428 258]
+ [ 61 253]]
+('Model params: 288.882K', 'Model buffers: 0.000K', 'Model size: 1.102MB')
+
+*******************************************
+
+average eval loss:  0.7163
+Accuracy: 0.690
+F1: 0.701
+Precision: 0.762
+Recall: 0.690
+MCC: 0.414
+Confusion matrix:
+ [[435 251]
+ [ 59 255]]
+('Model params: 288.882K', 'Model buffers: 0.000K', 'Model size: 1.102MB')
+
+*******************************************
+
+average eval loss:  0.5804
+Accuracy: 0.733
+F1: 0.734
+Precision: 0.734
+Recall: 0.733
+MCC: 0.383
+Confusion matrix:
+ [[550 136]
+ [131 183]]
+('Model params: 288.882K', 'Model buffers: 0.000K', 'Model size: 1.102MB')
+
+*******************************************
+
+average eval loss:  0.6092
+Accuracy: 0.700
+F1: 0.711
+Precision: 0.755
+Recall: 0.700
+MCC: 0.409
+Confusion matrix:
+ [[457 229]
+ [ 71 243]]
+('Model params: 288.882K', 'Model buffers: 0.000K', 'Model size: 1.102MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

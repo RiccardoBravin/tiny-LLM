@@ -17,7 +17,7 @@ from lib.trainer import Trainer
 
 
 ########################################################################################
-EPOCHS = 30
+EPOCHS = 10
 TRAINING_CYCLES = 4
 
 
@@ -25,7 +25,7 @@ dataset_config = DataConfig(
 					dataset_name=None,
 					dict_size=pow(2, 13),
 					tokenizer_type="wordpiece",
-					batch_size=64,
+					batch_size=128,
 					max_len=256,
 					labels=None
 				)
@@ -64,34 +64,28 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 	models = [
 		# BERT_original,
 		# Nano_Mlp_structured,
-		# Brav,
-		# Bert_efficient,
-		Nano_Bert_Efficient,
-		# Gray_BERT_Efficient,
-		# Mamba_model,
-		# MamBra_model,
-		Embbert,
-		Embedder_model,
-		Embedder_conv_model,
+		# Nano_Bert_Efficient,
+		Mamba_model,
+		# Embbert,
+		# Embedder_model,
+		# Embedder_conv_model,
 	]
 
 	configs = [
-		# ModelConfig( model_name="BERT_original", embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=2,
-		#    		forward_expansion=1, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
-		# ModelConfig( model_name="Nano_Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
-		#    		forward_expansion=4, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		# ModelConfig( model_name="Bert_efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
-		#    		forward_expansion=2, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
-		   			forward_expansion=0.7, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
-		# ModelConfig( model_name="Mamba", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None,
-		#    		forward_expansion=3, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size),
-		ModelConfig( model_name="Embbert", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None,
-		   			forward_expansion=0.33, num_layers=6, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
-		ModelConfig( model_name="Embedder_only", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None,
-					forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
-		ModelConfig( model_name="Embedder_+_conv", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None,
-			 		forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
+		# ModelConfig( model_name="BERT_original", embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=2, d_state= None,
+		#    			forward_expansion=1, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
+		# ModelConfig( model_name="Nano_Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
+		#    			forward_expansion=4, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
+		# ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
+		#    			forward_expansion=0.7, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
+		ModelConfig( model_name="Mamba", embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=None, d_state= 4,
+		   			forward_expansion=2, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
+		# ModelConfig( model_name="Embbert", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
+		#    			forward_expansion=1, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
+		# ModelConfig( model_name="Embedder_only", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, d_state= None,
+		# 			forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
+		# ModelConfig( model_name="Embedder_+_conv", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, d_state= None,
+		# 	 		forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
 	]
 
 	for config in configs:

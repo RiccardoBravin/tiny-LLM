@@ -288,8 +288,8 @@ def dataset_selector(name:str):
 		raise ValueError("Dataset not found")
 
 	#make dataset use only ascii characters
-	train_data = train_data.map(lambda x: {'text': x['text'].encode('ascii', 'ignore').decode()})
-	test_data = test_data.map(lambda x: {'text': x['text'].encode('ascii', 'ignore').decode()})
+	# train_data = train_data.map(lambda x: {'text': x['text'].encode('ascii', 'ignore').decode()})
+	# test_data = test_data.map(lambda x: {'text': x['text'].encode('ascii', 'ignore').decode()})
 
 	return train_data, test_data
 
@@ -376,7 +376,7 @@ def encode_dataset(tokenizer:Tokenizer, dataset:Dataset, max_length:int, batch_s
 	def tokenize_function(examples):
         # Encode the texts
 		encodings = tokenizer.encode_batch(examples["text"])
-
+	
         # Create a dictionary to hold the tokenized data
 		tokenized_data = {
 			"tokens": [encoding.ids for encoding in encodings],

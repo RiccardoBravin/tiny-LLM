@@ -35,7 +35,7 @@ def mask_tokens(tokens, dataset_config:DataConfig):
 	mask = torch.ones_like(tokens, device=tokens.device) * (tokens > len(dataset_config.special_tokens))
 	
 	aux = torch.count_nonzero(mask, dim=1).tolist()
-	aux = [(torch.randperm(aux[i]-1) + 1)[:max(1,aux[i]//6)] for i in range(tokens.shape[0])] #1/6 ~ 16% of the tokens are masked with at least 1 taken
+	aux = [(torch.randperm(aux[i]) + 1)[:max(1,aux[i]//6)] for i in range(tokens.shape[0])] #1/6 ~ 16% of the tokens are masked with at least 1 taken
 
 	
 	masked_indices = torch.zeros_like(tokens, device=tokens.device)

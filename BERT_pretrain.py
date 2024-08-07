@@ -18,7 +18,7 @@ from lib.Models.final_classifiers import *
 from lib.Models.models import *
 
 
-epochs_pretraining = 10
+epochs_pretraining = 50
 epochs_finetuning = 10
 
 logs_x_epoch = 2
@@ -51,8 +51,11 @@ model_config = ModelConfig(
 
 ########################################################################################
 
-# for DATASET_NAME in ["imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split"]:
-for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli"]: #GLUE
+# for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
+# for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
+for DATASET_NAME in ["bull"]: #GLUE
+# for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
+
 
 	dataset_config.dataset_name = DATASET_NAME
 

@@ -177,6 +177,8 @@ class Mamba_model(nn.Module):
         config = MambaConfig(d_model=model_config.embedding_dimension, 
                              n_layers=model_config.num_layers,
                              expand_factor=model_config.forward_expansion,
+                             d_state=model_config.d_state,
+                             d_conv=4,
                              use_cuda=True )
         self.mamba_layers = Mamba(config)
 

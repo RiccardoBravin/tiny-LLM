@@ -19,7 +19,7 @@ from lib.trainer import Trainer
 from lib.electra import Electra
 
 
-epochs_pretraining = 10
+epochs_pretraining = 30
 epochs_finetuning = 10
 
 logs_x_epoch = 1
@@ -29,8 +29,8 @@ TRAINING_CYCLES = 2
 dataset_config = DataConfig(
 					dataset_name=None,
 					dict_size=pow(2, 13),
-					tokenizer_type="bpe",
-					batch_size=32,
+					tokenizer_type="wordpiece",
+					batch_size=64,
 					max_len=256,
 					labels=None
 				)
@@ -45,7 +45,7 @@ generator_config = ModelConfig(
 					num_layers=1,
 					vocab_size=dataset_config.dict_size,
 					learning_rate=5e-4,
-					pretraining_lr=5e-4,
+					pretraining_lr=3e-4,
 				)
 
 discriminator_config = ModelConfig(
@@ -54,8 +54,8 @@ discriminator_config = ModelConfig(
 					reduced_embedding_dimension=generator_config.reduced_embedding_dimension,
 					number_of_heads=1,
 					max_length=dataset_config.max_len,
-					forward_expansion=0.5,
-					num_layers=5,
+					forward_expansion=0.7,
+					num_layers=4,
 					vocab_size=dataset_config.dict_size,
 					learning_rate=generator_config.learning_rate,
 					pretraining_lr=generator_config.pretraining_lr,
@@ -64,7 +64,9 @@ discriminator_config = ModelConfig(
 ########################################################################################
 
 # for DATASET_NAME in ["imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split"]:
-for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli"]: #GLUE
+# for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli"]: #GLUE
+for DATASET_NAME in ["qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
+
 	dataset_config.dataset_name = DATASET_NAME
 
 	#load the dataset

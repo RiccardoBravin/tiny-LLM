@@ -4,7 +4,8 @@ import os
 import pathlib
 import re
 
-models = ["Embedder_only", "Embedder_+_conv", "Nano_Bert_Efficient", "mlm_Nano_Bert_Efficient"]
+models = ["BERT_original", "Embbert", "Embedder_+_conv", "Embedder_only", "Nano_Bert_Efficient"]
+# models = ["Nano_Bert_Efficient_Nano_Bert_Efficient"]
 
 for model in models:
     print(f"Results for model: {model}")
@@ -13,8 +14,12 @@ for model in models:
     for file in os.listdir(f"results/{model}"):
         #keep from the file name only what is after cls_ and before _classification...
         #file_name = file.split("_")[0]
-        file_name = re.split(r"^([\w-]+_\d+)", file)[1]
+        try:
+            file_name = re.split(r"^([\w-]+_\d+)", file)[1]
+        except:
+            continue
         print(f"\t\t{file_name}")
+        print(f"{'acc':<15}{'f1':<15}{'mcc':<15}")
 
         #for each file extract the float values after the keywords "f1",and "accuracy"
         with open(f"results/{model}/{file}", "r") as f:
@@ -35,9 +40,14 @@ for model in models:
                     mcc = float(line.split(":")[1])
                     # print("MCC:", mcc)
                     mccs.append(mcc)
-
-            print("F1 mean:", sum(f1s)/len(f1s))
-            print("Accuracy mean:", sum(accuracies)/len(accuracies))
-            print("MCC mean:", sum(mccs)/len(mccs))
+            
+            try:
+                
+                print(f"{sum(accuracies)/len(accuracies)*100:<15}\t{sum(f1s)/len(f1s)*100:<15}\t{sum(mccs)/len(mccs)*100:<15}".replace('.', ','))
+                # print(f"F1 mean:\t\t{sum(f1s)/len(f1s)*100}".replace('.', ','))
+                # print(f"Accuracy mean:\t{sum(accuracies)/len(accuracies)*100}".replace('.', ','))
+                # print(f"MCC mean:\t\t{sum(mccs)/len(mccs)*100}".replace('.', ','))
+            except:
+                print("No results")
 
     print("\n*************************************************\n")

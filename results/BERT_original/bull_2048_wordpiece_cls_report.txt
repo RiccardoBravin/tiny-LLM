@@ -1,0 +1,77 @@
+Model config for current run:
+ModelConfig(model_name='BERT_original', embedding_dimension=80, reduced_embedding_dimension=None, number_of_heads=2, max_length=256, forward_expansion=2, num_layers=2, vocab_size=2048, learning_rate=0.001, pretraining_lr=None)
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.4500
+Accuracy: 0.818
+F1: 0.815
+Precision: 0.828
+Recall: 0.818
+MCC: 0.786
+Confusion matrix:
+ [[656   7  38  74   1   0]
+ [  3 755   3  15   2   2]
+ [ 50   5 339 379  34  11]
+ [ 38   3 111 604   2   7]
+ [  2  12  26  21 773   1]
+ [  1   2   6  12   0 775]]
+('Model params: 289.206K', 'Model buffers: 0.000K', 'Model size: 1.103MB')
+
+*******************************************
+
+average eval loss:  0.4246
+Accuracy: 0.822
+F1: 0.824
+Precision: 0.833
+Recall: 0.822
+MCC: 0.789
+Confusion matrix:
+ [[626   1  67  79   2   1]
+ [  2 745   3  17   7   6]
+ [ 23   1 408 340  41   5]
+ [ 24   5 154 573   4   5]
+ [  3   1  25   5 800   1]
+ [  1   0  12   8   4 771]]
+('Model params: 289.206K', 'Model buffers: 0.000K', 'Model size: 1.103MB')
+
+*******************************************
+
+average eval loss:  0.4399
+Accuracy: 0.826
+F1: 0.826
+Precision: 0.831
+Recall: 0.826
+MCC: 0.793
+Confusion matrix:
+ [[639   6  62  62   7   0]
+ [  1 765   4   7   2   1]
+ [ 36   1 417 325  31   8]
+ [ 33   8 148 557   8  11]
+ [  5   2  24  10 792   2]
+ [  0   0  11  11   4 770]]
+('Model params: 289.206K', 'Model buffers: 0.000K', 'Model size: 1.103MB')
+
+*******************************************
+
+average eval loss:  0.4030
+Accuracy: 0.839
+F1: 0.838
+Precision: 0.847
+Recall: 0.839
+MCC: 0.810
+Confusion matrix:
+ [[656   2  57  57   4   0]
+ [  3 764   3   6   4   0]
+ [ 29   3 393 352  39   2]
+ [ 24   5 109 619   6   2]
+ [  2   0  26   5 802   0]
+ [  1   0  13  10   2 770]]
+('Model params: 289.206K', 'Model buffers: 0.000K', 'Model size: 1.103MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

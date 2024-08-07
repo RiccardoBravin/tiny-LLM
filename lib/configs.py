@@ -8,6 +8,7 @@ class ModelConfig:
     number_of_heads: int
     max_length: int
     forward_expansion: float
+    d_state: int
     num_layers: int
     vocab_size: int
     learning_rate: float
