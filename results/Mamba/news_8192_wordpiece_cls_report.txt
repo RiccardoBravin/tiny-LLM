@@ -1,0 +1,69 @@
+Model config for current run:
+ModelConfig(model_name='Mamba', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.002, pretraining_lr=None)
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.2735
+Accuracy: 0.913
+F1: 0.913
+Precision: 0.913
+Recall: 0.913
+MCC: 0.884
+Confusion matrix:
+ [[1738   29   83   50]
+ [  22 1846   18   14]
+ [  59   14 1651  176]
+ [  53   14  130 1703]]
+('Model params: 202.132K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+average eval loss:  0.2770
+Accuracy: 0.909
+F1: 0.909
+Precision: 0.908
+Recall: 0.909
+MCC: 0.878
+Confusion matrix:
+ [[1741   32   76   51]
+ [  26 1835   25   14]
+ [  65   18 1645  172]
+ [  75   18  123 1684]]
+('Model params: 202.132K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+average eval loss:  0.2993
+Accuracy: 0.909
+F1: 0.909
+Precision: 0.910
+Recall: 0.909
+MCC: 0.878
+Confusion matrix:
+ [[1722   32   69   77]
+ [  26 1838   17   19]
+ [  54   11 1627  208]
+ [  60   15  106 1719]]
+('Model params: 202.132K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+average eval loss:  0.2889
+Accuracy: 0.911
+F1: 0.911
+Precision: 0.911
+Recall: 0.911
+MCC: 0.882
+Confusion matrix:
+ [[1714   49   83   54]
+ [  17 1862   17    4]
+ [  53   16 1662  169]
+ [  53   27  133 1687]]
+('Model params: 202.132K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

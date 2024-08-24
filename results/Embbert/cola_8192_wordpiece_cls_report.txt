@@ -15,14 +15,6 @@ Confusion matrix:
  [ 92 629]]
 ('Model params: 344.962K', 'Model buffers: 0.000K', 'Model size: 1.316MB')
 
-*******************************************
-
-Model config for current run:
-ModelConfig(model_name='Embbert', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=3, vocab_size=8192, learning_rate=0.0009, pretraining_lr=None)
-EPOCHS: 30
-
-*******************************************
-
 average eval loss:  0.7016
 Accuracy: 0.631
 F1: 0.618
