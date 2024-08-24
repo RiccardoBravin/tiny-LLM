@@ -66,6 +66,8 @@ discriminator_config = ModelConfig(
 # for DATASET_NAME in ["imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split"]:
 # for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli"]: #GLUE
 for DATASET_NAME in ["qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
+# for DATASET_NAME in ["stsb"]:  #Tester
+
 
 	dataset_config.dataset_name = DATASET_NAME
 

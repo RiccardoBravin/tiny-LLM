@@ -45,3 +45,5 @@ model = Mamba_model(model_config)
 cls = Classifier_max(model, model_config.embedding_dimension, dataset_config.n_labels())
 
 print_model_params(cls)
+
+print(cls.state_dict())

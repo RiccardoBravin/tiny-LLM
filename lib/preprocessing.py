@@ -53,8 +53,8 @@ def dataset_selector(name:str):
 
 
 		dataset = {
-		    "text": text_train,
-    		"label": label_train
+			"text": text_train,
+			"label": label_train
 		}
 
 
@@ -283,6 +283,11 @@ def dataset_selector(name:str):
 		train_data = train_data.remove_columns(['sentence1', 'sentence2', 'idx'])
 		test_data = test_data.remove_columns(['sentence1', 'sentence2', 'idx'])
 
+	elif name == "bookcorpus":
+		dataset = load_dataset("bookcorpus/bookcorpus", cache_dir="./datasets", trust_remote_code=True)
+
+		train_data = dataset['train'].select(range(100000))
+		test_data = None
 
 	else:
 		raise ValueError("Dataset not found")
@@ -358,15 +363,14 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 
 # function to encode the text using the tokenizer and return a torch usable dataloader
 def encode_dataset(tokenizer:Tokenizer, dataset:Dataset, max_length:int, batch_size:int):
-	tokenizer.pre_tokenizer
-
+	
 
 	from tokenizers.processors import TemplateProcessing
 	tokenizer.post_processor = TemplateProcessing(
-    	single="[CLS] $A",
-    	special_tokens=[
-        	("[CLS]", tokenizer.token_to_id("[CLS]")),
-    	],
+		single="[CLS] $A",
+		special_tokens=[
+			("[CLS]", tokenizer.token_to_id("[CLS]")),
+		],
 	)
 
 	tokenizer.enable_padding(length=max_length, pad_id=tokenizer.token_to_id("[PAD]"), pad_token="[PAD]")
@@ -374,10 +378,10 @@ def encode_dataset(tokenizer:Tokenizer, dataset:Dataset, max_length:int, batch_s
 
 
 	def tokenize_function(examples):
-        # Encode the texts
+		# Encode the texts
 		encodings = tokenizer.encode_batch(examples["text"])
 	
-        # Create a dictionary to hold the tokenized data
+		# Create a dictionary to hold the tokenized data
 		tokenized_data = {
 			"tokens": [encoding.ids for encoding in encodings],
 			"attention_mask": [encoding.attention_mask for encoding in encodings],
@@ -391,5 +395,70 @@ def encode_dataset(tokenizer:Tokenizer, dataset:Dataset, max_length:int, batch_s
 	dataloader = DataLoader(tokenized_dataset, batch_size=batch_size, pin_memory=True)
 
 	dataloader.shuffle = False
+
+	return dataloader
+
+
+def encode_pretr_dataset(tokenizer:Tokenizer, dataset:Dataset, max_length:int, batch_size:int):
+	
+
+
+	from tokenizers.processors import TemplateProcessing
+	tokenizer.post_processor = TemplateProcessing(
+		single="[CLS] $A",
+		pair="[CLS] $A [SEP] $B:1 [SEP]:1",
+		special_tokens=[
+			("[CLS]", tokenizer.token_to_id("[CLS]")),
+			("[SEP]", tokenizer.token_to_id("[SEP]")),
+		],
+	)
+
+	tokenizer.enable_padding(length=max_length, pad_id=tokenizer.token_to_id("[PAD]"), pad_token="[PAD]")
+	tokenizer.enable_truncation(max_length=max_length)
+
+	
+	def tokenize_function(examples):
+		pairs = []
+		labels = []
+		texts = examples["text"]
+		for i in range(len(texts) - 1):
+			if random.random() < 0.5:
+				# Randomly pair sentences
+				pairs.append((texts[i], texts[random.randint(0, len(texts) - 1)]))
+				labels.append(0)
+			else:
+				# Consecutive pair sentences
+				pairs.append((texts[i], texts[i + 1]))
+				labels.append(1)
+
+		pairs.append((texts[-1], texts[0]))
+		labels.append(0)
+
+		# Encode the pairs of texts
+		encodings = tokenizer.encode_batch(pairs)
+
+		# Create a dictionary to hold the tokenized data
+		tokenized_data = {
+			"tokens": [encoding.ids for encoding in encodings],
+			"attention_mask": [encoding.attention_mask for encoding in encodings],
+			"type_ids": [encoding.type_ids for encoding in encodings],
+			"special_tokens_mask": [encoding.special_tokens_mask for encoding in encodings],
+			"label": labels,
+		}
+
+		return tokenized_data
+	
+
+
+	tokenized_dataset = dataset.map(tokenize_function, batched=True, batch_size=50000)
+
+	tokenized_dataset.set_format(type='torch', columns=['tokens', 'attention_mask', 'special_tokens_mask', 'label'])
+	
+	# print(tokenized_dataset[0:32]["label"])
+	# print(tokenizer.decode_batch(tokenized_dataset[0:32]['tokens'].tolist()))
+
+	dataloader = DataLoader(tokenized_dataset, batch_size=batch_size, pin_memory=True)
+
+	dataloader.shuffle = True
 
 	return dataloader

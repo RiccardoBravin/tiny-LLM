@@ -20,8 +20,13 @@ def model_size(model):
 		buffer_size += buffer.nelement() * buffer.element_size()
 		
 	size_all_mb = (param_size + buffer_size) / 1024**2
-	return "Model params: {:.3f}K".format(param_count/1e3), "Model buffers: {:.3f}K".format(buffer_size/1e3), "Model size: {:.3f}MB".format(size_all_mb)
 
+	if param_count < 1024*1024:
+		out_string = "Model params: {:.3f}K".format(param_count/1e3), "Model buffers: {:.3f}K".format(buffer_size/1e3), "Model size: {:.3f}MB".format(size_all_mb)
+	else:
+		out_string = "Model params: {:.3f}M".format(param_count/1e6), "Model buffers: {:.3f}K".format(buffer_size/1e3), "Model size: {:.3f}MB".format(size_all_mb)
+	
+	return out_string
 
 def print_model_params(model):
 	#model class name
@@ -86,30 +91,69 @@ def n_ary_gray_code(n, base = 3):
 
 
 def calculate_metrics(test_dataloader, predicted):
-	accuracy = accuracy_score(test_dataloader.dataset["label"], predicted)
-	f1 = f1_score(test_dataloader.dataset["label"], predicted, average='weighted')  
-	precision = precision_score(test_dataloader.dataset["label"], predicted, average='weighted')  
-	recall = recall_score(test_dataloader.dataset["label"], predicted, average='weighted')
-	mcc = matthews_corrcoef(test_dataloader.dataset["label"], predicted)
-	conf_mat = confusion_matrix(test_dataloader.dataset["label"], predicted)
-
-	metrics_dict = {
-		"accuracy": accuracy,
-		"f1": f1,
-		"precision": precision,
-		"recall": recall,
-		"mcc": mcc,
-		"conf_mat": conf_mat
+	try:
+		accuracy = accuracy_score(test_dataloader.dataset["label"], predicted)
+		f1 = f1_score(test_dataloader.dataset["label"], predicted, average='weighted')  
+		precision = precision_score(test_dataloader.dataset["label"], predicted, average='weighted')  
+		recall = recall_score(test_dataloader.dataset["label"], predicted, average='weighted')
+		mcc = matthews_corrcoef(test_dataloader.dataset["label"], predicted)
+		conf_mat = confusion_matrix(test_dataloader.dataset["label"], predicted)
 	
-	}
+		metrics_dict = {
+			"accuracy": accuracy,
+			"f1": f1,
+			"precision": precision,
+			"recall": recall,
+			"mcc": mcc,
+			"conf_mat": conf_mat
+
+		}
+	except:
+		spe_corr = spearman_correlation(test_dataloader.dataset["label"], torch.tensor(predicted))
+		metrics_dict = {
+			"spearman_correlation": spe_corr
+		}
 	return metrics_dict
 
 def metrics_to_str(metrics):
-	acc_str = f"Accuracy: {metrics['accuracy']:.3f}"
-	f1_str = f"F1: {metrics['f1']:.3f}"
-	prec_str = f"Precision: {metrics['precision']:.3f}"
-	rec_str = f"Recall: {metrics['recall']:.3f}"
-	mcc_str = f"MCC: {metrics['mcc']:.3f}"
-	conf_mat_str = f"Confusion matrix:\n {metrics['conf_mat']}"
+	try:
+		acc_str = f"Accuracy: {metrics['accuracy']:.3f}"
+		f1_str = f"F1: {metrics['f1']:.3f}"
+		prec_str = f"Precision: {metrics['precision']:.3f}"
+		rec_str = f"Recall: {metrics['recall']:.3f}"
+		mcc_str = f"MCC: {metrics['mcc']:.3f}"
+		conf_mat_str = f"Confusion matrix:\n {metrics['conf_mat']}"
 
-	return f"{acc_str}\n{f1_str}\n{prec_str}\n{rec_str}\n{mcc_str}\n{conf_mat_str}"
+		out_str = f"{acc_str}\n{f1_str}\n{prec_str}\n{rec_str}\n{mcc_str}\n{conf_mat_str}"
+	except:
+		spe_corr_str = f"Spearman correlation coefficient: {metrics['spearman_correlation']:.3f}"
+		out_str = f"{spe_corr_str}"
+	return out_str 
+
+
+def _get_ranks(x: torch.Tensor) -> torch.Tensor:
+    tmp = x.argsort()
+    ranks = torch.zeros_like(tmp)
+    ranks[tmp] = torch.arange(len(x))
+    return ranks
+
+def spearman_correlation(x: torch.Tensor, y: torch.Tensor):
+    """Compute correlation between 2 1-D vectors
+    Args:
+        x: Shape (N, )
+        y: Shape (N, )
+    """
+    x_rank = _get_ranks(x)
+    y_rank = _get_ranks(y)
+    
+    n = x.size(0)
+    upper = 6 * torch.sum((x_rank - y_rank).pow(2))
+    down = n * (n ** 2 - 1.0)
+    return 1.0 - (upper / down)
+
+
+def checkpoint(model, filename):
+	torch.save(model.state_dict(), filename)
+
+def resume(model, filename):
+	model.load_state_dict(torch.load(filename))

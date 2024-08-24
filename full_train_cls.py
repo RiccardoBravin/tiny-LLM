@@ -17,8 +17,8 @@ from lib.trainer import Trainer
 
 
 ########################################################################################
-EPOCHS = 10
-TRAINING_CYCLES = 4
+EPOCHS = 20
+TRAINING_CYCLES = 5
 
 
 dataset_config = DataConfig(
@@ -37,8 +37,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
 # for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
-# for DATASET_NAME in ["qnli", "wnli", "stsb"]: #GLUE
-for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
+for DATASET_NAME in ["stsb"]: #GLUE
+# for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
 
 	dataset_config.dataset_name = DATASET_NAME
 	dataset_config.dict_size = dict_size_aux
@@ -47,7 +47,10 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 
 	print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
 	train_dataset, test_dataset = dataset_selector(dataset_config.dataset_name)
-	dataset_config.labels = train_dataset.unique("label")
+	if DATASET_NAME != "stsb":
+		dataset_config.labels = train_dataset.unique("label")
+	else:
+		dataset_config.labels = [0]
 
 	tokenizer = make_tokenizer(dataset_config, train_dataset)
 
@@ -64,11 +67,11 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 	models = [
 		# BERT_original,
 		# Nano_Mlp_structured,
-		# Nano_Bert_Efficient,
+		Nano_Bert_Efficient,
 		Mamba_model,
 		# Embbert,
-		# Embedder_model,
-		# Embedder_conv_model,
+		Embedder_model,
+		Embedder_conv_model,
 	]
 
 	configs = [
@@ -76,16 +79,16 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 		#    			forward_expansion=1, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		# ModelConfig( model_name="Nano_Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
 		#    			forward_expansion=4, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
-		# ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
-		#    			forward_expansion=0.7, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
+		ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
+		   			forward_expansion=0.7, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		ModelConfig( model_name="Mamba", embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=None, d_state= 4,
 		   			forward_expansion=2, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
 		# ModelConfig( model_name="Embbert", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
 		#    			forward_expansion=1, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
-		# ModelConfig( model_name="Embedder_only", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, d_state= None,
-		# 			forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
-		# ModelConfig( model_name="Embedder_+_conv", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, d_state= None,
-		# 	 		forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
+		ModelConfig( model_name="Embedder_only", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, d_state= None,
+					forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
+		ModelConfig( model_name="Embedder_+_conv", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, d_state= None,
+			 		forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
 	]
 
 	for config in configs:
@@ -127,9 +130,11 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 			predicted, avg_eval_loss = trainer.evaluate(test_dataloader)
 
 			########################################################################################
+			
 			metrics = calculate_metrics(test_dataloader, predicted)
 			print(metrics_to_str(metrics))
-
+			
+			
 			########################################################################################
 
 			#save the classification report in a file for later use specifying the dataset, model hyperparameters
