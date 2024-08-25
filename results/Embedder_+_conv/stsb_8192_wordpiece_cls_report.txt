@@ -1,0 +1,39 @@
+Model config for current run:
+ModelConfig(model_name='Embedder_+_conv', embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, max_length=256, forward_expansion=1, d_state=None, num_layers=1, vocab_size=8192, learning_rate=0.002)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  2.6014
+Spearman correlation coefficient: 0.152
+('Model params: 297.537K', 'Model buffers: 0.000K', 'Model size: 1.135MB')
+
+*******************************************
+
+average eval loss:  2.3946
+Spearman correlation coefficient: 0.170
+('Model params: 297.537K', 'Model buffers: 0.000K', 'Model size: 1.135MB')
+
+*******************************************
+
+average eval loss:  2.4249
+Spearman correlation coefficient: 0.135
+('Model params: 297.537K', 'Model buffers: 0.000K', 'Model size: 1.135MB')
+
+*******************************************
+
+average eval loss:  2.5113
+Spearman correlation coefficient: 0.166
+('Model params: 297.537K', 'Model buffers: 0.000K', 'Model size: 1.135MB')
+
+*******************************************
+
+average eval loss:  2.4905
+Spearman correlation coefficient: 0.182
+('Model params: 297.537K', 'Model buffers: 0.000K', 'Model size: 1.135MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

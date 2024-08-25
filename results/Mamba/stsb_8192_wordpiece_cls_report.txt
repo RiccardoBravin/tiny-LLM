@@ -1,6 +1,36 @@
 Model config for current run:
-ModelConfig(model_name='Mamba', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.002, pretraining_lr=None)
-EPOCHS: 30
+ModelConfig(model_name='Mamba', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.002)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  2.5577
+Spearman correlation coefficient: 0.012
+('Model params: 201.985K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+average eval loss:  2.5524
+Spearman correlation coefficient: 0.022
+('Model params: 201.985K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+average eval loss:  2.4430
+Spearman correlation coefficient: 0.004
+('Model params: 201.985K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+average eval loss:  2.6559
+Spearman correlation coefficient: 0.090
+('Model params: 201.985K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+average eval loss:  2.5382
+Spearman correlation coefficient: 0.138
+('Model params: 201.985K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
 
 *******************************************
 
