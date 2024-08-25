@@ -4,7 +4,7 @@ import os
 import pathlib
 import re
 
-models = ["BERT_original", "Embbert", "Embedder_+_conv", "Embedder_only", "Nano_Bert_Efficient"]
+models = ["BERT_original", "Mamba", "Embedder_+_conv", "Embedder_only", "Nano_Bert_Efficient"]
 # models = ["Nano_Bert_Efficient_Nano_Bert_Efficient"]
 
 for model in models:
@@ -27,6 +27,7 @@ for model in models:
             f1s = []
             accuracies = []
             mccs = []
+            sccs = []
             for line in lines:
                 if "F1" in line:
                     f1 = float(line.split(":")[1])
@@ -40,14 +41,17 @@ for model in models:
                     mcc = float(line.split(":")[1])
                     # print("MCC:", mcc)
                     mccs.append(mcc)
+                if "Spearman correlation coefficient" in line:
+                    scc = float(line.split(":")[1])
+                    # print("SCC:", scc)
+                    sccs.append(scc)
             
-            try:
-                
+            try: #there are results for F1, accuracy and MCC
                 print(f"{sum(accuracies)/len(accuracies)*100:<15}\t{sum(f1s)/len(f1s)*100:<15}\t{sum(mccs)/len(mccs)*100:<15}".replace('.', ','))
-                # print(f"F1 mean:\t\t{sum(f1s)/len(f1s)*100}".replace('.', ','))
-                # print(f"Accuracy mean:\t{sum(accuracies)/len(accuracies)*100}".replace('.', ','))
-                # print(f"MCC mean:\t\t{sum(mccs)/len(mccs)*100}".replace('.', ','))
             except:
-                print("No results")
+                try: #there are results just for spearman correlation coefficient
+                    print(f"{sum(sccs)/len(sccs)*100:<15}".replace('.', ','))
+                except:
+                    print("No results")
 
     print("\n*************************************************\n")
