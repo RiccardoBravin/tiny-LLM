@@ -79,7 +79,7 @@ train_dataloader = encode_pretr_dataset(tokenizer, pretraining_dataset, pretr_da
 print(f"\n\n{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}--------------------- STARTING PRETRAINING ---------------------{RESET}\n")
 
 # model = BERT_original(model_config)
-model = Nano_Bert_Efficient(model_config)
+model = Nano_Bert_Efficient(model_config, dropout=0)
 model_config.model_name = model.__class__.__name__
 
 # cls = Classifier_BERT_pretraining(model, model_config.embedding_dimension, pretr_dataset_config.dict_size, pretr_dataset_config.n_labels())
