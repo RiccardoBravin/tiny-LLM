@@ -286,7 +286,7 @@ def dataset_selector(name:str):
 	elif name == "bookcorpus":
 		dataset = load_dataset("bookcorpus/bookcorpus", cache_dir="./datasets", trust_remote_code=True)
 
-		train_data = dataset['train'].select(range(100000))
+		train_data = dataset['train']#.select(range(100000))
 		test_data = None
 
 	else:
