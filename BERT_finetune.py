@@ -18,8 +18,8 @@ from lib.Models.final_classifiers import *
 from lib.Models.models import *
 
 
-epochs_training = 5
-finetuning_tests= 1
+epochs_training = 10
+finetuning_tests= 5
 
 logs_x_epoch = 5
 
@@ -45,7 +45,7 @@ model_config = ModelConfig(
 					d_state=None,
 					num_layers=4,
 					vocab_size=dataset_config.dict_size,
-					learning_rate = 7e-4,
+					learning_rate = 1e-4,
 				)
 
 dict_size_aux = dataset_config.dict_size
@@ -56,7 +56,7 @@ dict_size_aux = dataset_config.dict_size
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
 # for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
 # for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
-for DATASET_NAME in ["bull"]: #GLUE
+for DATASET_NAME in ["wnli"]: #GLUE
 
 
 	dataset_config.dataset_name = DATASET_NAME
@@ -81,7 +81,14 @@ for DATASET_NAME in ["bull"]: #GLUE
 	validation_dataloader = encode_dataset(tokenizer, validation_dataset, dataset_config.max_len, dataset_config.batch_size)
 	test_dataloader = encode_dataset(tokenizer, test_dataset, dataset_config.max_len, dataset_config.batch_size)
 
+	#stampa le prime 10 frasi del dataset da train e validation con rispetive etichette
+	for i in range(10):
+		print(f"Train: {train_dataset[i]}")
+		print(f"Validation: {validation_dataset[i]}")
+		print("")
+
 	train_dataloader.shuffle = True
+	validation_dataloader.shuffle = True
 
 	train_n = 0
 	while train_n < finetuning_tests:
@@ -96,7 +103,7 @@ for DATASET_NAME in ["bull"]: #GLUE
 		model_config.model_name = model.__class__.__name__
 
 
-		checkpoint = f"{model.__class__.__name__}_6"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
+		checkpoint = f"{model.__class__.__name__}_24"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
 		print(f"Loading checkpoint {checkpoint}")
 		resume(model, f"trained_models/checkpoints/{checkpoint}.pth")
 		

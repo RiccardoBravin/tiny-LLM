@@ -125,17 +125,19 @@ class Trainer:
 				# Scales loss.  Calls backward() on scaled loss to create scaled gradients.
 				# Backward passes under autocast are not recommended.
 				# Backward ops run in the same dtype autocast chose for corresponding forward ops.
-				#scaler.scale(batch_loss).backward()
+				# scaler.scale(batch_loss).backward()
 				batch_loss.backward()
 
 				# scaler.step() first unscales the gradients of the optimizer's assigned params.
 				# If these gradients do not contain infs or NaNs, optimizer.step() is then called,
 				# otherwise, optimizer.step() is skipped.
-				#scaler.step(self.optimizer)
+				# scaler.step(self.optimizer)
 				self.optimizer.step()
 
+				# print(f"labels: {labels}\ny: {torch.argmax(y, dim=1)}")
 
 				# scaler.update()
+
 				# Update learning rate
 				# scheduler.step()
 
@@ -151,6 +153,8 @@ class Trainer:
 						labels_val = batch_val["label"].to(self.device)
 
 						guess = self.model(tokens, masks).squeeze()
+
+						# print(f"labels: {labels_val}\nguess: {torch.argmax(guess, dim=1)}")
 
 						val_loss += self.criterion(guess, labels_val).item()
 						if not self.regression:
@@ -259,6 +263,11 @@ class BertTrainer:
 		min_loss = float('inf')
 		ckpt_counter = 0
 
+		with open(f"trained_models/logs/{self.model_config.model_name}_train_log.txt", "a") as f:
+			f.write(f"\nNEW TRAINING\n")
+			f.write(f"Model: {self.model_config.model_name}\n")
+			f.write(f"Time: {time.asctime(time.localtime(time.time()))}\n")
+
 		for epoch in range(num_epochs):
 
 			tqdm_train_loader = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{num_epochs}", leave=True)
@@ -319,6 +328,11 @@ class BertTrainer:
 					cls_mcc = cls_mcc * 0.7 + 0.3 * matthews_corrcoef(nsp_label.cpu().detach(), torch.argmax(label_guess, dim=1).cpu().detach())
 					tqdm.write(f"Step {step_num+1}/{len(train_dataloader)}:\t\t MLM Loss: {lm_loss:.3f} CLS Loss: {cls_loss:.3f} CLS Accuracy: {cls_acc:.3f} CLS MCC: {cls_mcc:.3f}")
 					
+					#log the statistics in a log file
+					with open(f"trained_models/logs/{self.model_config.model_name}_train_log.txt", "a") as f:
+						f.write(f"Step {step_num+1}/{len(train_dataloader)}:\t\t MLM Loss: {lm_loss:.3f} CLS Loss: {cls_loss:.3f} CLS Accuracy: {cls_acc:.3f} CLS MCC: {cls_mcc:.3f}\n")
+
+					#save the model if the loss is the minimum
 					if(min_loss > batch_loss.item()):
 						min_loss = batch_loss.item()
 						#save with model name and ckpt counter

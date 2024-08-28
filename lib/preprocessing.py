@@ -450,7 +450,7 @@ def encode_pretr_dataset(tokenizer:Tokenizer, dataset:Dataset, max_length:int, b
 	
 
 
-	tokenized_dataset = dataset.map(tokenize_function, batched=True, batch_size=50000)
+	tokenized_dataset = dataset.map(tokenize_function, batched=True, batch_size=50000, num_proc=8)
 
 	tokenized_dataset.set_format(type='torch', columns=['tokens', 'attention_mask', 'special_tokens_mask', 'label'])
 	
