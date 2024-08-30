@@ -360,9 +360,15 @@ def make_tokenizer(config: DataConfig, train_dataset:Dataset):
 	# del aux
 	return tokenizer
 
+def load_tokenizer(config: DataConfig, tokenizer_filename:str):
+	tokenizer = Tokenizer.from_file(f"tokenizers/{tokenizer_filename}.json")
+	assert(tokenizer.get_vocab_size() == config.dict_size)
+	print(f"Tokenizer vocab size: {tokenizer.get_vocab_size()}")
+	
+	return tokenizer
 
 # function to encode the text using the tokenizer and return a torch usable dataloader
-def encode_dataset(tokenizer:Tokenizer, dataset:Dataset, max_length:int, batch_size:int):
+def encode_dataset(tokenizer:Tokenizer, dataset:Dataset, max_length:int, batch_size:int, shuffle:bool):
 	
 
 	from tokenizers.processors import TemplateProcessing
@@ -392,9 +398,7 @@ def encode_dataset(tokenizer:Tokenizer, dataset:Dataset, max_length:int, batch_s
 	tokenized_dataset = dataset.map(tokenize_function, batched=True)
 	tokenized_dataset.set_format(type='torch', columns=['tokens', 'attention_mask', 'label'])
 
-	dataloader = DataLoader(tokenized_dataset, batch_size=batch_size, pin_memory=True)
-
-	dataloader.shuffle = False
+	dataloader = DataLoader(tokenized_dataset, batch_size=batch_size, pin_memory=True, shuffle=shuffle)
 
 	return dataloader
 
@@ -457,7 +461,7 @@ def encode_pretr_dataset(tokenizer:Tokenizer, dataset:Dataset, max_length:int, b
 	# print(tokenized_dataset[0:32]["label"])
 	# print(tokenizer.decode_batch(tokenized_dataset[0:32]['tokens'].tolist()))
 
-	dataloader = DataLoader(tokenized_dataset, batch_size=batch_size, pin_memory=True)
+	dataloader = DataLoader(tokenized_dataset, batch_size=batch_size, pin_memory=True, shuffle=True)
 
 	dataloader.shuffle = True
 

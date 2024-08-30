@@ -10,7 +10,7 @@ from tqdm import tqdm
 #CUSTOM
 from lib.configs import DataConfig, ModelConfig
 from lib.utils import model_size, print_model_params, calculate_metrics, metrics_to_str, resume
-from lib.preprocessing import dataset_selector, make_tokenizer, encode_dataset, encode_pretr_dataset
+from lib.preprocessing import dataset_selector, make_tokenizer, load_tokenizer, encode_dataset, encode_pretr_dataset
 
 from lib.trainer import BertTrainer, Trainer
 
@@ -18,7 +18,7 @@ from lib.Models.final_classifiers import *
 from lib.Models.models import *
 
 
-epochs_training = 10
+epochs_training = 20
 finetuning_tests= 5
 
 logs_x_epoch = 5
@@ -28,7 +28,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 dataset_config = DataConfig(
 						dataset_name=None,
-						dict_size=pow(2, 13),
+						dict_size=pow(2, 11),
 						tokenizer_type="wordpiece",
 						batch_size=32,
 						max_len=256,
@@ -37,18 +37,17 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=128,
+					embedding_dimension=80,
 					reduced_embedding_dimension=16,
-					number_of_heads=1,
+					number_of_heads=2,
 					max_length=dataset_config.max_len,
-					forward_expansion=0.7,
+					forward_expansion=2,
 					d_state=None,
-					num_layers=4,
+					num_layers=2,
 					vocab_size=dataset_config.dict_size,
-					learning_rate = 1e-4,
+					learning_rate = 2e-4,
 				)
 
-dict_size_aux = dataset_config.dict_size
 
 ########################################################################################
 
@@ -60,7 +59,6 @@ for DATASET_NAME in ["wnli"]: #GLUE
 
 
 	dataset_config.dataset_name = DATASET_NAME
-	dataset_config.dict_size = dict_size_aux
 
 	print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Loading dataset {DATASET_NAME} {RESET}")
 
@@ -71,24 +69,27 @@ for DATASET_NAME in ["wnli"]: #GLUE
 	else:
 		dataset_config.labels = [0]
 
-	tokenizer = make_tokenizer(dataset_config, train_dataset)
+	print(f"Dataset labels: {dataset_config.labels}")
+
+	#tokenizer = make_tokenizer(dataset_config, train_dataset)
+	tokenizer = load_tokenizer(dataset_config, f"wordpiece_bookcorpus_{dataset_config.dict_size}") 
 
 	validation_dataset = train_dataset.train_test_split(test_size=0.1)
 	train_dataset, validation_dataset = validation_dataset["train"], validation_dataset["test"]
 
 
-	train_dataloader = encode_dataset(tokenizer, train_dataset, dataset_config.max_len, dataset_config.batch_size)
-	validation_dataloader = encode_dataset(tokenizer, validation_dataset, dataset_config.max_len, dataset_config.batch_size)
-	test_dataloader = encode_dataset(tokenizer, test_dataset, dataset_config.max_len, dataset_config.batch_size)
+	train_dataloader = encode_dataset(tokenizer, train_dataset, dataset_config.max_len, dataset_config.batch_size, shuffle=True)
+	validation_dataloader = encode_dataset(tokenizer, validation_dataset, dataset_config.max_len, dataset_config.batch_size, shuffle=False)
+	test_dataloader = encode_dataset(tokenizer, test_dataset, dataset_config.max_len, dataset_config.batch_size, shuffle=False)
 
-	#stampa le prime 10 frasi del dataset da train e validation con rispetive etichette
-	for i in range(10):
-		print(f"Train: {train_dataset[i]}")
-		print(f"Validation: {validation_dataset[i]}")
-		print("")
-
-	train_dataloader.shuffle = True
-	validation_dataloader.shuffle = True
+	# for batch in train_dataloader:
+	# 	x = batch["tokens"]
+	# 	l = batch["label"]
+	# 	for t, lab in zip(x, l):
+	# 		print(t)
+	# 		print(tokenizer.decode(t.tolist()))
+	# 		print(lab)
+	# 	break
 
 	train_n = 0
 	while train_n < finetuning_tests:
@@ -98,12 +99,14 @@ for DATASET_NAME in ["wnli"]: #GLUE
 
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Initializing model{RESET}")
-		model = Nano_Bert_Efficient(model_config, dropout=0)
+		
+		model = BERT_original(model_config, dropout=0.1)
+		#model = Nano_Bert_Efficient(model_config, dropout=0.1)
 	
 		model_config.model_name = model.__class__.__name__
 
 
-		checkpoint = f"{model.__class__.__name__}_24"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
+		checkpoint = f"{model.__class__.__name__}_28"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
 		print(f"Loading checkpoint {checkpoint}")
 		resume(model, f"trained_models/checkpoints/{checkpoint}.pth")
 		

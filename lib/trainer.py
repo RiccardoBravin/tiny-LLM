@@ -6,7 +6,7 @@ import time
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
-from torch.optim import lr_scheduler, AdamW, Adam
+from torch.optim import lr_scheduler, AdamW, Adam, SGD, RMSprop, Adagrad
 from torch.cuda.amp import GradScaler, autocast
 
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, matthews_corrcoef, confusion_matrix
@@ -61,7 +61,8 @@ def mask_tokens(tokens, special_tokens_mask, dataset_config:DataConfig):
 class Trainer:
 	def __init__(self, model:nn.Module, device, model_config:ModelConfig):
 		self.model = model
-		self.optimizer = AdamW(lr=model_config.learning_rate, params=self.model.parameters(), amsgrad=True)
+		#self.optimizer = AdamW(lr=model_config.learning_rate, params=self.model.parameters())
+		self.optimizer = RMSprop(lr=model_config.learning_rate, params=self.model.parameters())
 		self.device = device
 
 		self.model_config = model_config
@@ -84,7 +85,8 @@ class Trainer:
 		# Extract labels from the data
 		try:
 			class_weights = torch.bincount(train_dataloader.dataset["label"])
-			class_weights = class_weights.sum() / class_weights
+			class_weights = class_weights.sum() / (class_weights * len(class_weights))
+			print(f"Class weights: {class_weights}")
 			self.criterion = nn.CrossEntropyLoss(weight=class_weights).to(self.device)
 			self.regression = False
 
@@ -105,14 +107,14 @@ class Trainer:
 			tqdm_train_loader = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{num_epochs}", leave=True)
 			for step_num, batch_data in enumerate(tqdm_train_loader):
 
-				self.model.zero_grad()
+				self.optimizer.zero_grad()
 
 				tokens = batch_data["tokens"].to(self.device)
 				masks  = batch_data["attention_mask"].to(self.device)
 				labels = batch_data["label"].to(self.device)
 
 				#Model outputs (batch_size, n_labels)
-				y = self.model(tokens, masks).squeeze()
+				y = self.model(tokens, masks).squeeze(-1)
 				batch_loss = self.criterion(y, labels)
 
 				if step_num == 0:
@@ -134,17 +136,20 @@ class Trainer:
 				# scaler.step(self.optimizer)
 				self.optimizer.step()
 
-				# print(f"labels: {labels}\ny: {torch.argmax(y, dim=1)}")
-
 				# scaler.update()
 
 				# Update learning rate
 				# scheduler.step()
+				
+				#print the accuracy on the training set
+				# acc = accuracy_score(labels.cpu().detach(), torch.argmax(y, dim=1).cpu().detach())
+				# tqdm.write(f"Step {step_num+1}/{len(train_dataloader)}:\t\t Loss: {batch_loss:.3f} Accuracy: {acc:.3f}")
 
 				if step_num % log_step == (log_step - 1):
 					self.model.eval()
 
 					guesses = torch.Tensor([]).to(self.device)
+					true_labels = torch.Tensor([]).to(self.device)
 					val_loss = 0
 
 					for batch_val in eval_dataloader:
@@ -152,34 +157,38 @@ class Trainer:
 						masks  = batch_val["attention_mask"].to(self.device)
 						labels_val = batch_val["label"].to(self.device)
 
-						guess = self.model(tokens, masks).squeeze()
-
+						with torch.no_grad():
+							guess = self.model(tokens, masks).squeeze(-1)
+						
 						# print(f"labels: {labels_val}\nguess: {torch.argmax(guess, dim=1)}")
 
 						val_loss += self.criterion(guess, labels_val).item()
+						
 						if not self.regression:
 							guesses = torch.cat((guesses, torch.argmax(guess, dim=1)))
 						else:
 							guesses = torch.cat((guesses, guess))
+						
+						true_labels = torch.cat((true_labels, labels_val))
 
 					guesses = guesses.cpu().detach()
-					
-					if not self.regression:
+					true_labels = true_labels.cpu().detach()
 
-						val_accuracy = accuracy_score(eval_dataloader.dataset["label"], guesses)
-						mcc = matthews_corrcoef(eval_dataloader.dataset["label"], guesses)
+					if not self.regression:
+						val_accuracy = accuracy_score(true_labels, guesses)
+						mcc = matthews_corrcoef(true_labels, guesses)
 						val_loss = val_loss / len(eval_dataloader)
 
-						# scheduler.step(-mcc)
-						if(max_val < mcc):
-							max_val = mcc
+						if(max_val < abs(mcc)):
+							max_val = abs(mcc)
 							checkpoint(self.model, self.savepath)
 						
 						tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f} {color}")
 						# tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, Val accuracy: {val_accuracy:.3f}, Val mcc: {mcc:.3f}, Lr: {scheduler.get_last_lr()} {color}")
 					else:
 						val_loss = val_loss / len(eval_dataloader)
-						spm_corr = spearman_correlation(eval_dataloader.dataset["label"], guesses)
+						spm_corr = spearman_correlation(true_labels, guesses)
+						
 						if(max_val < spm_corr):
 							max_val = spm_corr
 							checkpoint(self.model, self.savepath)
@@ -321,6 +330,7 @@ class BertTrainer:
 
 				# Update learning rate
 				# scheduler.step()
+
 
 				if time.time() - start_time >= log_t_interval:
 					#calculate the metrics
