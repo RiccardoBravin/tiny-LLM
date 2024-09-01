@@ -18,7 +18,8 @@ from lib.Models.final_classifiers import *
 from lib.Models.models import *
 
 
-epochs_training = 20
+epochs_training = 5
+min_iterations = 1000
 finetuning_tests= 5
 
 logs_x_epoch = 5
@@ -28,7 +29,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 dataset_config = DataConfig(
 						dataset_name=None,
-						dict_size=pow(2, 11),
+						dict_size=pow(2, 13),
 						tokenizer_type="wordpiece",
 						batch_size=32,
 						max_len=256,
@@ -37,13 +38,13 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=80,
+					embedding_dimension=128,
 					reduced_embedding_dimension=16,
-					number_of_heads=2,
+					number_of_heads=1,
 					max_length=dataset_config.max_len,
-					forward_expansion=2,
+					forward_expansion=0.7,
 					d_state=None,
-					num_layers=2,
+					num_layers=4,
 					vocab_size=dataset_config.dict_size,
 					learning_rate = 2e-4,
 				)
@@ -55,7 +56,7 @@ model_config = ModelConfig(
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
 # for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
 # for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
-for DATASET_NAME in ["wnli"]: #GLUE
+for DATASET_NAME in ["sst2"]: #GLUE
 
 
 	dataset_config.dataset_name = DATASET_NAME
@@ -100,16 +101,21 @@ for DATASET_NAME in ["wnli"]: #GLUE
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Initializing model{RESET}")
 		
-		model = BERT_original(model_config, dropout=0.1)
-		#model = Nano_Bert_Efficient(model_config, dropout=0.1)
-	
-		model_config.model_name = model.__class__.__name__
+		# model = BERT_original(model_config, dropout=0.1)
+		model = Nano_Bert_Efficient(model_config, dropout=0.1)
+		# model = Embedder_model(model_config, dropout=0.1)
+		# model = Embedder_conv_model(model_config, dropout=0.1)
+		# model = Mamba_model(model_config, dropout=0.1)
 
+		model_config.model_name = model.__class__.__name__		
 
-		checkpoint = f"{model.__class__.__name__}_28"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
+		checkpoint = f"{model.__class__.__name__}_24"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
 		print(f"Loading checkpoint {checkpoint}")
 		resume(model, f"trained_models/checkpoints/{checkpoint}.pth")
 		
+		#Freezing the model
+		for param in model.embedder.parameters(): 
+			param.requires_grad = False
 
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
@@ -125,7 +131,7 @@ for DATASET_NAME in ["wnli"]: #GLUE
 
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Starting training{RESET}")
 		trainer = Trainer(classifier, device, model_config)
-		trainer.train(train_dataloader, validation_dataloader, epochs_training, log_freq=logs_x_epoch, color=FOREGROUND_COLORS["BrightMagenta"])
+		trainer.train(train_dataloader, validation_dataloader, epochs_training, log_freq=logs_x_epoch, color=FOREGROUND_COLORS["BrightMagenta"], min_iter=min_iterations)
 
 
 		########################################################################################

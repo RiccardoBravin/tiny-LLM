@@ -91,13 +91,17 @@ def n_ary_gray_code(n, base = 3):
 
 
 def calculate_metrics(test_dataloader, predicted):
+	labels = []
+	for batch in test_dataloader:
+		labels.extend(batch["label"].tolist())
+
 	try:
-		accuracy = accuracy_score(test_dataloader.dataset["label"], predicted)
-		f1 = f1_score(test_dataloader.dataset["label"], predicted, average='weighted')  
-		precision = precision_score(test_dataloader.dataset["label"], predicted, average='weighted')  
-		recall = recall_score(test_dataloader.dataset["label"], predicted, average='weighted')
-		mcc = matthews_corrcoef(test_dataloader.dataset["label"], predicted)
-		conf_mat = confusion_matrix(test_dataloader.dataset["label"], predicted)
+		accuracy = accuracy_score(labels, predicted)
+		f1 = f1_score(labels, predicted, average='weighted')  
+		precision = precision_score(labels, predicted, average='weighted')  
+		recall = recall_score(labels, predicted, average='weighted')
+		mcc = matthews_corrcoef(labels, predicted)
+		conf_mat = confusion_matrix(labels, predicted)
 	
 		metrics_dict = {
 			"accuracy": accuracy,
@@ -109,7 +113,7 @@ def calculate_metrics(test_dataloader, predicted):
 
 		}
 	except:
-		spe_corr = spearman_correlation(test_dataloader.dataset["label"], torch.tensor(predicted))
+		spe_corr = spearman_correlation(labels, torch.tensor(predicted))
 		metrics_dict = {
 			"spearman_correlation": spe_corr
 		}

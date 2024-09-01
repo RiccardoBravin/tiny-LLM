@@ -23,7 +23,7 @@ TRAINING_CYCLES = 5
 
 dataset_config = DataConfig(
 					dataset_name=None,
-					dict_size=pow(2, 11),
+					dict_size=pow(2, 13),
 					tokenizer_type="wordpiece",
 					batch_size=128,
 					max_len=256,
@@ -37,7 +37,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
 # for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
-for DATASET_NAME in ["wnli"]: #GLUE
+for DATASET_NAME in ["sst2"]: #GLUE
 # for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
 
 	dataset_config.dataset_name = DATASET_NAME
@@ -65,9 +65,9 @@ for DATASET_NAME in ["wnli"]: #GLUE
 	train_dataloader.shuffle = True
 
 	models = [
-		BERT_original,
+		# BERT_original,
 		# Nano_Mlp_structured,
-		# Nano_Bert_Efficient,
+		Nano_Bert_Efficient,
 		# Mamba_model,
 		# Embbert,
 		# Embedder_model,
@@ -75,12 +75,12 @@ for DATASET_NAME in ["wnli"]: #GLUE
 	]
 
 	configs = [
-		ModelConfig( model_name="BERT_original", embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=2, d_state= None,
-		   			forward_expansion=1, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
+		# ModelConfig( model_name="BERT_original", embedding_dimension=80, reduced_embedding_dimension=16, number_of_heads=2, d_state= None,
+		#    			forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		# ModelConfig( model_name="Nano_Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
 		#    			forward_expansion=4, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
-		# ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
-		#    			forward_expansion=0.7, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
+		ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
+		   			forward_expansion=0.7, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		# ModelConfig( model_name="Mamba", embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=None, d_state= 4,
 		#    			forward_expansion=2, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
 		# ModelConfig( model_name="Embbert", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,

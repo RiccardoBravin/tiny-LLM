@@ -25,7 +25,8 @@ class BERT_original(nn.Module):
         encoder_layer = nn.TransformerEncoderLayer(d_model=model_config.embedding_dimension, 
                                                    nhead=model_config.number_of_heads,
                                                    dim_feedforward=model_config.feed_forward_hidden(),
-                                                   batch_first=True) 
+                                                   batch_first=True,
+                                                   dropout=dropout) 
  
         self.bert_layers = torch.nn.TransformerEncoder(encoder_layer, num_layers=model_config.num_layers, enable_nested_tensor=False)
     

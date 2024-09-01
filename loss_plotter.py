@@ -1,25 +1,12 @@
 #File to plot the two losses and the accuracy of the model
-
-#Example of the output of the file to read with data
-# First launch of NanoBERT efficient
-
-# Step 63029/2312633:              MLM Loss: 3.680 CLS Loss: 0.502 CLS Accuracy: 0.723 CLS MCC: 0.450                                                                                     
-# Step 63252/2312633:              MLM Loss: 3.685 CLS Loss: 0.550 CLS Accuracy: 0.759 CLS MCC: 0.533                                                                                     
-# Step 63473/2312633:              MLM Loss: 3.713 CLS Loss: 0.597 CLS Accuracy: 0.728 CLS MCC: 0.467                                                                                     
-# Step 63695/2312633:              MLM Loss: 4.363 CLS Loss: 0.564 CLS Accuracy: 0.707 CLS MCC: 0.419                                                                                     
-# Step 63917/2312633:              MLM Loss: 3.968 CLS Loss: 0.682 CLS Accuracy: 0.692 CLS MCC: 0.395                                                                                     
-# Step 64138/2312633:              MLM Loss: 3.320 CLS Loss: 0.654 CLS Accuracy: 0.653 CLS MCC: 0.336                                                                                     
-# Step 64360/2312633:              MLM Loss: 4.063 CLS Loss: 0.514 CLS Accuracy: 0.673 CLS MCC: 0.388                                                                                     
-# Step 64582/2312633:              MLM Loss: 3.051 CLS Loss: 0.509 CLS Accuracy: 0.686 CLS MCC: 0.405                                                                                     
-# Step 64803/2312633:              MLM Loss: 3.187 CLS Loss: 0.644 CLS Accuracy: 0.649 CLS MCC: 0.325                                                                                     
- 
+                                                                                 
 
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
 #Read the file
-FILE_NAME = "trained_models/logs/log_nanobert.txt"
+FILE_NAME = "trained_models/logs/Nano_Bert_Efficient_train_log.txt"
 with open(FILE_NAME, 'r') as f:
     lines = f.readlines()
 
@@ -68,7 +55,8 @@ ax[2].set_xlabel('Step')
 ax[2].set_ylabel('Accuracy')
 ax[2].legend()
 
-
+#make title the name of the file after last '/' and before '_train_log.txt'
+plt.suptitle(FILE_NAME.split('/')[-1].split('_train_log.txt')[0])
 
 fig.tight_layout()
 plt.show()

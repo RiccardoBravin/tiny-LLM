@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from torch.optim import lr_scheduler, AdamW, Adam, SGD, RMSprop, Adagrad
 from torch.cuda.amp import GradScaler, autocast
 
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, matthews_corrcoef, confusion_matrix
+from sklearn.metrics import accuracy_score, matthews_corrcoef, classification_report, top_k_accuracy_score
 
 from lib.configs import ModelConfig, DataConfig
 from lib.utils import checkpoint, resume, spearman_correlation
@@ -61,8 +61,23 @@ def mask_tokens(tokens, special_tokens_mask, dataset_config:DataConfig):
 class Trainer:
 	def __init__(self, model:nn.Module, device, model_config:ModelConfig):
 		self.model = model
-		#self.optimizer = AdamW(lr=model_config.learning_rate, params=self.model.parameters())
-		self.optimizer = RMSprop(lr=model_config.learning_rate, params=self.model.parameters())
+
+		decay_params = []
+		no_decay_params = []
+
+		for name, param in model.named_parameters():
+			if "bias" in name or "norm" in name:
+				no_decay_params.append(param)
+			else:
+				decay_params.append(param)
+
+		param_groups = [
+ 		   	{'params': decay_params, 'weight_decay': 1e-2},
+    		{'params': no_decay_params, 'weight_decay': 0.0}
+]
+		# self.optimizer = AdamW(params=self.model.parameters(), lr=model_config.learning_rate)
+		self.optimizer = AdamW(params=param_groups, lr=model_config.learning_rate)
+
 		self.device = device
 
 		self.model_config = model_config
@@ -71,7 +86,7 @@ class Trainer:
 		self.regression = None
 
 
-	def train(self, train_dataloader, eval_dataloader, num_epochs, log_freq: int, color = FOREGROUND_COLORS['Green']):
+	def train(self, train_dataloader, eval_dataloader, num_epochs, log_freq: int, color = FOREGROUND_COLORS['Green'], min_iter = 0):
 
 		log_step = len(train_dataloader) // log_freq
 
@@ -101,9 +116,11 @@ class Trainer:
 
 		max_val = -1
 
-
-		for epoch in range(num_epochs):
-
+		epoch = 0
+		while epoch < num_epochs or epoch*len(train_dataloader) < min_iter:
+			
+			avg_train_acc = 0
+		
 			tqdm_train_loader = tqdm(train_dataloader, desc=f"Epoch {epoch+1}/{num_epochs}", leave=True)
 			for step_num, batch_data in enumerate(tqdm_train_loader):
 
@@ -119,8 +136,10 @@ class Trainer:
 
 				if step_num == 0:
 					train_loss = batch_loss.item()
+					avg_train_acc = torch.mean((torch.argmax(y, dim=1) == labels).float()).item() / len(train_dataloader)
 				else:
 					train_loss = 0.9 * train_loss + 0.1 * batch_loss.item()
+					avg_train_acc += torch.mean((torch.argmax(y, dim=1) == labels).float()).item() / len(train_dataloader)
 
 				tqdm_train_loader.set_postfix(loss = "{:.4f}".format(train_loss))
 
@@ -144,7 +163,7 @@ class Trainer:
 				#print the accuracy on the training set
 				# acc = accuracy_score(labels.cpu().detach(), torch.argmax(y, dim=1).cpu().detach())
 				# tqdm.write(f"Step {step_num+1}/{len(train_dataloader)}:\t\t Loss: {batch_loss:.3f} Accuracy: {acc:.3f}")
-
+				
 				if step_num % log_step == (log_step - 1):
 					self.model.eval()
 
@@ -196,7 +215,11 @@ class Trainer:
 						tqdm.write(f"{RESET}Val loss: {val_loss:.3f} Spearman correlation {spm_corr:.3f} {color}")
 						
 					self.model.train()
+
+			tqdm.write(f"Epoch {epoch+1}/{num_epochs}:\t\t Average training accuracy: {avg_train_acc:.3f}")
+			epoch += 1
 		resume(self.model, self.savepath)
+
 
 	def evaluate(self, test_dataloader):
 
@@ -347,6 +370,7 @@ class BertTrainer:
 						min_loss = batch_loss.item()
 						#save with model name and ckpt counter
 						checkpoint(self.model.model, f"trained_models/checkpoints/{self.model_config.model_name}_{ckpt_counter}.pth")
+						tqdm.write(f"Checkpoint saved at {ckpt_counter}")
 						ckpt_counter += 1
 					
 					# Reset the start time
@@ -394,3 +418,63 @@ class BertTrainer:
 				# 	#tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, mlm loss: {mlm_avg_loss:.3f}, mlm accuracy: {mlm_accuracy:.3f}, cls loss: {cls_avg_loss:.3f}, cls accuracy: {cls_accuracy:.3f}, Lr: {scheduler.get_last_lr()} {color}")
 				# 	tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, mlm loss: {mlm_avg_loss:.3f}, mlm accuracy: {mlm_accuracy:.3f}, cls loss: {cls_avg_loss:.3f}, cls accuracy: {cls_accuracy:.3f}{color}")
 				# 	self.model.train()
+
+	def evaluate(self, test_dataloader, color = FOREGROUND_COLORS['White']):
+		print(f"{color}")
+
+		self.model.eval()
+
+		train_loss = 0.0
+		cls_acc = 0.5
+		cls_mcc = 0.0
+		mlm_topk_acc = 0.0
+
+		tqdm_train_loader = tqdm(test_dataloader, leave=True)
+		
+		for step_num, batch_data in enumerate(tqdm_train_loader):
+
+			
+			# "tokens", "attention_mask", "type_ids", "special_tokens_mask", "label"
+			tokens = batch_data["tokens"].to(self.device)
+			masks  = batch_data["attention_mask"].to(self.device)
+			special_tokens_mask = batch_data["special_tokens_mask"].to(self.device)
+			nsp_label = batch_data["label"].to(self.device)
+
+			masked_tokens, masks_mask = mask_tokens(tokens, special_tokens_mask, self.dataset_config)
+
+			with torch.no_grad():
+				#Model outputs (batch_size, seq_len, dict_size) and (batch_size, seq_len, 2)
+				logits, label_guess = self.model(masked_tokens, masks)
+
+				tokens[~masks_mask] = 0
+
+				lm_loss = self.mlm_criterion(logits.transpose(1,2), tokens)
+				cls_loss = self.nsp_criterion(label_guess.squeeze(-1), nsp_label)
+
+				batch_loss = lm_loss + cls_loss
+
+			tokens = tokens[masks_mask]
+			logits = logits[masks_mask]
+
+
+			if step_num == 0:
+				train_loss = batch_loss.item()/len(test_dataloader)
+				cls_acc = torch.mean((torch.argmax(label_guess, dim=1) == nsp_label).float()).item()/len(test_dataloader)
+				cls_mcc = matthews_corrcoef(nsp_label.cpu().detach(), torch.argmax(label_guess, dim=1).cpu().detach())/len(test_dataloader)
+				
+				mlm_topk_acc = top_k_accuracy_score(tokens.cpu().detach(), logits.cpu().detach(), k=5, labels=range(self.dataset_config.dict_size))/len(test_dataloader)
+
+			else:
+				train_loss += batch_loss.item()/len(test_dataloader)
+				cls_acc += torch.mean((torch.argmax(label_guess, dim=1) == nsp_label).float()).item()/len(test_dataloader)
+				cls_mcc += matthews_corrcoef(nsp_label.cpu().detach(), torch.argmax(label_guess, dim=1).cpu().detach())/len(test_dataloader)
+
+				mlm_topk_acc += top_k_accuracy_score(tokens.cpu().detach(), logits.cpu().detach(), k=5, labels=range(self.dataset_config.dict_size))/len(test_dataloader)				
+
+			tqdm_train_loader.set_postfix(loss = "{:.4f}".format(batch_loss.item()))
+
+			
+		
+		print(f"Test loss: {train_loss:.3f}, CLS Accuracy: {cls_acc:.3f}, CLS MCC: {cls_mcc:.3f}, MLM Top-5 Accuracy: {mlm_topk_acc:.3f}")
+			
+			

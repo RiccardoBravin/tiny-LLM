@@ -8,7 +8,7 @@ import os, random
 from lib.configs import DataConfig
 
 #selects and loads the dataset based on the name. Outputs the train and test datasets with "text" and "label" columns
-def dataset_selector(name:str):
+def dataset_selector(name:str, reduced:bool=False):
 	#"imdb", "sst2", "news","bull", "limit", "dbpedia", "nli", "nlu" "snips"
 	if name == "imdb": #https://huggingface.co/datasets/stanfordnlp/imdb
 		dataset = load_dataset("stanfordnlp/imdb", cache_dir="./datasets")
@@ -285,8 +285,10 @@ def dataset_selector(name:str):
 
 	elif name == "bookcorpus":
 		dataset = load_dataset("bookcorpus/bookcorpus", cache_dir="./datasets", trust_remote_code=True)
-
-		train_data = dataset['train']#.select(range(100000))
+		if reduced:
+			train_data = dataset['train'].select(range(len(dataset['train'])-10000, len(dataset['train'])))
+		else:
+			train_data = dataset['train']#.select(range(100000))
 		test_data = None
 
 	else:
