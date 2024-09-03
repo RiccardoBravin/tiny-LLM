@@ -70,7 +70,8 @@ class EfficientAttention(torch.nn.Module):
         scores = scores.masked_fill(mask == 0, float("-inf")) 
         
         # softmax to put attention weight for all non-pad tokens
-        weights = nn.functional.softmax(scores, dim=-1)           
+        weights = nn.functional.softmax(scores, dim=-1)    
+        weights = weights.masked_fill(weights.isnan(), 0)              
         weights = self.dropout(weights)
         
         # (batch_size, max_len, max_len) matmul (batch_size, d_model, max_len) --> (batch_size, d_model, max_len)
@@ -123,7 +124,8 @@ class EfficientMultiheadAttention(torch.nn.Module):
         # (batch_size, h, max_len, d_k) matmul (batch_size, h, d_k, max_len) --> (batch_size, h, max_len, max_len)
         scores = torch.matmul(query, key.permute(0, 1, 3, 2)) / math.sqrt(query.size(-1))
 
-        mask = mask.expand_as(scores)# (batch_size, max_len, max_len)
+        # (batch_size, max_len, max_len) --> (batch_size, h, max_len, max_len)
+        mask = mask.unsqueeze(1).repeat(1, self.heads, 1, 1)
 
         # fill 0 mask with super small number so it wont affect the softmax weight
         scores = scores.masked_fill(mask == 0, float("-inf")) # (batch_size, h, max_len, max_len)
@@ -131,7 +133,8 @@ class EfficientMultiheadAttention(torch.nn.Module):
         # (batch_size, h, max_len, max_len)
         # softmax to put attention weight for all non-pad tokens
         # max_len X max_len matrix of attention
-        weights = nn.functional.softmax(scores, dim=-1)           
+        weights = nn.functional.softmax(scores, dim=-1)    
+        weights = weights.masked_fill(weights.isnan(), 0)    
         weights = self.dropout(weights)
 
         # (batch_size, h, max_len, max_len) matmul (batch_size, h, max_len, d_k) --> (batch_size, h, max_len, d_k)
@@ -293,7 +296,8 @@ class EmbBertAttention(nn.Module):
         scores = scores.masked_fill(mask == 0, float("-inf")) 
         
         # softmax to put attention weight for all non-pad tokens
-        weights = nn.functional.softmax(scores, dim=-1)       
+        weights = nn.functional.softmax(scores, dim=-1)    
+        weights = weights.masked_fill(weights.isnan(), 0)       
         weights = self.dropout(weights)
         
         # (batch_size, max_len, max_len) matmul (batch_size, d_model, max_len) --> (batch_size, d_model, max_len)

@@ -55,7 +55,7 @@ model_config = ModelConfig(
 
 #load the dataset for pretraining
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Importing pretraining dataset (Book Corpus){RESET}")
-pretraining_dataset, _ = dataset_selector(pretr_dataset_config.dataset_name)
+pretraining_dataset, _ = dataset_selector(pretr_dataset_config.dataset_name, reduced=False)
 print(f"{FOREGROUND_COLORS["BrightCyan"]}Dataset contains {len(pretraining_dataset)} training samples to be combined in pairs{RESET}")
 
 
@@ -80,6 +80,9 @@ print(f"\n\n{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}-------------
 
 # model = BERT_original(model_config, dropout=0)
 model = Nano_Bert_Efficient(model_config, dropout=0)
+# model =  Mamba_model(model_config, dropout=0)
+# model = EmbBERT(model_config, dropout=0)
+
 model_config.model_name = model.__class__.__name__
 
 # cls = Classifier_BERT_pretraining(model, model_config.embedding_dimension, pretr_dataset_config.dict_size, pretr_dataset_config.n_labels())

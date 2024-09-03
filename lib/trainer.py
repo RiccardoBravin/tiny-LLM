@@ -65,18 +65,19 @@ class Trainer:
 		decay_params = []
 		no_decay_params = []
 
-		for name, param in model.named_parameters():
-			if "bias" in name or "norm" in name:
-				no_decay_params.append(param)
-			else:
-				decay_params.append(param)
+		# for name, param in model.named_parameters():
+		# 	if "bias" in name or "norm" in name or "embedder" in name:
+		# 		no_decay_params.append(param)
+		# 	else:
+		# 		decay_params.append(param)
 
-		param_groups = [
- 		   	{'params': decay_params, 'weight_decay': 1e-2},
-    		{'params': no_decay_params, 'weight_decay': 0.0}
-]
-		# self.optimizer = AdamW(params=self.model.parameters(), lr=model_config.learning_rate)
-		self.optimizer = AdamW(params=param_groups, lr=model_config.learning_rate)
+		# param_groups = [
+ 		#    	{'params': decay_params, 'weight_decay': 10e-2},
+    	# 	{'params': no_decay_params, 'weight_decay': 0.0}
+		# ]
+
+		self.optimizer = AdamW(params=self.model.parameters(), lr=model_config.learning_rate, weight_decay=0.05)
+		# self.optimizer = AdamW(params=param_groups, lr=model_config.learning_rate)
 
 		self.device = device
 

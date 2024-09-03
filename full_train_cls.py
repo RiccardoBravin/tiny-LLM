@@ -18,6 +18,7 @@ from lib.trainer import Trainer
 
 ########################################################################################
 EPOCHS = 20
+MIN_ITERATIONS = 0#1000
 TRAINING_CYCLES = 5
 
 
@@ -65,13 +66,15 @@ for DATASET_NAME in ["sst2"]: #GLUE
 	train_dataloader.shuffle = True
 
 	models = [
-		# BERT_original,
+		BERT_original,
 		# Nano_Mlp_structured,
-		Nano_Bert_Efficient,
+		# Nano_Bert_Efficient,
 		# Mamba_model,
 		# Embbert,
 		# Embedder_model,
 		# Embedder_conv_model,
+		Nano_Bert_Efficient_mh
+		# Nano_Bert_Efficient_mh_augm
 	]
 
 	configs = [
@@ -79,8 +82,8 @@ for DATASET_NAME in ["sst2"]: #GLUE
 		#    			forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		# ModelConfig( model_name="Nano_Mlp_structured", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
 		#    			forward_expansion=4, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
-		ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
-		   			forward_expansion=0.7, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
+		# ModelConfig( model_name="Nano_Bert_Efficient", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
+		#    			forward_expansion=0.7, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		# ModelConfig( model_name="Mamba", embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=None, d_state= 4,
 		#    			forward_expansion=2, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
 		# ModelConfig( model_name="Embbert", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, d_state= None,
@@ -89,6 +92,8 @@ for DATASET_NAME in ["sst2"]: #GLUE
 		# 			forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
 		# ModelConfig( model_name="Embedder_+_conv", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, d_state= None,
 		# 	 		forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
+		ModelConfig( model_name="Nano_Bert_Efficient_mh", embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=3, d_state= None,
+			  		forward_expansion=0.5, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),	
 	]
 
 	for config in configs:
@@ -123,7 +128,7 @@ for DATASET_NAME in ["sst2"]: #GLUE
 			########################################################################################
 			print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Training{RESET}")
 			trainer = Trainer(cls, device, config)
-			trainer.train(train_dataloader, validation_dataloader, EPOCHS, 3)
+			trainer.train(train_dataloader, validation_dataloader, EPOCHS, 3, min_iter=MIN_ITERATIONS)
 
 			########################################################################################
 			print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Evaluation{RESET}")

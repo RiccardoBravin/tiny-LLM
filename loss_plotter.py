@@ -6,7 +6,7 @@ import numpy as np
 import torch
 
 #Read the file
-FILE_NAME = "trained_models/logs/Nano_Bert_Efficient_train_log.txt"
+FILE_NAME = "trained_models/logs/Nano_Bert_Efficient_mh_train_log.txt"
 with open(FILE_NAME, 'r') as f:
     lines = f.readlines()
 

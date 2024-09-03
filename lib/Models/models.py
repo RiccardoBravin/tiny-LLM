@@ -114,10 +114,9 @@ class Bert_efficient(nn.Module):
         return x
     
     
-
 class Nano_Bert_Efficient(nn.Module):
     """
-    BERT model with NanoBERT embedder
+    BERT model with NanoBERT embedder and efficient attention
     """
 
     def __init__(self, model_config: ModelConfig, dropout=0.1):
@@ -147,8 +146,47 @@ class Nano_Bert_Efficient(nn.Module):
 
         # attention masking for padded token
         # (batch_size, seq_len, seq_len)
-        mask = mask.unsqueeze(1).repeat(1, x.shape[1], 1)
+        mask = modules.make_score_mask(mask)
+        
+        # running over multiple transformer blocks
+        for encoder in self.encoder_blocks:
+            x = encoder.forward(x, mask)
+        return x
 
+class Nano_Bert_Efficient_mh(nn.Module):
+    """
+    BERT model with NanoBERT embedder and efficient multihead attention 
+    """
+    
+    def __init__(self, model_config: ModelConfig, dropout=0.1):
+        """
+        Embedder and multilayer model using the BERT_block
+        """
+
+        super().__init__()
+        self.d_model = model_config.embedding_dimension
+
+        # embedding for BERT, sum of positional, segment, token embeddings
+        self.embedder = embedders.Nano_embedder(model_config)
+
+        # multi-layers transformer blocks, deep network
+        self.encoder_blocks = torch.nn.ModuleList(
+            [structures.EncoderLayer(
+                            blocks.EfficientMultiheadAttention(model_config.number_of_heads, model_config.embedding_dimension, dropout), 
+                            model_config.embedding_dimension, 
+                            model_config.forward_expansion, 
+                            dropout) 
+                                    for _ in range(model_config.num_layers)])
+
+    def forward(self, x, mask):
+        
+        # embedding the indexed sequence to sequence of vectors
+        x = self.embedder(x)
+
+        # attention masking for padded token
+        # (batch_size, seq_len, seq_len)
+        mask = modules.make_score_mask(mask)
+        
         # running over multiple transformer blocks
         for encoder in self.encoder_blocks:
             x = encoder.forward(x, mask)
@@ -315,4 +353,44 @@ class Embbert(nn.Module):
         # running over multiple transformer blocks
         for layer in self.embbert_layers:
             x = layer.forward(x, mask)
+        return x
+    
+
+class Nano_Bert_Efficient_mh_augm(nn.Module):
+    """
+    BERT model with NanoBERT embedder and efficient multihead attention 
+    """
+    
+    def __init__(self, model_config: ModelConfig, dropout=0.1):
+        """
+        Embedder and multilayer model using the BERT_block
+        """
+
+        super().__init__()
+        self.d_model = model_config.embedding_dimension
+
+        # embedding for BERT, sum of positional, segment, token embeddings
+        self.embedder = embedders.Nano_embedder_augmentation(model_config)
+
+        # multi-layers transformer blocks, deep network
+        self.encoder_blocks = torch.nn.ModuleList(
+            [structures.EncoderLayer(
+                            blocks.EfficientMultiheadAttention(model_config.number_of_heads, model_config.embedding_dimension, dropout), 
+                            model_config.embedding_dimension, 
+                            model_config.forward_expansion, 
+                            dropout) 
+                                    for _ in range(model_config.num_layers)])
+
+    def forward(self, x, mask):
+        
+        # embedding the indexed sequence to sequence of vectors
+        x = self.embedder(x)
+
+        # attention masking for padded token
+        # (batch_size, seq_len, seq_len)
+        mask = modules.make_score_mask(mask)
+        
+        # running over multiple transformer blocks
+        for encoder in self.encoder_blocks:
+            x = encoder.forward(x, mask)
         return x

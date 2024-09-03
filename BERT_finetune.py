@@ -64,7 +64,8 @@ for DATASET_NAME in ["sst2"]: #GLUE
 	print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Loading dataset {DATASET_NAME} {RESET}")
 
 	print(f"{FOREGROUND_COLORS["BrightCyan"]}", end="")
-	train_dataset, test_dataset = dataset_selector(dataset_config.dataset_name)
+	train_dataset, test_dataset = dataset_selector(dataset_config.dataset_name, reduced=False)
+	
 	if DATASET_NAME != "stsb":
 		dataset_config.labels = train_dataset.unique("label")
 	else:
