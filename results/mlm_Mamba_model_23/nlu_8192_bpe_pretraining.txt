@@ -1,0 +1,160 @@
+ModelConfig(model_name='Mamba_model', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  2.8892
+Accuracy: 0.048
+F1: 0.004
+Precision: 0.002
+Recall: 0.048
+MCC: 0.000
+Confusion matrix:
+ [[  0   0   0   0   0   0   0   0   0   0  59   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0  41   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0 160   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0 286   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0 236   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0 591   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0  78   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0  48   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0  91   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0  59   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0 124   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0 244   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0  76   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0  65   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0  45   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0 164   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0 106   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0   0  99   0   0   0   0   0   0   0]]
+('Model params: 202.818K', 'Model buffers: 0.000K', 'Model size: 0.774MB')
+
+*******************************************
+
+ModelConfig(model_name='Mamba_model', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  2.8967
+Accuracy: 0.023
+F1: 0.001
+Precision: 0.001
+Recall: 0.023
+MCC: 0.000
+Confusion matrix:
+ [[  0   0   0   0   0   0   0   0   0  59   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0  41   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0 160   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0 286   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0 236   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0 591   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0  78   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0  48   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0  91   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0  59   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0 124   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0 244   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0  76   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0  65   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0  45   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0 164   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0 106   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0   0   0   0  99   0   0   0   0   0   0   0   0]]
+('Model params: 202.818K', 'Model buffers: 0.000K', 'Model size: 0.774MB')
+
+*******************************************
+
+ModelConfig(model_name='Mamba_model', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  2.8915
+Accuracy: 0.030
+F1: 0.002
+Precision: 0.001
+Recall: 0.030
+MCC: 0.000
+Confusion matrix:
+ [[  0   0   0   0   0   0  59   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0  41   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0 160   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0 286   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0 236   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0 591   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0  78   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0  48   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0  91   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0  59   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0 124   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0 244   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0  76   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0  65   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0  45   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0 164   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0 106   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0   0  99   0   0   0   0   0   0   0   0   0   0   0]]
+('Model params: 202.818K', 'Model buffers: 0.000K', 'Model size: 0.774MB')
+
+*******************************************
+
+ModelConfig(model_name='Mamba_model', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  2.8930
+Accuracy: 0.016
+F1: 0.001
+Precision: 0.000
+Recall: 0.016
+MCC: 0.000
+Confusion matrix:
+ [[  0  59   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0  41   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0 160   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0 286   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0 236   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0 591   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0  78   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0  48   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0  91   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0  59   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0 124   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0 244   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0  76   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0  65   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0  45   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0 164   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0 106   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0  99   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0]]
+('Model params: 202.818K', 'Model buffers: 0.000K', 'Model size: 0.774MB')
+
+*******************************************
+
+ModelConfig(model_name='Mamba_model', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  2.8924
+Accuracy: 0.230
+F1: 0.086
+Precision: 0.053
+Recall: 0.230
+MCC: 0.000
+Confusion matrix:
+ [[  0   0   0   0   0  59   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0  41   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0 160   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0 286   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0 236   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0 591   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0  78   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0  48   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0  91   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0  59   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0 124   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0 244   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0  76   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0  65   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0  45   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0 164   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0 106   0   0   0   0   0   0   0   0   0   0   0   0]
+ [  0   0   0   0   0  99   0   0   0   0   0   0   0   0   0   0   0   0]]
+('Model params: 202.818K', 'Model buffers: 0.000K', 'Model size: 0.774MB')
+
+*******************************************
+

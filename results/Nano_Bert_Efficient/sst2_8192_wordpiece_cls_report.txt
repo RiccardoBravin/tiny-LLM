@@ -1,57 +1,70 @@
 Model config for current run:
-ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.7, num_layers=4, vocab_size=8192, learning_rate=0.001, pretraining_lr=None)
-EPOCHS: 30
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.7, d_state=None, num_layers=4, vocab_size=8192, learning_rate=0.001)
+EPOCHS: 20
 
 *******************************************
 
-average eval loss:  0.9683
+average eval loss:  0.6353
+Accuracy: 0.804
+F1: 0.804
+Precision: 0.805
+Recall: 0.804
+MCC: 0.609
+Confusion matrix:
+ [[355  73]
+ [ 98 346]]
+('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
+
+*******************************************
+
+average eval loss:  0.8954
+Accuracy: 0.781
+F1: 0.781
+Precision: 0.781
+Recall: 0.781
+MCC: 0.562
+Confusion matrix:
+ [[333  95]
+ [ 96 348]]
+('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
+
+*******************************************
+
+average eval loss:  0.8716
+Accuracy: 0.780
+F1: 0.780
+Precision: 0.780
+Recall: 0.780
+MCC: 0.560
+Confusion matrix:
+ [[322 106]
+ [ 86 358]]
+('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
+
+*******************************************
+
+average eval loss:  0.8057
 Accuracy: 0.775
 F1: 0.775
-Precision: 0.776
+Precision: 0.775
 Recall: 0.775
 MCC: 0.551
 Confusion matrix:
- [[337  91]
- [105 339]]
+ [[334  94]
+ [102 342]]
 ('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
 
 *******************************************
 
-average eval loss:  0.7680
-Accuracy: 0.803
-F1: 0.802
-Precision: 0.808
-Recall: 0.803
-MCC: 0.611
+average eval loss:  0.7337
+Accuracy: 0.794
+F1: 0.794
+Precision: 0.794
+Recall: 0.794
+MCC: 0.587
 Confusion matrix:
- [[368  60]
- [112 332]]
-('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
-
-*******************************************
-
-average eval loss:  1.0366
-Accuracy: 0.753
-F1: 0.753
-Precision: 0.754
-Recall: 0.753
-MCC: 0.507
-Confusion matrix:
- [[307 121]
- [ 94 350]]
-('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
-
-*******************************************
-
-average eval loss:  0.9029
-Accuracy: 0.780
-F1: 0.779
-Precision: 0.787
-Recall: 0.780
-MCC: 0.567
-Confusion matrix:
- [[364  64]
- [128 316]]
+ [[338  90]
+ [ 90 354]]
 ('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
 
 *******************************************

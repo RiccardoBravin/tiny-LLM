@@ -113,7 +113,7 @@ def calculate_metrics(test_dataloader, predicted):
 
 		}
 	except:
-		spe_corr = spearman_correlation(labels, torch.tensor(predicted))
+		spe_corr = spearman_correlation(torch.tensor(labels), torch.tensor(predicted))
 		metrics_dict = {
 			"spearman_correlation": spe_corr
 		}

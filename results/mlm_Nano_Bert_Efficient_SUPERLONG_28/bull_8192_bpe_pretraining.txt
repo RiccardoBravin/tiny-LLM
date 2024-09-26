@@ -1,0 +1,100 @@
+ModelConfig(model_name='Nano_Bert_Efficient_SUPERLONG', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.3748
+Accuracy: 0.845
+F1: 0.840
+Precision: 0.856
+Recall: 0.845
+MCC: 0.819
+Confusion matrix:
+ [[691   1  49   0   5  49]
+ [  3 778   7   2   4  18]
+ [ 66   2 685   0   1  44]
+ [  6   0   1 778   1   9]
+ [ 13   0   3   0 771   3]
+ [374  27  40   6   4 329]]
+('Model params: 389.318K', 'Model buffers: 0.000K', 'Model size: 1.485MB')
+
+*******************************************
+
+ModelConfig(model_name='Nano_Bert_Efficient_SUPERLONG', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.3672
+Accuracy: 0.849
+F1: 0.844
+Precision: 0.862
+Recall: 0.849
+MCC: 0.825
+Confusion matrix:
+ [[708   3  28   3   3  50]
+ [  2 787   8   2   1  12]
+ [ 79   3 667   0   1  48]
+ [  6   0   0 781   0   8]
+ [ 11   1   0   1 775   2]
+ [367  33  39   5   2 334]]
+('Model params: 389.318K', 'Model buffers: 0.000K', 'Model size: 1.485MB')
+
+*******************************************
+
+ModelConfig(model_name='Nano_Bert_Efficient_SUPERLONG', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.3670
+Accuracy: 0.850
+F1: 0.847
+Precision: 0.858
+Recall: 0.850
+MCC: 0.823
+Confusion matrix:
+ [[670   1  43   0   3  78]
+ [  4 790   2   1   1  14]
+ [ 59   3 679   1   1  55]
+ [  5   0   1 780   0   9]
+ [ 18   1   0   1 768   2]
+ [340  32  35   6   0 367]]
+('Model params: 389.318K', 'Model buffers: 0.000K', 'Model size: 1.485MB')
+
+*******************************************
+
+ModelConfig(model_name='Nano_Bert_Efficient_SUPERLONG', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.3711
+Accuracy: 0.851
+F1: 0.847
+Precision: 0.863
+Recall: 0.851
+MCC: 0.826
+Confusion matrix:
+ [[700   2  30   2   4  57]
+ [  6 787   2   1   2  14]
+ [ 75   4 662   0   1  56]
+ [  6   0   1 784   0   4]
+ [ 11   1   0   1 773   4]
+ [362  33  26   5   2 352]]
+('Model params: 389.318K', 'Model buffers: 0.000K', 'Model size: 1.485MB')
+
+*******************************************
+
+ModelConfig(model_name='Nano_Bert_Efficient_SUPERLONG', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.3771
+Accuracy: 0.846
+F1: 0.841
+Precision: 0.856
+Recall: 0.846
+MCC: 0.820
+Confusion matrix:
+ [[700   2  32   1   5  55]
+ [  2 791   1   1   5  12]
+ [ 66   4 667   0   4  57]
+ [  6   0   1 778   0  10]
+ [ 15   1   1   0 771   2]
+ [375  33  36   6   2 328]]
+('Model params: 389.318K', 'Model buffers: 0.000K', 'Model size: 1.485MB')
+
+*******************************************
+

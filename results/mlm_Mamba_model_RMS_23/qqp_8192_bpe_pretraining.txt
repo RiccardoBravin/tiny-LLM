@@ -1,0 +1,80 @@
+ModelConfig(model_name='Mamba_model_RMS', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.4668
+Accuracy: 0.795
+F1: 0.795
+Precision: 0.796
+Recall: 0.795
+MCC: 0.562
+Confusion matrix:
+ [[21136  4409]
+ [ 3893 10992]]
+('Model params: 202.034K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+ModelConfig(model_name='Mamba_model_RMS', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.4521
+Accuracy: 0.797
+F1: 0.798
+Precision: 0.800
+Recall: 0.797
+MCC: 0.569
+Confusion matrix:
+ [[20940  4605]
+ [ 3621 11264]]
+('Model params: 202.034K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+ModelConfig(model_name='Mamba_model_RMS', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.4738
+Accuracy: 0.787
+F1: 0.788
+Precision: 0.790
+Recall: 0.787
+MCC: 0.548
+Confusion matrix:
+ [[20821  4724]
+ [ 3896 10989]]
+('Model params: 202.034K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+ModelConfig(model_name='Mamba_model_RMS', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.4520
+Accuracy: 0.790
+F1: 0.793
+Precision: 0.799
+Recall: 0.790
+MCC: 0.565
+Confusion matrix:
+ [[20320  5225]
+ [ 3248 11637]]
+('Model params: 202.034K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+
+ModelConfig(model_name='Mamba_model_RMS', embedding_dimension=48, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=4, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.4522
+Accuracy: 0.790
+F1: 0.793
+Precision: 0.803
+Recall: 0.790
+MCC: 0.571
+Confusion matrix:
+ [[19958  5587]
+ [ 2895 11990]]
+('Model params: 202.034K', 'Model buffers: 0.000K', 'Model size: 0.771MB')
+
+*******************************************
+

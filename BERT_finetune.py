@@ -18,8 +18,8 @@ from lib.Models.final_classifiers import *
 from lib.Models.models import *
 
 
-epochs_training = 5
-min_iterations = 1000
+epochs_training = 10
+min_iterations = 10000
 finetuning_tests= 5
 
 logs_x_epoch = 5
@@ -29,8 +29,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 dataset_config = DataConfig(
 						dataset_name=None,
-						dict_size=pow(2, 13),
-						tokenizer_type="wordpiece",
+						dict_size=pow(2, 11),
+						tokenizer_type="bpe",
 						batch_size=32,
 						max_len=256,
 						labels=[0,1]
@@ -38,17 +38,19 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=128,
+					embedding_dimension=48,
 					reduced_embedding_dimension=16,
-					number_of_heads=1,
+					number_of_heads=None,
 					max_length=dataset_config.max_len,
-					forward_expansion=0.7,
-					d_state=None,
+					forward_expansion=2,
+					d_state=4,
 					num_layers=4,
 					vocab_size=dataset_config.dict_size,
-					learning_rate = 2e-4,
+					learning_rate = 2e-5,
 				)
 
+
+#exploring transformers as compact... suggests 2x10-5 di lr per 10 epochs
 
 ########################################################################################
 
@@ -74,24 +76,14 @@ for DATASET_NAME in ["sst2"]: #GLUE
 	print(f"Dataset labels: {dataset_config.labels}")
 
 	#tokenizer = make_tokenizer(dataset_config, train_dataset)
-	tokenizer = load_tokenizer(dataset_config, f"wordpiece_bookcorpus_{dataset_config.dict_size}") 
+	tokenizer = load_tokenizer(dataset_config, f"{dataset_config.tokenizer_type}_bookcorpus_{dataset_config.dict_size}") 
 
 	validation_dataset = train_dataset.train_test_split(test_size=0.1)
 	train_dataset, validation_dataset = validation_dataset["train"], validation_dataset["test"]
 
-
 	train_dataloader = encode_dataset(tokenizer, train_dataset, dataset_config.max_len, dataset_config.batch_size, shuffle=True)
 	validation_dataloader = encode_dataset(tokenizer, validation_dataset, dataset_config.max_len, dataset_config.batch_size, shuffle=False)
 	test_dataloader = encode_dataset(tokenizer, test_dataset, dataset_config.max_len, dataset_config.batch_size, shuffle=False)
-
-	# for batch in train_dataloader:
-	# 	x = batch["tokens"]
-	# 	l = batch["label"]
-	# 	for t, lab in zip(x, l):
-	# 		print(t)
-	# 		print(tokenizer.decode(t.tolist()))
-	# 		print(lab)
-	# 	break
 
 	train_n = 0
 	while train_n < finetuning_tests:
@@ -103,26 +95,44 @@ for DATASET_NAME in ["sst2"]: #GLUE
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightGreen"]}Initializing model{RESET}")
 		
 		# model = BERT_original(model_config, dropout=0.1)
-		model = Nano_Bert_Efficient(model_config, dropout=0.1)
+		# model = Nano_Bert_Efficient(model_config, dropout=0.1)
+		# model = Nano_Bert_Efficient_mh(model_config, dropout=0.1)
 		# model = Embedder_model(model_config, dropout=0.1)
 		# model = Embedder_conv_model(model_config, dropout=0.1)
+		model = Mamba_model(model_config, dropout=0.1)
+		# model = Nano_Bert_Efficient_mh(model_config, dropout=0.1)
 		# model = Mamba_model(model_config, dropout=0.1)
 
-		model_config.model_name = model.__class__.__name__		
+		model_config.model_name = model.__class__.__name__	
 
-		checkpoint = f"{model.__class__.__name__}_24"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
-		print(f"Loading checkpoint {checkpoint}")
-		resume(model, f"trained_models/checkpoints/{checkpoint}.pth")
-		
+
+		try:
+			full_model = Classifier_BERT_pretraining(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
+			# full_model = Classifier_Nano_BERT_pretraining(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size, 2)
+
+			checkpoint = f"{model.__class__.__name__}_43"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
+			print(f"Loading checkpoint {checkpoint}")
+			resume(full_model, f"trained_models/checkpoints/{checkpoint}.pth")
+
+			model = full_model.model
+
+		except Exception as e:
+			print(e)
+			print(f"{FOREGROUND_COLORS["BrightRed"]}Checkpoint not found{RESET}")
+			exit()
+
 		#Freezing the model
-		for param in model.embedder.parameters(): 
-			param.requires_grad = False
+		# for param in model.embedder.parameters(): 
+		# 	param.requires_grad = False
 
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
 		classifier = Classifier_first_token(model, model_config.embedding_dimension, dataset_config.n_labels())
+		# classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
+
+		model_config.model_name = classifier.__class__.__name__ + "_" + model_config.model_name
 
 
 		print("Model parameters:")
@@ -151,7 +161,7 @@ for DATASET_NAME in ["sst2"]: #GLUE
 		print(f"{RESET}")
 
 
-		folder_name = f"mlm_{model_config.model_name}"
+		folder_name = f"mlm_{checkpoint}"
 		if not os.path.exists(f"results/{folder_name}/"):
 			os.makedirs(f"results/{folder_name}/")
 

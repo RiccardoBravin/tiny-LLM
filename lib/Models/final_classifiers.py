@@ -107,7 +107,7 @@ class Classifier_Nano_BERT_pretraining(nn.Module):
             nn.Linear(model_out_sz, num_labels),
         )
 
-        self.reducer.weight = torch.nn.Parameter(self.model.embedder.tok_expander.weight.T)
+        # self.reducer.weight = torch.nn.Parameter(self.model.embedder.tok_expander.weight.T)
         self.lm_cls.weight = self.model.embedder.token.weight
 
     def forward(self, x:torch.Tensor, mask:torch.Tensor):

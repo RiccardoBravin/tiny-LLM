@@ -1,57 +1,70 @@
 Model config for current run:
-ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.7, num_layers=4, vocab_size=8192, learning_rate=0.001, pretraining_lr=None)
-EPOCHS: 30
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.7, d_state=None, num_layers=4, vocab_size=8192, learning_rate=0.001)
+EPOCHS: 20
 
 *******************************************
 
-average eval loss:  0.9297
-Accuracy: 0.488
-F1: 0.496
-Precision: 0.611
-Recall: 0.488
-MCC: 0.081
+average eval loss:  1.7791
+Accuracy: 0.667
+F1: 0.666
+Precision: 0.665
+Recall: 0.667
+MCC: 0.226
 Confusion matrix:
- [[ 89  40]
- [169 110]]
-('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
-
-*******************************************
-
-average eval loss:  0.6888
-Accuracy: 0.625
-F1: 0.616
-Precision: 0.610
-Recall: 0.625
-MCC: 0.098
-Confusion matrix:
- [[ 43  86]
+ [[ 60  69]
  [ 67 212]]
 ('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
 
 *******************************************
 
-average eval loss:  0.6787
-Accuracy: 0.647
-F1: 0.621
-Precision: 0.612
-Recall: 0.647
-MCC: 0.098
+average eval loss:  0.7022
+Accuracy: 0.645
+F1: 0.632
+Precision: 0.625
+Recall: 0.645
+MCC: 0.131
 Confusion matrix:
- [[ 33  96]
- [ 48 231]]
+ [[ 43  86]
+ [ 59 220]]
 ('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
 
 *******************************************
 
-average eval loss:  0.6707
-Accuracy: 0.657
-F1: 0.647
-Precision: 0.642
-Recall: 0.657
-MCC: 0.170
+average eval loss:  1.0262
+Accuracy: 0.615
+F1: 0.619
+Precision: 0.622
+Recall: 0.615
+MCC: 0.127
 Confusion matrix:
- [[ 48  81]
- [ 59 220]]
+ [[ 55  74]
+ [ 83 196]]
+('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
+
+*******************************************
+
+average eval loss:  0.6874
+Accuracy: 0.542
+F1: 0.555
+Precision: 0.637
+Recall: 0.542
+MCC: 0.141
+Confusion matrix:
+ [[ 86  43]
+ [144 135]]
+('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
+
+*******************************************
+
+average eval loss:  2.1639
+Accuracy: 0.645
+F1: 0.623
+Precision: 0.614
+Recall: 0.645
+MCC: 0.105
+Confusion matrix:
+ [[ 36  93]
+ [ 52 227]]
 ('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
 
 *******************************************

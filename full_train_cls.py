@@ -18,14 +18,14 @@ from lib.trainer import Trainer
 
 ########################################################################################
 EPOCHS = 20
-MIN_ITERATIONS = 0#1000
+MIN_ITERATIONS = 1000
 TRAINING_CYCLES = 5
 
 
 dataset_config = DataConfig(
 					dataset_name=None,
 					dict_size=pow(2, 13),
-					tokenizer_type="wordpiece",
+					tokenizer_type="bpe",
 					batch_size=128,
 					max_len=256,
 					labels=None
@@ -38,8 +38,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
 # for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
-for DATASET_NAME in ["sst2"]: #GLUE
-# for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
+# for DATASET_NAME in ["sst2"]: #test
+for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
 
 	dataset_config.dataset_name = DATASET_NAME
 	dataset_config.dict_size = dict_size_aux
@@ -66,14 +66,14 @@ for DATASET_NAME in ["sst2"]: #GLUE
 	train_dataloader.shuffle = True
 
 	models = [
-		BERT_original,
+		# BERT_original,
 		# Nano_Mlp_structured,
-		# Nano_Bert_Efficient,
+		Nano_Bert_Efficient,
 		# Mamba_model,
 		# Embbert,
 		# Embedder_model,
 		# Embedder_conv_model,
-		Nano_Bert_Efficient_mh
+		# Nano_Bert_Efficient_mh
 		# Nano_Bert_Efficient_mh_augm
 	]
 
@@ -92,8 +92,10 @@ for DATASET_NAME in ["sst2"]: #GLUE
 		# 			forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
 		# ModelConfig( model_name="Embedder_+_conv", embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, d_state= None,
 		# 	 		forward_expansion=1, num_layers=1, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),
-		ModelConfig( model_name="Nano_Bert_Efficient_mh", embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=3, d_state= None,
-			  		forward_expansion=0.5, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),	
+		# ModelConfig( model_name="Nano_Bert_Efficient_mh", embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=3, d_state= None,
+		# 	  		forward_expansion=0.5, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
+		ModelConfig( model_name="Nano_Bert_Efficient_long", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, d_state= None,
+			  		forward_expansion=2, num_layers=10, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),	
 	]
 
 	for config in configs:

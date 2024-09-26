@@ -1,0 +1,80 @@
+ModelConfig(model_name='Nano_Bert_Efficient_SUPERLONG', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.6144
+Accuracy: 0.796
+F1: 0.796
+Precision: 0.796
+Recall: 0.796
+MCC: 0.592
+Confusion matrix:
+ [[338  90]
+ [ 88 356]]
+('Model params: 389.058K', 'Model buffers: 0.000K', 'Model size: 1.484MB')
+
+*******************************************
+
+ModelConfig(model_name='Nano_Bert_Efficient_SUPERLONG', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.7087
+Accuracy: 0.802
+F1: 0.801
+Precision: 0.803
+Recall: 0.802
+MCC: 0.604
+Confusion matrix:
+ [[326 102]
+ [ 71 373]]
+('Model params: 389.058K', 'Model buffers: 0.000K', 'Model size: 1.484MB')
+
+*******************************************
+
+ModelConfig(model_name='Nano_Bert_Efficient_SUPERLONG', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.7026
+Accuracy: 0.794
+F1: 0.793
+Precision: 0.800
+Recall: 0.794
+MCC: 0.594
+Confusion matrix:
+ [[369  59]
+ [121 323]]
+('Model params: 389.058K', 'Model buffers: 0.000K', 'Model size: 1.484MB')
+
+*******************************************
+
+ModelConfig(model_name='Nano_Bert_Efficient_SUPERLONG', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.6301
+Accuracy: 0.795
+F1: 0.795
+Precision: 0.795
+Recall: 0.795
+MCC: 0.589
+Confusion matrix:
+ [[340  88]
+ [ 91 353]]
+('Model params: 389.058K', 'Model buffers: 0.000K', 'Model size: 1.484MB')
+
+*******************************************
+
+ModelConfig(model_name='Nano_Bert_Efficient_SUPERLONG', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.6749
+Accuracy: 0.806
+F1: 0.806
+Precision: 0.806
+Recall: 0.806
+MCC: 0.612
+Confusion matrix:
+ [[341  87]
+ [ 82 362]]
+('Model params: 389.058K', 'Model buffers: 0.000K', 'Model size: 1.484MB')
+
+*******************************************
+

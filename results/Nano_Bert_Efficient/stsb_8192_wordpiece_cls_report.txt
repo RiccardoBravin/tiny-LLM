@@ -4,33 +4,3 @@ EPOCHS: 20
 
 *******************************************
 
-average eval loss:  2.6758
-Spearman correlation coefficient: 0.051
-('Model params: 365.925K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
-
-*******************************************
-
-average eval loss:  3.1387
-Spearman correlation coefficient: 0.181
-('Model params: 365.925K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
-
-*******************************************
-
-average eval loss:  2.4902
-Spearman correlation coefficient: 0.051
-('Model params: 365.925K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
-
-*******************************************
-
-average eval loss:  2.7464
-Spearman correlation coefficient: 0.038
-('Model params: 365.925K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
-
-*******************************************
-
-average eval loss:  3.0803
-Spearman correlation coefficient: 0.126
-('Model params: 365.925K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
-
-*******************************************
-

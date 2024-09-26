@@ -24,8 +24,6 @@ def get_linear_schedule_with_warmup(optimizer, num_warmup_steps, num_training_st
 			return lr_scheduler.LambdaLR(optimizer, lr_lambda, last_epoch)
 
 
-
-
 def mask_tokens(tokens, special_tokens_mask, dataset_config:DataConfig):
 
 
@@ -62,22 +60,7 @@ class Trainer:
 	def __init__(self, model:nn.Module, device, model_config:ModelConfig):
 		self.model = model
 
-		decay_params = []
-		no_decay_params = []
-
-		# for name, param in model.named_parameters():
-		# 	if "bias" in name or "norm" in name or "embedder" in name:
-		# 		no_decay_params.append(param)
-		# 	else:
-		# 		decay_params.append(param)
-
-		# param_groups = [
- 		#    	{'params': decay_params, 'weight_decay': 10e-2},
-    	# 	{'params': no_decay_params, 'weight_decay': 0.0}
-		# ]
-
 		self.optimizer = AdamW(params=self.model.parameters(), lr=model_config.learning_rate, weight_decay=0.05)
-		# self.optimizer = AdamW(params=param_groups, lr=model_config.learning_rate)
 
 		self.device = device
 
@@ -137,10 +120,12 @@ class Trainer:
 
 				if step_num == 0:
 					train_loss = batch_loss.item()
-					avg_train_acc = torch.mean((torch.argmax(y, dim=1) == labels).float()).item() / len(train_dataloader)
+					if not self.regression:
+						avg_train_acc = torch.mean((torch.argmax(y, dim=1) == labels).float()).item() / len(train_dataloader)
 				else:
 					train_loss = 0.9 * train_loss + 0.1 * batch_loss.item()
-					avg_train_acc += torch.mean((torch.argmax(y, dim=1) == labels).float()).item() / len(train_dataloader)
+					if not self.regression:
+						avg_train_acc += torch.mean((torch.argmax(y, dim=1) == labels).float()).item() / len(train_dataloader)
 
 				tqdm_train_loader.set_postfix(loss = "{:.4f}".format(train_loss))
 
@@ -257,7 +242,7 @@ class Trainer:
 
 class BertTrainer:
 
-	def __init__(self, model:nn.Module, device, model_config: ModelConfig, dataset_config: DataConfig, mask_prob: float = 0.15):
+	def __init__(self, model:nn.Module, device, model_config: ModelConfig, dataset_config: DataConfig, mask_prob: float = 0.15, checkpoint:int = 0):
 
 		self.device = device
 
@@ -273,6 +258,8 @@ class BertTrainer:
 		self.dataset_config = dataset_config
 
 		self.mask_prob = mask_prob
+		self.ckpt_counter = checkpoint
+
 
 	def train(self, train_dataloader, num_epochs, log_t_interval: int, color = FOREGROUND_COLORS['Green']):
 		print(f"{color}")
@@ -294,7 +281,6 @@ class BertTrainer:
 		cls_mcc = 0.0
 		
 		min_loss = float('inf')
-		ckpt_counter = 0
 
 		with open(f"trained_models/logs/{self.model_config.model_name}_train_log.txt", "a") as f:
 			f.write(f"\nNEW TRAINING\n")
@@ -370,55 +356,14 @@ class BertTrainer:
 					if(min_loss > batch_loss.item()):
 						min_loss = batch_loss.item()
 						#save with model name and ckpt counter
-						checkpoint(self.model.model, f"trained_models/checkpoints/{self.model_config.model_name}_{ckpt_counter}.pth")
-						tqdm.write(f"Checkpoint saved at {ckpt_counter}")
-						ckpt_counter += 1
+						checkpoint(self.model, f"trained_models/checkpoints/{self.model_config.model_name}_{self.ckpt_counter}.pth")
+						tqdm.write(f"Checkpoint saved at {self.ckpt_counter}")
+						self.ckpt_counter += 1
 					
 					# Reset the start time
 					start_time = time.time()
 
 
-				
-				# if step_num % log_step == (log_step - 1):
-				# 	self.model.eval()
-				# 	mlm_accuracy = torch.Tensor([]).to(self.device)
-				# 	cls_accuracy = torch.Tensor([]).to(self.device)
-				# 	mlm_avg_loss = 0
-				# 	cls_avg_loss = 0
-				# 	val_loss = 0
-
-				# 	for batch_val in eval_dataloader:
-				# 		tokens = batch_val["tokens"].to(self.device)
-				# 		masks  = batch_val["attention_mask"].to(self.device)
-				# 		lables_val = batch_val["label"].to(self.device)
-
-				# 		masked_tokens, masks_mask = mask_tokens(tokens, self.dataset_config)
-
-				# 		logits, label_guess = self.model(masked_tokens, masks)
-
-				# 		tokens[~masks_mask] = 0 #set to 0 the tokens that are not masked so that they are not considered in the loss
-				# 		label_guess = label_guess.squeeze(-1) #remove the last dimension for the loss
-
-				# 		lm_loss = self.lm_criterion(logits.transpose(1,2), tokens)
-				# 		cls_loss = cls_criterion(label_guess, lables_val)
-
-				# 		val_loss += lm_loss.item() + cls_loss.item()
-				# 		mlm_avg_loss += lm_loss.item()
-				# 		cls_avg_loss += cls_loss.item()
-
-				# 		mlm_accuracy = torch.cat((mlm_accuracy, (torch.argmax(logits, dim=2)[masks_mask] == tokens[masks_mask])))
-				# 		cls_accuracy = torch.cat((cls_accuracy, (torch.argmax(label_guess, dim=1) == lables_val)))
-
-
-				# 	mlm_accuracy = torch.mean(mlm_accuracy.float()).item()
-				# 	cls_accuracy = torch.mean(cls_accuracy.float()).item()
-				# 	val_loss = val_loss / len(eval_dataloader)
-				# 	cls_avg_loss = cls_avg_loss / len(eval_dataloader)
-				# 	mlm_avg_loss = mlm_avg_loss / len(eval_dataloader)
-
-				# 	#tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, mlm loss: {mlm_avg_loss:.3f}, mlm accuracy: {mlm_accuracy:.3f}, cls loss: {cls_avg_loss:.3f}, cls accuracy: {cls_accuracy:.3f}, Lr: {scheduler.get_last_lr()} {color}")
-				# 	tqdm.write(f"{RESET}Val loss: {val_loss:.3f}, mlm loss: {mlm_avg_loss:.3f}, mlm accuracy: {mlm_accuracy:.3f}, cls loss: {cls_avg_loss:.3f}, cls accuracy: {cls_accuracy:.3f}{color}")
-				# 	self.model.train()
 
 	def evaluate(self, test_dataloader, color = FOREGROUND_COLORS['White']):
 		print(f"{color}")
