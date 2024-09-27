@@ -394,3 +394,43 @@ class Nano_Bert_Efficient_mh_augm(nn.Module):
         for encoder in self.encoder_blocks:
             x = encoder.forward(x, mask)
         return x
+
+
+class New_idea1(nn.Module):
+    """
+    BERT model with NanoBERT embedder and custom idea
+    """
+    
+    def __init__(self, model_config: ModelConfig, dropout=0.1):
+        """
+        Embedder and multilayer model using the BERT_block
+        """
+
+        super().__init__()
+        self.d_model = model_config.embedding_dimension
+
+        # embedding for BERT, sum of positional, segment, token embeddings
+        self.embedder = embedders.No_pos_Nano_embedder(model_config)
+
+        # multi-layers transformer blocks, deep network
+        self.encoder_blocks = torch.nn.ModuleList([
+            structures.Att_idea2(self.d_model, model_config.reduced_embedding_dimension, model_config.max_length) 
+        for _ in range(model_config.num_layers)])
+
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x, mask= None):
+        
+        # embedding the indexed sequence to sequence of vectors
+        x = self.embedder(x)
+
+        # attention masking for padded token
+        # (batch_size, seq_len, seq_len)
+        #mask = modules.make_score_mask(mask)
+        
+        # running over multiple transformer blocks
+        for encoder in self.encoder_blocks:
+            x = self.dropout(x)
+            x = encoder.forward(x, mask)
+            
+        return x

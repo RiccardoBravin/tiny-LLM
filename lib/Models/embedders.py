@@ -131,3 +131,39 @@ class Nano_embedder_augmentation(nn.Module):
 		x = self.tok_expander(embeddings) + self.pos_expander(self.position(positions)) + self.sentence(sentence_ids)
 		return x
 		
+
+class No_pos_Nano_embedder(nn.Module):
+	def __init__(self, model_config: ModelConfig):
+		r"""
+		Embedder for transformer models taken from NanoBERT. It is a combination of a token and a positional embedding where the token embedding
+		is done in a lower dimension and then projected to the desired dimension with a linear layer
+		
+		Args:
+			vocab_size: the size of the vocabulary
+			embed_size: the size of the embeddings in output
+			red_embed_size: the size of the embeddings in the lower dimension
+			max_len: the maximum length of the sequence
+		"""
+
+		super().__init__()
+		# (m, seq_len) --> (m, seq_len, embed_size)
+		# padding_idx is not updated during training, remains as fixed pad (0)
+		self.token = torch.nn.Embedding(model_config.vocab_size, model_config.reduced_embedding_dimension, padding_idx=0)
+		self.tok_expander = torch.nn.Linear(model_config.reduced_embedding_dimension, model_config.embedding_dimension, bias=False)
+		
+		self.sentence = torch.nn.Embedding(3, model_config.embedding_dimension, padding_idx=0)
+
+	   
+	def forward(self, tokens):
+		
+		sep_pos = torch.nonzero(tokens == 4)        
+		sentence_ids = torch.ones_like(tokens, device=tokens.device)
+
+		for i in sep_pos:
+			sentence_ids[i[0], i[1]:] = 2
+		
+		sentence_ids[tokens == 0] = 0
+
+
+		x = self.tok_expander(self.token(tokens)) + self.sentence(sentence_ids)
+		return x
