@@ -7,7 +7,8 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 from torch.optim import lr_scheduler, AdamW, Adam, SGD, RMSprop, Adagrad
-from torch.cuda.amp import GradScaler, autocast
+from torch.cuda.amp import GradScaler
+from torch.amp import autocast
 
 from sklearn.metrics import accuracy_score, matthews_corrcoef, classification_report, top_k_accuracy_score
 
@@ -302,16 +303,16 @@ class BertTrainer:
 
 				masked_tokens, masks_mask = mask_tokens(tokens, special_tokens_mask, self.dataset_config)
 
-				with autocast():
-					#Model outputs (batch_size, seq_len, dict_size) and (batch_size, seq_len, 2)
-					logits, label_guess = self.model(masked_tokens, masks)
+				
+				#Model outputs (batch_size, seq_len, dict_size) and (batch_size, seq_len, 2)
+				logits, label_guess = self.model(masked_tokens, masks)
 
-					tokens[~masks_mask] = 0
+				tokens[~masks_mask] = 0
 
-					lm_loss = self.mlm_criterion(logits.transpose(1,2), tokens)
-					cls_loss = self.nsp_criterion(label_guess.squeeze(-1), nsp_label)
+				lm_loss = self.mlm_criterion(logits.transpose(1,2), tokens)
+				cls_loss = self.nsp_criterion(label_guess.squeeze(-1), nsp_label)
 
-					batch_loss = lm_loss + cls_loss
+				batch_loss = lm_loss + cls_loss
 
 
 				if step_num == 0:

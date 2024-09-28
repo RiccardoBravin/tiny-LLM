@@ -396,7 +396,7 @@ class Nano_Bert_Efficient_mh_augm(nn.Module):
         return x
 
 
-class New_idea1(nn.Module):
+class New_idea2(nn.Module):
     """
     BERT model with NanoBERT embedder and custom idea
     """
@@ -414,7 +414,7 @@ class New_idea1(nn.Module):
 
         # multi-layers transformer blocks, deep network
         self.encoder_blocks = torch.nn.ModuleList([
-            structures.Att_idea2(self.d_model, model_config.reduced_embedding_dimension, model_config.max_length) 
+            structures.NewLayer(self.d_model, model_config.feed_forward_hidden() ,4, model_config.max_length) 
         for _ in range(model_config.num_layers)])
 
         self.dropout = nn.Dropout(dropout)
@@ -426,7 +426,7 @@ class New_idea1(nn.Module):
 
         # attention masking for padded token
         # (batch_size, seq_len, seq_len)
-        #mask = modules.make_score_mask(mask)
+        mask = modules.make_score_mask(mask)
         
         # running over multiple transformer blocks
         for encoder in self.encoder_blocks:
@@ -434,3 +434,4 @@ class New_idea1(nn.Module):
             x = encoder.forward(x, mask)
             
         return x
+    

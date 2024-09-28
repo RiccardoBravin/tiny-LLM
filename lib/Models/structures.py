@@ -210,6 +210,7 @@ class Att_idea1(nn.Module):
         y2 = self.fc2(x)
 
         y1 = torch.einsum("blr, lrx -> blr", y1, self.A)
+        y1 = torch.einsum("blr, lrx -> blr", y1, self.A)
 
         y2 = self.softmax(y2)
 
@@ -222,37 +223,35 @@ class Att_idea1(nn.Module):
         return y + embeddings
 
 
-class Att_idea2(nn.Module):
-    def __init__(self, d_model, hid_d_model, s_len):
+class NewLayer(nn.Module):
+    def __init__(self, d_model, d_ff, hid_d_model, s_len):
         super().__init__()
-
+        
         self.norm = modules.RMSNorm(d_model)
 
-        self.fc1 = nn.Linear(d_model, hid_d_model)
+
+        self.att = blocks.NewPosAttention(d_model, s_len, hid_d_model)
         
-        self.A = nn.Parameter(torch.zeros(s_len, hid_d_model))
+        self.fcup = nn.Linear(d_model, d_ff)
+        self.fcdown = nn.Linear(d_ff, d_model)
         
-        # nn.init.xavier_normal_(self.A)
-    
-        self.softmax = torch.nn.Softmax(dim=-1)
-        
+        self.fc = nn.Linear(d_model, d_model)
+
+        self.act = torch.nn.SiLU()
+
     def forward(self, embeddings, mask = None):
         # embeddings: (batch_size, max_len, d_model)
         # result: (batch_size, max_len, d_model)
 
-        x = self.norm(embeddings)
-
+        x = self.att(embeddings, embeddings, embeddings, mask)
         
-        y1 = self.fc1(x)
-        
-        #in alternativa prova un fc che lo porta a l = 1
-        y2 = torch.sqrt(torch.mean(torch.pow(x, 2), dim=1))
+        y1 = self.fc(x)
 
-        y2 = torch.einsum("bd, lr -> blrd", y2, self.A)
-        y2 = self.softmax(y2)
+        y2 = self.fcup(self.norm(x))
+        y2 = self.act(y2)
+        y2 = self.fcdown(y2)
 
-        y = torch.einsum("blr, blrd -> bld", y1, y2)
-
+        y = y1 * y2
         
-        
-        return y + x
+        return y
+    

@@ -75,7 +75,7 @@ for DATASET_NAME in ["sst2"]: #test
 		# Embedder_conv_model,
 		# Nano_Bert_Efficient_mh
 		# Nano_Bert_Efficient_mh_augm
-		New_idea1
+		New_idea2
 	]
 
 	configs = [
@@ -97,8 +97,8 @@ for DATASET_NAME in ["sst2"]: #test
 		# 	  		forward_expansion=0.5, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		# ModelConfig( model_name="Nano_Bert_Efficient_long", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, d_state= None,
 			  		# forward_expansion=2, num_layers=10, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),	
-		ModelConfig( model_name="IDEA1", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=0, d_state= None,
-			  		forward_expansion=0, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-4),	
+		ModelConfig( model_name="IDEA1", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, d_state= None,
+			  		forward_expansion=0, num_layers=8, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=5e-4),	
 
 	]
 

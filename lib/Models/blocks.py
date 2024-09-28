@@ -306,3 +306,69 @@ class EmbBertAttention(nn.Module):
         # (batch_size, max_len, d_model) -> (batch_size, max_len, d_model // ff_expansion)
         return self.output_linear(context)
     
+
+
+class NewPosAttention(torch.nn.Module):
+    
+    def __init__(self, d_model:int, s_len:int, hid_d_model:int = 4, dropout=0.1):
+        """
+        Efficient Attention block that is taken from the paper. 
+        Args:
+            d_model: the embedding dimension
+            dropout: the dropout rate
+        """
+        super().__init__()
+        
+
+        self.dropout = nn.Dropout(dropout)
+        self.norm = nn.RMSNorm(d_model)
+        
+        self.down = nn.Linear(d_model, hid_d_model)
+        self.up = nn.Linear(hid_d_model, d_model)
+        self.pos = nn.Parameter(torch.randn(s_len, hid_d_model, hid_d_model))
+        
+        self.query = nn.Linear(d_model, d_model)
+        self.output_linear = nn.Linear(d_model, d_model)
+        
+    def forward(self, query:torch.Tensor, key:torch.Tensor, value:torch.Tensor, mask:torch.Tensor):
+        """
+        Usually query, key, value are the same tensor.
+
+        Args:
+            query: the query tensor of shape (batch_size, max_len, d_model)
+            key: the key tensor of shape (batch_size, max_len, d_model)
+            value: the value tensor of shape (batch_size, max_len, d_model) 
+            mask: the mask tensor of shape (batch_size, max_len, max_len) that contains 0 for padding tokens and 1 for the rest
+        """
+        normx = self.norm(query)
+
+        key = normx
+        
+        # (batch_size, max_len, d_model)
+        query = self.query(normx) 
+
+        # (batch_size, max_len, d_model) matmul (batch_size, d_model, max_len) --> (batch_size, max_len, max_len)
+        scores = torch.matmul(query, key.permute(0, 2, 1)) / math.sqrt(query.size(-1))
+        
+        
+        # fill 0 mask with super small number so it wont affect the softmax weight
+        scores = scores.masked_fill(mask == 0, float("-inf")) 
+        
+        # softmax to put attention weight for all non-pad tokens
+        weights = nn.functional.softmax(scores, dim=-1)    
+        weights = weights.masked_fill(weights.isnan(), 0)              
+        weights = self.dropout(weights)
+
+        #positional attention
+        posx = self.down(normx)
+        posx = torch.einsum('bld, ldi -> bld', posx, self.pos )
+        posx = self.up(posx)
+
+        value = posx + value
+
+        
+        # (batch_size, max_len, max_len) matmul (batch_size, d_model, max_len) --> (batch_size, d_model, max_len)
+        context = torch.matmul(weights, value)
+        
+        return context # (batch_size, max_len, d_model) as input
+    

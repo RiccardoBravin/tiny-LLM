@@ -3,6 +3,8 @@ from lib.Models.structures import Att_idea1
 from lib.Models.models import New_idea1
 from lib.configs import DataConfig, ModelConfig
 
+from lib.Models.blocks import NewPosAttention
+
 model_config = ModelConfig(
 					model_name=None,
 					embedding_dimension=128,
@@ -16,11 +18,14 @@ model_config = ModelConfig(
 					learning_rate = 2e-5,
 				)
 
-model = New_idea1(model_config=model_config)
+#model = New_idea1(model_config=model_config)
+model = NewPosAttention(128, 256, 4)
 
 print(model)
 
-out = model(torch.randint(0, pow(2, 13), (32, 256)))
+x = torch.randn(32, 256, 128)
+mask = torch.ones(32, 256,256).bool()
+out = model(x,x,x,mask)
 
 print(out)
 print(out.shape)

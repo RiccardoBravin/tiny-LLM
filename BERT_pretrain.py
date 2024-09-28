@@ -20,7 +20,7 @@ from lib.Models.models import *
 
 epochs_pretraining = 1
 
-log_t_interval = 60
+log_t_interval = 20
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -37,13 +37,13 @@ pretr_dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=128,
+					embedding_dimension=96,
 					reduced_embedding_dimension=16,
 					number_of_heads=1,
 					max_length=pretr_dataset_config.max_len,
-					forward_expansion=0.7,
-					d_state=None,
-					num_layers=4,
+					forward_expansion=0.5,
+					d_state=4,
+					num_layers=5,
 					vocab_size=pretr_dataset_config.dict_size,
 					learning_rate = 5e-4,
 				)
@@ -55,7 +55,7 @@ model_config = ModelConfig(
 
 #load the dataset for pretraining
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Importing pretraining dataset (Book Corpus){RESET}")
-pretraining_dataset, _ = dataset_selector(pretr_dataset_config.dataset_name, reduced=False)
+pretraining_dataset, _ = dataset_selector(pretr_dataset_config.dataset_name, reduced=True)
 print(f"{FOREGROUND_COLORS["BrightCyan"]}Dataset contains {len(pretraining_dataset)} training samples to be combined in pairs{RESET}")
 
 
@@ -75,9 +75,10 @@ train_dataloader = encode_pretr_dataset(tokenizer, pretraining_dataset, pretr_da
 print(f"\n\n{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}--------------------- STARTING PRETRAINING ---------------------{RESET}\n")
 
 # model = BERT_original(model_config, dropout=0)
-model = Nano_Bert_Efficient(model_config, dropout=0)
+# model = Nano_Bert_Efficient(model_config, dropout=0)
 # model =  Mamba_model(model_config, dropout=0)
 # model = EmbBERT(model_config, dropout=0)
+model = New_idea2(model_config, dropout=0)
 
 model_config.model_name = model.__class__.__name__
 
