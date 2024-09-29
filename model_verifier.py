@@ -40,13 +40,13 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=48,
+					embedding_dimension=96,
 					reduced_embedding_dimension=16,
-					number_of_heads=0,
+					number_of_heads=1,
 					max_length=dataset_config.max_len,
-					forward_expansion=2,
+					forward_expansion=0.5,
 					d_state=4,
-					num_layers=4,
+					num_layers=5,
 					vocab_size=dataset_config.dict_size,
 					learning_rate = 5e-4,
 				)
@@ -79,7 +79,8 @@ print(f"\n\n{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}-------------
 # model = Nano_Bert_Efficient(model_config, dropout=0)
 # model = Embedder_model(model_config, dropout=0)
 # model = Embedder_conv_model(model_config, dropout=0)
-model = Mamba_model(model_config, dropout=0)
+# model = Mamba_model(model_config, dropout=0)
+model = New_idea2(model_config, dropout=0)
 
 model_config.model_name = model.__class__.__name__		
 

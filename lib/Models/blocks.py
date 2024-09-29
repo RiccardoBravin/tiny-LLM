@@ -1,6 +1,8 @@
 import torch
 from torch import nn
 
+from lib.Models import modules
+
 import math
 
 
@@ -321,7 +323,7 @@ class NewPosAttention(torch.nn.Module):
         
 
         self.dropout = nn.Dropout(dropout)
-        self.norm = nn.RMSNorm(d_model)
+        self.norm = modules.RMSNorm(d_model)
         
         self.down = nn.Linear(d_model, hid_d_model)
         self.up = nn.Linear(hid_d_model, d_model)
