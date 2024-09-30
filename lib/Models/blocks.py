@@ -310,9 +310,9 @@ class EmbBertAttention(nn.Module):
     
 
 
-class NewPosAttention(torch.nn.Module):
+class SwiGLUAttention(torch.nn.Module):
     
-    def __init__(self, d_model:int, s_len:int, hid_d_model:int = 4, dropout=0.1):
+    def __init__(self, d_model:int, hid_d_model:int, dropout=0.1):
         """
         Efficient Attention block that is taken from the paper. 
         Args:
@@ -325,12 +325,11 @@ class NewPosAttention(torch.nn.Module):
         self.dropout = nn.Dropout(dropout)
         self.norm = modules.RMSNorm(d_model)
         
-        self.down = nn.Linear(d_model, hid_d_model)
-        self.up = nn.Linear(hid_d_model, d_model)
-        self.pos = nn.Parameter(torch.randn(s_len, hid_d_model, hid_d_model))
-        
+        self.up = nn.Linear(d_model, hid_d_model) 
+        self.down = nn.Linear(hid_d_model, d_model)      
+
         self.query = nn.Linear(d_model, d_model)
-        self.output_linear = nn.Linear(d_model, d_model)
+        self.output_linear = nn.Linear(d_model, hid_d_model)
         
     def forward(self, query:torch.Tensor, key:torch.Tensor, value:torch.Tensor, mask:torch.Tensor):
         """
@@ -342,12 +341,9 @@ class NewPosAttention(torch.nn.Module):
             value: the value tensor of shape (batch_size, max_len, d_model) 
             mask: the mask tensor of shape (batch_size, max_len, max_len) that contains 0 for padding tokens and 1 for the rest
         """
-        normx = self.norm(query)
 
-        key = normx
-        
         # (batch_size, max_len, d_model)
-        query = self.query(normx) 
+        query = self.query(self.norm(query)) 
 
         # (batch_size, max_len, d_model) matmul (batch_size, d_model, max_len) --> (batch_size, max_len, max_len)
         scores = torch.matmul(query, key.permute(0, 2, 1)) / math.sqrt(query.size(-1))
@@ -360,17 +356,18 @@ class NewPosAttention(torch.nn.Module):
         weights = nn.functional.softmax(scores, dim=-1)    
         weights = weights.masked_fill(weights.isnan(), 0)              
         weights = self.dropout(weights)
-
-        #positional attention
-        posx = self.down(normx)
-        posx = torch.einsum('bld, ldi -> bld', posx, self.pos )
-        posx = self.up(posx)
-
-        value = posx + value
-
         
         # (batch_size, max_len, max_len) matmul (batch_size, d_model, max_len) --> (batch_size, d_model, max_len)
         context = torch.matmul(weights, value)
         
-        return context # (batch_size, max_len, d_model) as input
+        att = self.output_linear(context) # (batch_size, max_len, d_model) as input
+
+        s = self.up(query)
+        s = torch.nn.functional.silu(s)
+        s = self.dropout(s)
+
+        y = att * s
+
     
+
+        return self.down(y) + value

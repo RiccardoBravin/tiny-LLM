@@ -224,34 +224,16 @@ class Att_idea1(nn.Module):
 
 
 class NewLayer(nn.Module):
-    def __init__(self, d_model, d_ff, hid_d_model, s_len):
+    def __init__(self, d_model, hid_d_model, dropout=0.1):
         super().__init__()
-        
-        self.norm = modules.RMSNorm(d_model)
 
-
-        self.att = blocks.NewPosAttention(d_model, s_len, hid_d_model)
+        self.att = blocks.SwiGLUAttention(d_model, hid_d_model, dropout=0.1)
         
-        self.fcup = nn.Linear(d_model, d_ff)
-        self.fcdown = nn.Linear(d_ff, d_model)
-        
-        self.fc = nn.Linear(d_model, d_model)
-
-        self.act = torch.nn.SiLU()
 
     def forward(self, embeddings, mask = None):
         # embeddings: (batch_size, max_len, d_model)
         # result: (batch_size, max_len, d_model)
-
+        
         x = self.att(embeddings, embeddings, embeddings, mask)
-        
-        y1 = self.fc(x)
-
-        y2 = self.fcup(self.norm(x))
-        y2 = self.act(y2)
-        y2 = self.fcdown(y2)
-
-        y = y1 * y2
-        
-        return y
-    
+                
+        return x

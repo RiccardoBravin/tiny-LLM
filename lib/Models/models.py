@@ -410,11 +410,11 @@ class New_idea2(nn.Module):
         self.d_model = model_config.embedding_dimension
 
         # embedding for BERT, sum of positional, segment, token embeddings
-        self.embedder = embedders.No_pos_Nano_embedder(model_config)
+        self.embedder = embedders.Nano_embedder(model_config)
 
         # multi-layers transformer blocks, deep network
         self.encoder_blocks = torch.nn.ModuleList([
-            structures.NewLayer(self.d_model, model_config.feed_forward_hidden() ,4, model_config.max_length) 
+            structures.NewLayer(self.d_model, model_config.feed_forward_hidden(), dropout) 
         for _ in range(model_config.num_layers)])
 
         self.dropout = nn.Dropout(dropout)
