@@ -37,13 +37,13 @@ pretr_dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=64,
+					embedding_dimension=128,
 					reduced_embedding_dimension=16,
-					number_of_heads=1,
+					number_of_heads=None,
 					max_length=pretr_dataset_config.max_len,
-					forward_expansion=2,
+					forward_expansion=1.2,
 					d_state=0,
-					num_layers=4,
+					num_layers=3,
 					vocab_size=pretr_dataset_config.dict_size,
 					learning_rate = 5e-4,
 				)

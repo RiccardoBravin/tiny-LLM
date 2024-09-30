@@ -22,12 +22,12 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig( 
                     model_name="model_name", 
-                    embedding_dimension=96,
+                    embedding_dimension=128,
                     reduced_embedding_dimension=16,
                     number_of_heads=1,
-		            forward_expansion=0.5,
-                    d_state=4,
-                    num_layers=5,
+		            forward_expansion=1.2,
+                    d_state=0,
+                    num_layers=3,
                     max_length=dataset_config.max_len, 
                     vocab_size=dataset_config.dict_size,
                     learning_rate=1e-3,
