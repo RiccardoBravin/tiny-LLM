@@ -5,7 +5,7 @@ import pathlib
 import re
 
 # models = ["BERT_original", "Mamba", "Embedder_+_conv", "Embedder_only", "Nano_Bert_Efficient", "Nano_Bert_Efficient_mh"]
-models = ["mlm_Mamba_model_23"]
+models = ["IDEA1", "mlm_New_idea2_30"]
 
 for model in models:
     print(f"Results for model: {model}")

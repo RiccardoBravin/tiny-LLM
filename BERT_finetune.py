@@ -29,7 +29,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 dataset_config = DataConfig(
 						dataset_name=None,
-						dict_size=pow(2, 11),
+						dict_size=pow(2, 13),
 						tokenizer_type="bpe",
 						batch_size=32,
 						max_len=256,
@@ -38,27 +38,26 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=48,
+					embedding_dimension=128,
 					reduced_embedding_dimension=16,
 					number_of_heads=None,
 					max_length=dataset_config.max_len,
-					forward_expansion=2,
-					d_state=4,
-					num_layers=4,
+					forward_expansion=1.2,
+					d_state=0,
+					num_layers=3,
 					vocab_size=dataset_config.dict_size,
-					learning_rate = 2e-5,
+					learning_rate = 3e-4,
 				)
 
 
-#exploring transformers as compact... suggests 2x10-5 di lr per 10 epochs
 
 ########################################################################################
 
 
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
 # for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
-# for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
-for DATASET_NAME in ["sst2"]: #GLUE
+for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
+# for DATASET_NAME in ["sst2"]: #GLUE
 
 
 	dataset_config.dataset_name = DATASET_NAME
@@ -99,18 +98,19 @@ for DATASET_NAME in ["sst2"]: #GLUE
 		# model = Nano_Bert_Efficient_mh(model_config, dropout=0.1)
 		# model = Embedder_model(model_config, dropout=0.1)
 		# model = Embedder_conv_model(model_config, dropout=0.1)
-		model = Mamba_model(model_config, dropout=0.1)
+		# model = Mamba_model(model_config, dropout=0.1)
 		# model = Nano_Bert_Efficient_mh(model_config, dropout=0.1)
 		# model = Mamba_model(model_config, dropout=0.1)
+		model = New_idea2(model_config, dropout=0.1)
 
 		model_config.model_name = model.__class__.__name__	
 
 
 		try:
-			full_model = Classifier_BERT_pretraining(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
-			# full_model = Classifier_Nano_BERT_pretraining(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size, 2)
+			# full_model = Classifier_BERT_pretraining(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
+			full_model = Classifier_Nano_BERT_pretraining(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size, 2)
 
-			checkpoint = f"{model.__class__.__name__}_43"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
+			checkpoint = f"{model.__class__.__name__}_30"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
 			print(f"Loading checkpoint {checkpoint}")
 			resume(full_model, f"trained_models/checkpoints/{checkpoint}.pth")
 

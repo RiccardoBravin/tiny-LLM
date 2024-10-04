@@ -1,0 +1,39 @@
+Model config for current run:
+ModelConfig(model_name='IDEA1', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=1.2, d_state=None, num_layers=3, vocab_size=8192, learning_rate=0.0005)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  2.3967
+Spearman correlation coefficient: 0.034
+('Model params: 367.255K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+average eval loss:  2.4166
+Spearman correlation coefficient: 0.041
+('Model params: 367.255K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+average eval loss:  2.4909
+Spearman correlation coefficient: -0.001
+('Model params: 367.255K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+average eval loss:  2.5385
+Spearman correlation coefficient: 0.036
+('Model params: 367.255K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+average eval loss:  2.5718
+Spearman correlation coefficient: 0.038
+('Model params: 367.255K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

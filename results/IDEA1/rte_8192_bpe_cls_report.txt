@@ -1,0 +1,74 @@
+Model config for current run:
+ModelConfig(model_name='IDEA1', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=1.2, d_state=None, num_layers=3, vocab_size=8192, learning_rate=0.0005)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  0.6901
+Accuracy: 0.545
+F1: 0.434
+Precision: 0.590
+Recall: 0.545
+MCC: 0.089
+Confusion matrix:
+ [[140   6]
+ [120  11]]
+('Model params: 367.384K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+average eval loss:  0.6909
+Accuracy: 0.534
+F1: 0.452
+Precision: 0.533
+Recall: 0.534
+MCC: 0.042
+Confusion matrix:
+ [[131  15]
+ [114  17]]
+('Model params: 367.384K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+average eval loss:  0.6919
+Accuracy: 0.549
+F1: 0.476
+Precision: 0.562
+Recall: 0.549
+MCC: 0.085
+Confusion matrix:
+ [[131  15]
+ [110  21]]
+('Model params: 367.384K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+average eval loss:  0.6929
+Accuracy: 0.523
+F1: 0.520
+Precision: 0.521
+Recall: 0.523
+MCC: 0.038
+Confusion matrix:
+ [[88 58]
+ [74 57]]
+('Model params: 367.384K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+average eval loss:  0.6909
+Accuracy: 0.509
+F1: 0.399
+Precision: 0.454
+Recall: 0.509
+MCC: -0.053
+Confusion matrix:
+ [[133  13]
+ [123   8]]
+('Model params: 367.384K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

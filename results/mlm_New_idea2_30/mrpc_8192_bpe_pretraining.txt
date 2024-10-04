@@ -1,0 +1,80 @@
+ModelConfig(model_name='Classifier_first_token_New_idea2', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1.2, d_state=0, num_layers=3, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  1.3369
+Accuracy: 0.662
+F1: 0.666
+Precision: 0.670
+Recall: 0.662
+MCC: 0.237
+Confusion matrix:
+ [[ 66  63]
+ [ 75 204]]
+('Model params: 367.384K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_New_idea2', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1.2, d_state=0, num_layers=3, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.9901
+Accuracy: 0.657
+F1: 0.655
+Precision: 0.654
+Recall: 0.657
+MCC: 0.200
+Confusion matrix:
+ [[ 57  72]
+ [ 68 211]]
+('Model params: 367.384K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_New_idea2', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1.2, d_state=0, num_layers=3, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  1.6634
+Accuracy: 0.674
+F1: 0.662
+Precision: 0.657
+Recall: 0.674
+MCC: 0.204
+Confusion matrix:
+ [[ 49  80]
+ [ 53 226]]
+('Model params: 367.384K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_New_idea2', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1.2, d_state=0, num_layers=3, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.9801
+Accuracy: 0.627
+F1: 0.638
+Precision: 0.658
+Recall: 0.627
+MCC: 0.206
+Confusion matrix:
+ [[ 72  57]
+ [ 95 184]]
+('Model params: 367.384K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_New_idea2', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1.2, d_state=0, num_layers=3, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  2.8678
+Accuracy: 0.657
+F1: 0.659
+Precision: 0.661
+Recall: 0.657
+MCC: 0.216
+Confusion matrix:
+ [[ 62  67]
+ [ 73 206]]
+('Model params: 367.384K', 'Model buffers: 0.000K', 'Model size: 1.401MB')
+
+*******************************************
+

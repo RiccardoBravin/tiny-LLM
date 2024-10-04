@@ -20,7 +20,7 @@ from lib.Models.models import *
 
 epochs_pretraining = 1
 
-log_t_interval = 20
+log_t_interval = 60
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -55,7 +55,7 @@ model_config = ModelConfig(
 
 #load the dataset for pretraining
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Importing pretraining dataset (Book Corpus){RESET}")
-pretraining_dataset, _ = dataset_selector(pretr_dataset_config.dataset_name, reduced=True)
+pretraining_dataset, _ = dataset_selector(pretr_dataset_config.dataset_name, reduced=False)
 print(f"{FOREGROUND_COLORS["BrightCyan"]}Dataset contains {len(pretraining_dataset)} training samples to be combined in pairs{RESET}")
 
 
