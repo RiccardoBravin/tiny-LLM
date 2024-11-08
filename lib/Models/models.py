@@ -396,11 +396,50 @@ class Nano_Bert_Efficient_mh_augm(nn.Module):
         return x
 
 
-class New_idea2(nn.Module):
+
+class Mamba_model_noNANO(nn.Module):
     """
-    BERT model with NanoBERT embedder and custom idea
+    Mamba model
     """
-    
+
+    def __init__(self, model_config: ModelConfig, dropout=0.1):
+        """
+        Embedder and multilayer model using the Mamba_block
+        """
+
+        super().__init__()
+        self.d_model = model_config.embedding_dimension
+
+        self.dropout = nn.Dropout(dropout)
+
+        # embedding for BERT, sum of positional, segment, token embeddings
+        self.embedder = embedders.STD_embedder(model_config)
+
+        # multi-layers transformer blocks, deep network
+        config = MambaConfig(d_model=model_config.embedding_dimension, 
+                             n_layers=model_config.num_layers,
+                             expand_factor=model_config.forward_expansion,
+                             d_state=model_config.d_state,
+                             d_conv=4,
+                             use_cuda=True )
+        self.mamba_layers = Mamba(config)
+
+    def forward(self, x, mask = None):
+        
+        # embedding the indexed sequence to sequence of vectors
+        x = self.embedder(x)
+        
+        x = self.dropout(x)
+
+        # running over multiple transformer blocks
+        x = self.mamba_layers(x)
+        return x
+
+class Nano_Bert_Differential_Efficient(nn.Module):
+    """
+    BERT model with NanoBERT embedder and efficient attention
+    """
+
     def __init__(self, model_config: ModelConfig, dropout=0.1):
         """
         Embedder and multilayer model using the BERT_block
@@ -413,13 +452,15 @@ class New_idea2(nn.Module):
         self.embedder = embedders.Nano_embedder(model_config)
 
         # multi-layers transformer blocks, deep network
-        self.encoder_blocks = torch.nn.ModuleList([
-            structures.NewLayer(self.d_model, model_config.feed_forward_hidden(), dropout) 
-        for _ in range(model_config.num_layers)])
+        self.encoder_blocks = torch.nn.ModuleList(
+            [structures.EncoderLayer(
+                            blocks.EfficientDifferentialAttention(model_config.embedding_dimension, dropout), 
+                            model_config.embedding_dimension, 
+                            model_config.forward_expansion, 
+                            dropout) 
+                                    for _ in range(model_config.num_layers)])
 
-        self.dropout = nn.Dropout(dropout)
-
-    def forward(self, x, mask= None):
+    def forward(self, x, mask):
         
         # embedding the indexed sequence to sequence of vectors
         x = self.embedder(x)
@@ -430,8 +471,5 @@ class New_idea2(nn.Module):
         
         # running over multiple transformer blocks
         for encoder in self.encoder_blocks:
-            x = self.dropout(x)
             x = encoder.forward(x, mask)
-            
         return x
-    

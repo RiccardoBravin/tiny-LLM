@@ -1,5 +1,6 @@
 
 virtualenv
+virtualenv2
 venv
 
 stpiece

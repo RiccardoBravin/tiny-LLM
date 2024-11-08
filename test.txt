@@ -1,0 +1,35 @@
+File: emotion_split_report,txt
+Media Accuracy: 88,86000
+Media MCC: 85,26602
+Media F1: 88,87508
+*******************************************
+File: limit_report,txt
+Media Accuracy: 72,40000
+Media MCC: 41,07848
+Media F1: 73,13932
+*******************************************
+File: bull_report,txt
+Media Accuracy: 83,37526
+Media MCC: 80,11912
+Media F1: 83,32907
+*******************************************
+File: news_report,txt
+Media Accuracy: 91,92895
+Media MCC: 89,24344
+Media F1: 91,90880
+*******************************************
+File: imdb_report,txt
+Media Accuracy: 85,68720
+Media MCC: 71,50618
+Media F1: 85,67395
+*******************************************
+File: nlu_report,txt
+Media Accuracy: 88,53033
+Media MCC: 87,10636
+Media F1: 88,51503
+*******************************************
+File: snips_report,txt
+Media Accuracy: 98,15714
+Media MCC: 97,85243
+Media F1: 98,15794
+*******************************************

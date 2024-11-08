@@ -1,10 +1,12 @@
 from datasets import load_dataset
 from lib.preprocessing import dataset_selector
 from colors import ATTRIBUTES, FOREGROUND_COLORS, RESET
+from lib import utils
 
 epochs_training = 10
 
-for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
+# for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
+for DATASET_NAME in ["snips", "imdb", "emotion_split"]: 
     print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Loading dataset {DATASET_NAME} {RESET}")
         
     dataset_name = DATASET_NAME
@@ -62,9 +64,12 @@ for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_s
         from transformers import AutoModelForSequenceClassification
         model = AutoModelForSequenceClassification.from_pretrained("prajjwal1/bert-tiny", num_labels=len(num_labels))
 
+        print(utils.model_size(model))
+
+
 
         from transformers import TrainingArguments
-        training_args = TrainingArguments("test_trainer", num_train_epochs=epochs_training, save_strategy="no")
+        training_args = TrainingArguments("test_trainer", num_train_epochs=epochs_training, save_strategy="no", seed=times)
 
 
 
@@ -92,3 +97,5 @@ for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_s
         with open(f"results/BERT-tiny/{dataset_name}_report.txt", "a") as f:
                         f.write(f"{res}")
                         f.write("\n\n*******************************************\n\n")
+
+

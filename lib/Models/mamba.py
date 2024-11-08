@@ -53,7 +53,7 @@ class MambaConfig:
     use_cuda: bool = False # use official CUDA implementation when training (not compatible with (b)float16)
 
     def __post_init__(self):
-        self.d_inner = self.expand_factor * self.d_model # E*D = ED in comments
+        self.d_inner = int(self.expand_factor * self.d_model) # E*D = ED in comments
 
         if self.dt_rank == 'auto':
             self.dt_rank = math.ceil(self.d_model / 16)

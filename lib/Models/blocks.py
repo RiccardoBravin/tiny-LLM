@@ -371,3 +371,74 @@ class SwiGLUAttention(torch.nn.Module):
     
 
         return self.down(y) + value
+    
+
+
+class EfficientDifferentialAttention(torch.nn.Module):
+    
+    def __init__(self, d_model:int, dropout=0.1):
+        """
+        Efficient Attention block that is taken from the paper. 
+        Args:
+            d_model: the embedding dimension
+            dropout: the dropout rate
+        """
+        super().__init__()
+        
+
+        self.dropout = nn.Dropout(dropout)
+
+        self.lambda_q1 = nn.Parameter(torch.zeros(d_model, dtype=torch.float32).normal_(mean=0,std=0.1))
+        self.lambda_k1 = nn.Parameter(torch.zeros(d_model, dtype=torch.float32).normal_(mean=0,std=0.1))
+        self.lambda_q2 = nn.Parameter(torch.zeros(d_model, dtype=torch.float32).normal_(mean=0,std=0.1))
+        self.lambda_k2 = nn.Parameter(torch.zeros(d_model, dtype=torch.float32).normal_(mean=0,std=0.1))
+
+
+        self.query = nn.Linear(d_model, d_model*2)
+        self.output_linear = nn.Linear(d_model, d_model)
+        
+    def forward(self, query:torch.Tensor, key:torch.Tensor, value:torch.Tensor, mask:torch.Tensor):
+        """
+        Usually query, key, value are the same tensor.
+
+        Args:
+            query: the query tensor of shape (batch_size, max_len, d_model)
+            key: the key tensor of shape (batch_size, max_len, d_model)
+            value: the value tensor of shape (batch_size, max_len, d_model) 
+            mask: the mask tensor of shape (batch_size, max_len, max_len) that contains 0 for padding tokens and 1 for the rest
+        """
+
+        lamb = torch.exp(torch.dot(self.lambda_q1, self.lambda_k1)) - torch.exp(torch.dot(self.lambda_q2, self.lambda_k2)) + 0.8
+
+        # (batch_size, max_len, d_model)
+        query = self.query(query) 
+
+        Q1 = query[:, :, :query.shape[-1]//2]
+        Q2 = query[:, :, query.shape[-1]//2:]
+
+        # (batch_size, max_len, d_model) matmul (batch_size, d_model, max_len) --> (batch_size, max_len, max_len)
+        scores1 = torch.matmul(Q1, key.permute(0, 2, 1)) / math.sqrt(query.size(-1))
+        scores2 = torch.matmul(Q2, key.permute(0, 2, 1)) / math.sqrt(query.size(-1))
+        
+
+        # fill 0 mask with super small number so it wont affect the softmax weight
+        scores1 = scores1.masked_fill(mask == 0, float("-inf")) 
+        scores2 = scores2.masked_fill(mask == 0, float("-inf"))
+
+
+        # softmax to put attention weight for all non-pad tokens
+        weights1 = nn.functional.softmax(scores1, dim=-1)
+        weights2 = nn.functional.softmax(scores2, dim=-1)
+
+
+        weights1 = torch.nan_to_num(weights1)
+        weights2 = torch.nan_to_num(weights2)
+        
+        weights = weights1 - lamb * weights2
+
+        weights = self.dropout(weights)
+        
+        # (batch_size, max_len, max_len) matmul (batch_size, d_model, max_len) --> (batch_size, d_model, max_len)
+        context = torch.matmul(weights, value)
+        
+        return self.output_linear(context) # (batch_size, max_len, d_model) as input
