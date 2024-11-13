@@ -1,0 +1,17 @@
+ModelConfig(model_name='Classifier_first_token_Nano_Bert_Differential_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.8, d_state=0, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.7848
+Accuracy: 0.661
+F1: 0.658
+Precision: 0.660
+Recall: 0.661
+MCC: 0.491
+Confusion matrix:
+ [[2626  474  379]
+ [ 774 1716  633]
+ [ 562  506 2145]]
+('Model params: 312.691K', 'Model buffers: 0.000K', 'Model size: 1.193MB')
+
+*******************************************
+
