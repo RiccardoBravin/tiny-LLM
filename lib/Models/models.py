@@ -473,3 +473,46 @@ class Nano_Bert_Differential_Efficient(nn.Module):
         for encoder in self.encoder_blocks:
             x = encoder.forward(x, mask)
         return x
+    
+
+
+
+class Nano_Bert_Differential_Skip(nn.Module):
+    """
+    BERT model with NanoBERT embedder and efficient attention
+    """
+
+    def __init__(self, model_config: ModelConfig, dropout=0.1):
+        """
+        Embedder and multilayer model using the BERT_block
+        """
+
+        super().__init__()
+        self.d_model = model_config.embedding_dimension
+
+        # embedding for BERT, sum of positional, segment, token embeddings
+        self.embedder = embedders.Nano_embedder(model_config)
+
+        # multi-layers transformer blocks, deep network
+        self.encoder_blocks = torch.nn.ModuleList(
+            [
+                blocks.EfficientDifferentialSkipAttention(model_config.embedding_dimension, 
+                                                          model_config.d_state,
+                                                          model_config.forward_expansion,
+                                                          dropout) 
+                
+                for _ in range(model_config.num_layers)])
+
+    def forward(self, x, mask):
+        
+        # embedding the indexed sequence to sequence of vectors
+        x = self.embedder(x)
+
+        # attention masking for padded token
+        # (batch_size, seq_len, seq_len)
+        mask = modules.make_score_mask(mask)
+        
+        # running over multiple transformer blocks
+        for encoder in self.encoder_blocks:
+            x = encoder.forward(x, mask)
+        return x

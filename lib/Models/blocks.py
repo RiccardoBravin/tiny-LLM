@@ -442,3 +442,93 @@ class EfficientDifferentialAttention(torch.nn.Module):
         context = torch.matmul(weights, value)
         
         return self.output_linear(context) # (batch_size, max_len, d_model) as input
+    
+
+
+
+class EfficientDifferentialSkipAttention(torch.nn.Module):
+    
+    def __init__(self, d_model:int, d_conv:int, fw_exp:float, dropout=0.1):
+        """
+        Efficient Attention block that is taken from the paper. 
+        Args:
+            d_model: the embedding dimension
+            dropout: the dropout rate
+        """
+        super().__init__()
+        
+        self.d_inner = int(d_model*fw_exp)
+
+        self.dropout = nn.Dropout(dropout)
+        self.norm = modules.RMSNorm(d_model)
+        self.act = torch.nn.SiLU()
+
+        self.lambda_q1 = nn.Parameter(torch.zeros(d_model, dtype=torch.float32).normal_(mean=0,std=0.1))
+        self.lambda_k1 = nn.Parameter(torch.zeros(d_model, dtype=torch.float32).normal_(mean=0,std=0.1))
+        self.lambda_q2 = nn.Parameter(torch.zeros(d_model, dtype=torch.float32).normal_(mean=0,std=0.1))
+        self.lambda_k2 = nn.Parameter(torch.zeros(d_model, dtype=torch.float32).normal_(mean=0,std=0.1))
+
+
+        self.query = nn.Linear(d_model, d_model)
+        self.output_linear = nn.Linear(d_model, d_model)
+
+        #self.expand = nn.Linear(d_model, int(d_model*fw_exp))
+        self.contract = nn.Linear(self.d_inner, d_model)
+        
+        self.conv1d = nn.Conv1d(in_channels=d_model, out_channels=self.d_inner, kernel_size=d_conv, groups=d_model, padding=d_conv - 1)
+        
+
+    def forward(self, x:torch.Tensor, mask:torch.Tensor):
+        """
+        Usually query, key, value are the same tensor.
+
+        Args:
+            query: the query tensor of shape (batch_size, max_len, d_model)
+            key: the key tensor of shape (batch_size, max_len, d_model)
+            value: the value tensor of shape (batch_size, max_len, d_model) 
+            mask: the mask tensor of shape (batch_size, max_len, max_len) that contains 0 for padding tokens and 1 for the rest
+        """
+        query = self.norm(x)
+        key = query
+        value = query
+
+        lamb1 = torch.exp(torch.dot(self.lambda_q1, self.lambda_k1))
+        lamb2 = torch.exp(torch.dot(self.lambda_q2, self.lambda_k2))
+
+        # (batch_size, max_len, d_model)
+        Q = self.query(query) 
+
+        # (batch_size, max_len, d_model) matmul (batch_size, d_model, max_len) --> (batch_size, max_len, max_len)
+        scores = torch.matmul(Q, key.permute(0, 2, 1)) / math.sqrt(query.size(-1))        
+
+        # fill 0 mask with super small number so it wont affect the softmax weight
+        scores = scores.masked_fill(mask == 0, float("-inf")) 
+
+        # softmax to put attention weight for all non-pad tokens
+        weights = nn.functional.softmax(scores, dim=-1)
+        weights = torch.nan_to_num(weights)
+
+        weights = self.dropout(weights)
+        
+        # (batch_size, max_len, max_len) matmul (batch_size, d_model, max_len) --> (batch_size, d_model, max_len)
+        context = torch.matmul(weights, value)
+        
+        out1 = self.output_linear(context)
+
+
+        #convolution expansion
+        _, L, _ = x.shape
+        x = query.transpose(1, 2) # (B, ED, L)
+        x = self.conv1d(x)[:, :, :L] # depthwise convolution over time, with a short filter
+        x = x.transpose(1, 2) # (B, L, ED)
+
+        #activation
+        x = self.act(x)
+
+        #contract
+        out2 = self.contract(x)
+
+
+        out = lamb1 * out1 - lamb2 * out2
+
+        return out # (batch_size, max_len, d_model) as input
