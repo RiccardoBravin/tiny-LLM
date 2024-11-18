@@ -1,0 +1,39 @@
+Model config for current run:
+ModelConfig(model_name='EmbBERT-Diff-Skip', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=1, d_state=32, num_layers=4, vocab_size=8192, learning_rate=0.001)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  2.7143
+Spearman correlation coefficient: 0.102
+('Model params: 357.377K', 'Model buffers: 0.000K', 'Model size: 1.363MB')
+
+*******************************************
+
+average eval loss:  2.5309
+Spearman correlation coefficient: 0.088
+('Model params: 357.377K', 'Model buffers: 0.000K', 'Model size: 1.363MB')
+
+*******************************************
+
+average eval loss:  2.5844
+Spearman correlation coefficient: 0.116
+('Model params: 357.377K', 'Model buffers: 0.000K', 'Model size: 1.363MB')
+
+*******************************************
+
+average eval loss:  2.4131
+Spearman correlation coefficient: 0.076
+('Model params: 357.377K', 'Model buffers: 0.000K', 'Model size: 1.363MB')
+
+*******************************************
+
+average eval loss:  3.1128
+Spearman correlation coefficient: 0.106
+('Model params: 357.377K', 'Model buffers: 0.000K', 'Model size: 1.363MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

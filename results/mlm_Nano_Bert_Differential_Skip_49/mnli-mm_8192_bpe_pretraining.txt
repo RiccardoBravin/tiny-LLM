@@ -1,0 +1,51 @@
+ModelConfig(model_name='Classifier_first_token_Nano_Bert_Differential_Skip', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=1, max_length=256, forward_expansion=1, d_state=32, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.7065
+Accuracy: 0.691
+F1: 0.691
+Precision: 0.693
+Recall: 0.691
+MCC: 0.536
+Confusion matrix:
+ [[2550  606  307]
+ [ 504 2084  541]
+ [ 445  637 2158]]
+('Model params: 357.635K', 'Model buffers: 0.000K', 'Model size: 1.364MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_Nano_Bert_Differential_Skip', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=1, max_length=256, forward_expansion=1, d_state=32, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.7027
+Accuracy: 0.701
+F1: 0.702
+Precision: 0.703
+Recall: 0.701
+MCC: 0.552
+Confusion matrix:
+ [[2515  593  355]
+ [ 451 2127  551]
+ [ 378  607 2255]]
+('Model params: 357.635K', 'Model buffers: 0.000K', 'Model size: 1.364MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_Nano_Bert_Differential_Skip', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=1, max_length=256, forward_expansion=1, d_state=32, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.7144
+Accuracy: 0.695
+F1: 0.695
+Precision: 0.697
+Recall: 0.695
+MCC: 0.543
+Confusion matrix:
+ [[2606  570  287]
+ [ 536 2115  478]
+ [ 477  649 2114]]
+('Model params: 357.635K', 'Model buffers: 0.000K', 'Model size: 1.364MB')
+
+*******************************************
+

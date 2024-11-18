@@ -19,7 +19,7 @@ from lib.trainer import Trainer
 ########################################################################################
 EPOCHS = 20
 MIN_ITERATIONS = 1000
-TRAINING_CYCLES = 1
+TRAINING_CYCLES = 5
 
 
 dataset_config = DataConfig(
@@ -38,8 +38,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
 # for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
-for DATASET_NAME in ["qqp", "sst2", "imdb"]: #test
-# for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
+# for DATASET_NAME in ["qqp", "sst2", "imdb"]: #test
+for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
 
 	dataset_config.dataset_name = DATASET_NAME
 	dataset_config.dict_size = dict_size_aux

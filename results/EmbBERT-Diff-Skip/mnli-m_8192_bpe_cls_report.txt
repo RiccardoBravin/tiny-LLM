@@ -1,0 +1,20 @@
+Model config for current run:
+ModelConfig(model_name='EmbBERT-Diff-Skip', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=1, d_state=32, num_layers=4, vocab_size=8192, learning_rate=0.001)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  0.8416
+Accuracy: 0.630
+F1: 0.627
+Precision: 0.629
+Recall: 0.630
+MCC: 0.444
+Confusion matrix:
+ [[2472  599  408]
+ [ 856 1618  649]
+ [ 643  481 2089]]
+('Model params: 357.635K', 'Model buffers: 0.000K', 'Model size: 1.364MB')
+
+*******************************************
+

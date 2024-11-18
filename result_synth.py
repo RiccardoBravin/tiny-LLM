@@ -5,7 +5,7 @@ import pathlib
 import re
 
 # models = ["BERT_original", "Mamba", "Embedder_+_conv", "Embedder_only", "Nano_Bert_Efficient", "Nano_Bert_Efficient_mh"]
-models = ["IDEA1", "mlm_New_idea2_30"]
+models = ["mlm_Nano_Bert_Differential_Skip_49"]
 
 if True:
     for model in models:
