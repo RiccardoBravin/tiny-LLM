@@ -19,7 +19,7 @@ from lib.Models.models import *
 
 
 epochs_training = 10
-min_iterations = 10000
+min_iterations = 2000
 finetuning_tests= 5
 
 logs_x_epoch = 5
