@@ -56,8 +56,8 @@ model_config = ModelConfig(
 
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
 # for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
-for DATASET_NAME in ["mnli-m", "mnli-mm"]:  #ALL DATASETS
-# for DATASET_NAME in ["mnli-mm"]: #GLUE
+# for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
+for DATASET_NAME in ["qqp"]: #GLUE
 
 
 	dataset_config.dataset_name = DATASET_NAME
@@ -101,7 +101,6 @@ for DATASET_NAME in ["mnli-m", "mnli-mm"]:  #ALL DATASETS
 		# model = Mamba_model(model_config, dropout=0.1)
 		# model = Nano_Bert_Efficient_mh(model_config, dropout=0.1)
 		# model = Mamba_model(model_config, dropout=0.1)
-		# model = New_idea2(model_config, dropout=0.1)
 		model = Nano_Bert_Differential_Skip(model_config, dropout=0.1)
 
 		model_config.model_name = model.__class__.__name__	

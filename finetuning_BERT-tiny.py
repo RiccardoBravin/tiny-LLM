@@ -3,10 +3,13 @@ from lib.preprocessing import dataset_selector
 from colors import ATTRIBUTES, FOREGROUND_COLORS, RESET
 from lib import utils
 
-epochs_training = 10
+epochs_training = 3
 
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
-for DATASET_NAME in ["snips", "imdb", "emotion_split"]: 
+# for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb",  "mnli-m", "mnli-mm"]: #GLUE
+for DATASET_NAME in ["mnli-m", "mnli-mm"]: #GLUE
+    #missing  = "stsb"  and "qnli" 
+# for DATASET_NAME in ["snips", "imdb", "emotion_split"]: #extra
     print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Loading dataset {DATASET_NAME} {RESET}")
         
     dataset_name = DATASET_NAME
@@ -15,6 +18,8 @@ for DATASET_NAME in ["snips", "imdb", "emotion_split"]:
     train_data, test_data = dataset_selector(dataset_name)
 
     num_labels = train_data.unique("label")
+    if dataset_name == "stsb":
+        num_labels = [0]
 
 
     from transformers import AutoTokenizer
@@ -34,6 +39,7 @@ for DATASET_NAME in ["snips", "imdb", "emotion_split"]:
 
     import numpy as np
     import evaluate
+    from lib.utils import spearman_correlation
 
     accuracy_metric = evaluate.load("accuracy")
     mcc_metric = evaluate.load("matthews_correlation")
@@ -41,29 +47,38 @@ for DATASET_NAME in ["snips", "imdb", "emotion_split"]:
 
     def compute_metrics(eval_pred):
         logits, labels = eval_pred
-        predictions = np.argmax(logits, axis=-1)
 
-        # Compute accuracy
-        accuracy = accuracy_metric.compute(predictions=predictions, references=labels)
+        try:
+            predictions = np.argmax(logits, axis=-1)
 
-        # Compute MCC
-        mcc = mcc_metric.compute(predictions=predictions, references=labels)
+            # Compute accuracy
+            accuracy = accuracy_metric.compute(predictions=predictions, references=labels)
 
-        # Compute F1 score
-        f1 = f1_metric.compute(predictions=predictions, references=labels, average='weighted')
+            # Compute MCC
+            mcc = mcc_metric.compute(predictions=predictions, references=labels)
 
-        # Combine all metrics into a single dictionary
-        return {
-            "accuracy": accuracy["accuracy"],
-            "matthews_correlation": mcc["matthews_correlation"],
-            "f1": f1["f1"]
-        }
+            # Compute F1 score
+            f1 = f1_metric.compute(predictions=predictions, references=labels, average='weighted')
+
+            # Combine all metrics into a single dictionary
+            return {
+                "accuracy": accuracy["accuracy"],
+                "matthews_correlation": mcc["matthews_correlation"],
+                "f1": f1["f1"]
+            }
+        except:
+
+            spe_corr = spearman_correlation(torch.tensor(labels), torch.tensor(logits))
+			
+            return {
+                "spearman_correlation": spe_corr
+            }
 
     for times in range(5):
         print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Training step: {times} {RESET}")
         from transformers import AutoModelForSequenceClassification
         model = AutoModelForSequenceClassification.from_pretrained("prajjwal1/bert-tiny", num_labels=len(num_labels))
-
+        
         print(utils.model_size(model))
 
 
