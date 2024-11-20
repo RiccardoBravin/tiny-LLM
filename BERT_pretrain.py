@@ -37,13 +37,13 @@ pretr_dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=128,
+					embedding_dimension=90,
 					reduced_embedding_dimension=16,
-					number_of_heads=None,
+					number_of_heads=2,
 					max_length=pretr_dataset_config.max_len,
-					forward_expansion=1,
-					d_state=32,
-					num_layers=4,
+					forward_expansion=2,
+					d_state=None,
+					num_layers=2,
 					vocab_size=pretr_dataset_config.dict_size,
 					learning_rate = 5e-4,
 				)
@@ -79,7 +79,8 @@ print(f"\n\n{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}-------------
 # model =  Mamba_model(model_config, dropout=0)
 # model = EmbBERT(model_config, dropout=0)
 # model = Nano_Bert_Differential_Efficient(model_config, dropout=0)
-model = Nano_Bert_Differential_Skip(model_config, dropout=0)
+# model = Nano_Bert_Differential_Skip(model_config, dropout=0)
+model = NanoBERT_original(model_config, dropout=0)
 
 model_config.model_name = model.__class__.__name__
 

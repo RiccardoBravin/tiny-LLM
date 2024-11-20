@@ -22,12 +22,12 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig( 
                     model_name="model_name", 
-                    embedding_dimension=128,
+                    embedding_dimension=90,
                     reduced_embedding_dimension=16,
-                    number_of_heads=None,
-		            forward_expansion=1,
-                    d_state=32,
-                    num_layers=4,
+                    number_of_heads=2,
+		            forward_expansion=2,
+                    d_state=None,
+                    num_layers=2,
                     max_length=dataset_config.max_len, 
                     vocab_size=dataset_config.dict_size,
                     learning_rate=1e-3,
@@ -43,7 +43,8 @@ model_config = ModelConfig(
 # model = Embbert(model_config)
 # model = Mamba_model_noNANO(model_config)
 # model = Nano_Bert_Differential_Efficient(model_config)
-model = Nano_Bert_Differential_Skip(model_config)
+# model = Nano_Bert_Differential_Skip(model_config)
+model = NanoBERT_original(model_config)
 
 #cls = Classifier_max(model, model_config.embedding_dimension, dataset_config.n_labels())
 

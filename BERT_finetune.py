@@ -101,10 +101,11 @@ for DATASET_NAME in ["qqp"]: #GLUE
 		# model = Mamba_model(model_config, dropout=0.1)
 		# model = Nano_Bert_Efficient_mh(model_config, dropout=0.1)
 		# model = Mamba_model(model_config, dropout=0.1)
-		model = Nano_Bert_Differential_Skip(model_config, dropout=0.1)
+		# model = Nano_Bert_Differential_Skip(model_config, dropout=0.1)
+		model = NanoBERT_original(model_config, dropout=0.1)
+
 
 		model_config.model_name = model.__class__.__name__	
-
 
 		try:
 			# full_model = Classifier_BERT_pretraining(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
