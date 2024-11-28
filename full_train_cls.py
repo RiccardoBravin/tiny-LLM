@@ -100,14 +100,16 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 		# 	  		forward_expansion=0.5, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		# ModelConfig( model_name="Nano_Bert_Efficient_long", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, d_state= None,
 			  		# forward_expansion=2, num_layers=10, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),	
-		ModelConfig( model_name="MAMBA_noNANO", embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=0, d_state= 6,
-			  		forward_expansion=1, num_layers=5, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),	
+		# ModelConfig( model_name="MAMBA_noNANO", embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=0, d_state= 6,
+		# 	  		forward_expansion=1, num_layers=5, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),	
 		# ModelConfig( model_name="EmbBERT-Diff", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, d_state= None,
 		# 	  		forward_expansion=1, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),	
 		# ModelConfig( model_name="EmbBERT-Diff-Skip", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=0, d_state= 32,
 		# 	  		forward_expansion=1, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		# ModelConfig( model_name="NanoBERT-Original", embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, d_state= None,
 		# 	  		forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-
+		ModelConfig( model_name="BERT_efficient", embedding_dimension=84, reduced_embedding_dimension=None, number_of_heads=2, d_state=None,
+			  		forward_expansion=2, num_layers=3, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 	]
 
 	for config in configs:

@@ -38,13 +38,13 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=64,
+					embedding_dimension=84,
 					reduced_embedding_dimension=None,
-					number_of_heads=None,
+					number_of_heads=2,
 					max_length=dataset_config.max_len,
-					forward_expansion=1,
-					d_state=6,
-					num_layers=5,
+					forward_expansion=2,
+					d_state=None,
+					num_layers=3,
 					vocab_size=dataset_config.dict_size,
 					learning_rate = 3e-4,
 				)
@@ -103,7 +103,8 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 		# model = Mamba_model(model_config, dropout=0.1)
 		# model = Nano_Bert_Differential_Skip(model_config, dropout=0.1)
 		# model = NanoBERT_original(model_config, dropout=0.1)
-		model = Mamba_model_noNANO(model_config, dropout=0.1)
+		# model = Mamba_model_noNANO(model_config, dropout=0.1)
+		model = BERT_Efficient(model_config, dropout=0.1)
 
 		model_config.model_name = model.__class__.__name__	
 
@@ -111,7 +112,7 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 			full_model = Classifier_BERT_pretraining(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
 			# full_model = Classifier_Nano_BERT_pretraining(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size, 2)
 
-			checkpoint = f"{model.__class__.__name__}_32"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
+			checkpoint = f"{model.__class__.__name__}_1000"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
 			print(f"Loading checkpoint {checkpoint}")
 			resume(full_model, f"trained_models/checkpoints/{checkpoint}.pth")
 
@@ -128,8 +129,8 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
-		# classifier = Classifier_first_token(model, model_config.embedding_dimension, dataset_config.n_labels())
-		classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
+		classifier = Classifier_first_token(model, model_config.embedding_dimension, dataset_config.n_labels())
+		# classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
 
