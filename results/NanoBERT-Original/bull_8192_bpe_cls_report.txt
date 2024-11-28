@@ -1,0 +1,94 @@
+Model config for current run:
+ModelConfig(model_name='NanoBERT-Original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.001)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  0.4117
+Accuracy: 0.835
+F1: 0.834
+Precision: 0.839
+Recall: 0.835
+MCC: 0.803
+Confusion matrix:
+ [[705   0  33   2   3  64]
+ [  1 744   6   1   2  10]
+ [ 33   4 613   3   0 138]
+ [  3   1  10 733   3   3]
+ [  3   0   3   0 781  47]
+ [ 46  11 333   4  20 407]]
+('Model params: 270.444K', 'Model buffers: 0.000K', 'Model size: 1.032MB')
+
+*******************************************
+
+average eval loss:  0.4191
+Accuracy: 0.836
+F1: 0.835
+Precision: 0.846
+Recall: 0.836
+MCC: 0.806
+Confusion matrix:
+ [[671   2  68   0   2  64]
+ [  0 749   7   0   0   8]
+ [ 16   3 651   7   2 112]
+ [  0   3   6 741   1   2]
+ [  5   2   6   9 779  33]
+ [ 25  14 362   5  18 397]]
+('Model params: 270.444K', 'Model buffers: 0.000K', 'Model size: 1.032MB')
+
+*******************************************
+
+average eval loss:  0.4070
+Accuracy: 0.837
+F1: 0.832
+Precision: 0.846
+Recall: 0.837
+MCC: 0.809
+Confusion matrix:
+ [[709   0  61   1   4  32]
+ [  0 748   8   0   1   7]
+ [ 26   7 661   4   2  91]
+ [  2   2  11 731   6   1]
+ [  9   1   9   0 791  24]
+ [ 47  21 376   3  21 353]]
+('Model params: 270.444K', 'Model buffers: 0.000K', 'Model size: 1.032MB')
+
+*******************************************
+
+average eval loss:  0.4262
+Accuracy: 0.817
+F1: 0.812
+Precision: 0.828
+Recall: 0.817
+MCC: 0.787
+Confusion matrix:
+ [[685   2  75   0   3  42]
+ [  0 739  10   2   5   8]
+ [ 31   3 660   4   4  89]
+ [  1   1   6 738   1   6]
+ [ 18   0  10   5 774  27]
+ [ 43  13 431   6  25 303]]
+('Model params: 270.444K', 'Model buffers: 0.000K', 'Model size: 1.032MB')
+
+*******************************************
+
+average eval loss:  0.4451
+Accuracy: 0.823
+F1: 0.825
+Precision: 0.827
+Recall: 0.823
+MCC: 0.788
+Confusion matrix:
+ [[671   1  49   2   3  81]
+ [  2 746   3   0   1  12]
+ [ 23   3 508   9   2 246]
+ [  1   0   6 741   4   1]
+ [ 10   3   4   1 792  24]
+ [ 31  18 277   5  23 467]]
+('Model params: 270.444K', 'Model buffers: 0.000K', 'Model size: 1.032MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

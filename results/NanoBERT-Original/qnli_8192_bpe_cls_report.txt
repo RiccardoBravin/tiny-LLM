@@ -1,0 +1,74 @@
+Model config for current run:
+ModelConfig(model_name='NanoBERT-Original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.001)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  0.6733
+Accuracy: 0.630
+F1: 0.618
+Precision: 0.653
+Recall: 0.630
+MCC: 0.284
+Confusion matrix:
+ [[2200  502]
+ [1517 1244]]
+('Model params: 270.080K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+average eval loss:  0.6772
+Accuracy: 0.598
+F1: 0.583
+Precision: 0.611
+Recall: 0.598
+MCC: 0.207
+Confusion matrix:
+ [[1103 1599]
+ [ 598 2163]]
+('Model params: 270.080K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+average eval loss:  0.5348
+Accuracy: 0.755
+F1: 0.755
+Precision: 0.755
+Recall: 0.755
+MCC: 0.509
+Confusion matrix:
+ [[2058  644]
+ [ 697 2064]]
+('Model params: 270.080K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+average eval loss:  0.5594
+Accuracy: 0.725
+F1: 0.725
+Precision: 0.725
+Recall: 0.725
+MCC: 0.451
+Confusion matrix:
+ [[1969  733]
+ [ 768 1993]]
+('Model params: 270.080K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+average eval loss:  0.6750
+Accuracy: 0.630
+F1: 0.624
+Precision: 0.639
+Recall: 0.630
+MCC: 0.270
+Confusion matrix:
+ [[2033  669]
+ [1354 1407]]
+('Model params: 270.080K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

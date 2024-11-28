@@ -28,7 +28,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 pretr_dataset_config = DataConfig(
 						dataset_name="bookcorpus",
-						dict_size=pow(2, 13),
+						dict_size=pow(2, 11),
 						tokenizer_type="bpe",
 						batch_size=32,
 						max_len=256,
@@ -37,13 +37,13 @@ pretr_dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=90,
-					reduced_embedding_dimension=16,
-					number_of_heads=2,
+					embedding_dimension=64,
+					reduced_embedding_dimension=None,
+					number_of_heads=None,
 					max_length=pretr_dataset_config.max_len,
-					forward_expansion=2,
-					d_state=None,
-					num_layers=2,
+					forward_expansion=1,
+					d_state=6,
+					num_layers=5,
 					vocab_size=pretr_dataset_config.dict_size,
 					learning_rate = 5e-4,
 				)
@@ -80,12 +80,13 @@ print(f"\n\n{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}-------------
 # model = EmbBERT(model_config, dropout=0)
 # model = Nano_Bert_Differential_Efficient(model_config, dropout=0)
 # model = Nano_Bert_Differential_Skip(model_config, dropout=0)
-model = NanoBERT_original(model_config, dropout=0)
+# model = NanoBERT_original(model_config, dropout=0)
+model = Mamba_model_noNANO(model_config, dropout=0)
 
 model_config.model_name = model.__class__.__name__
 
-# cls = Classifier_BERT_pretraining(model, model_config.embedding_dimension, pretr_dataset_config.dict_size, pretr_dataset_config.n_labels())
-cls = Classifier_Nano_BERT_pretraining(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, pretr_dataset_config.dict_size, pretr_dataset_config.n_labels())
+cls = Classifier_BERT_pretraining(model, model_config.embedding_dimension, pretr_dataset_config.dict_size, pretr_dataset_config.n_labels())
+# cls = Classifier_Nano_BERT_pretraining(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, pretr_dataset_config.dict_size, pretr_dataset_config.n_labels())
 cls.to(device)
 
 

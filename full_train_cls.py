@@ -24,7 +24,7 @@ TRAINING_CYCLES = 5
 
 dataset_config = DataConfig(
 					dataset_name=None,
-					dict_size=pow(2, 13),
+					dict_size=pow(2, 11),
 					tokenizer_type="bpe",
 					batch_size=64,
 					max_len=256,
@@ -75,10 +75,10 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 		# Embedder_conv_model,
 		# Nano_Bert_Efficient_mh
 		# Nano_Bert_Efficient_mh_augm
-		# Mamba_model_noNANO
+		Mamba_model_noNANO
 		# Nano_Bert_Differential_Efficient
 		# Nano_Bert_Differential_Skip
-		NanoBERT_original
+		# NanoBERT_original
 	]
 
 	configs = [
@@ -100,14 +100,14 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 		# 	  		forward_expansion=0.5, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
 		# ModelConfig( model_name="Nano_Bert_Efficient_long", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, d_state= None,
 			  		# forward_expansion=2, num_layers=10, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),	
-		# ModelConfig( model_name="MAMBA_noNANO", embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=0, d_state= 6,
-		# 	  		forward_expansion=1, num_layers=5, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),	
+		ModelConfig( model_name="MAMBA_noNANO", embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=0, d_state= 6,
+			  		forward_expansion=1, num_layers=5, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=2e-3),	
 		# ModelConfig( model_name="EmbBERT-Diff", embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=0, d_state= None,
 		# 	  		forward_expansion=1, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),	
 		# ModelConfig( model_name="EmbBERT-Diff-Skip", embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=0, d_state= 32,
 		# 	  		forward_expansion=1, num_layers=4, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
-		ModelConfig( model_name="NanoBERT-Original", embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, d_state= None,
-			  		forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-3),
+		# ModelConfig( model_name="NanoBERT-Original", embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, d_state= None,
+		# 	  		forward_expansion=2, num_layers=2, max_length=dataset_config.max_len, vocab_size=dataset_config.dict_size, learning_rate=1e-
 	]
 
 	for config in configs:

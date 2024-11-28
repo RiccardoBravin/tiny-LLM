@@ -29,7 +29,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 dataset_config = DataConfig(
 						dataset_name=None,
-						dict_size=pow(2, 13),
+						dict_size=pow(2, 11),
 						tokenizer_type="bpe",
 						batch_size=32,
 						max_len=256,
@@ -38,13 +38,13 @@ dataset_config = DataConfig(
 
 model_config = ModelConfig(
 					model_name=None,
-					embedding_dimension=128,
-					reduced_embedding_dimension=16,
-					number_of_heads=1,
+					embedding_dimension=64,
+					reduced_embedding_dimension=None,
+					number_of_heads=None,
 					max_length=dataset_config.max_len,
 					forward_expansion=1,
-					d_state=32,
-					num_layers=4,
+					d_state=6,
+					num_layers=5,
 					vocab_size=dataset_config.dict_size,
 					learning_rate = 3e-4,
 				)
@@ -56,8 +56,8 @@ model_config = ModelConfig(
 
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
 # for DATASET_NAME in ["cola", "mnli-m", "mnli-mm", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb"]: #GLUE
-# for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
-for DATASET_NAME in ["qqp"]: #GLUE
+for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb", "imdb", "news", "bull", "limit", "nlu", "snips", "emotion_split", "mnli-m", "mnli-mm"]:  #ALL DATASETS
+# for DATASET_NAME in ["qqp"]: #GLUE
 
 
 	dataset_config.dataset_name = DATASET_NAME
@@ -102,16 +102,16 @@ for DATASET_NAME in ["qqp"]: #GLUE
 		# model = Nano_Bert_Efficient_mh(model_config, dropout=0.1)
 		# model = Mamba_model(model_config, dropout=0.1)
 		# model = Nano_Bert_Differential_Skip(model_config, dropout=0.1)
-		model = NanoBERT_original(model_config, dropout=0.1)
-
+		# model = NanoBERT_original(model_config, dropout=0.1)
+		model = Mamba_model_noNANO(model_config, dropout=0.1)
 
 		model_config.model_name = model.__class__.__name__	
 
 		try:
-			# full_model = Classifier_BERT_pretraining(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
-			full_model = Classifier_Nano_BERT_pretraining(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size, 2)
+			full_model = Classifier_BERT_pretraining(model, model_config.embedding_dimension, dataset_config.dict_size, dataset_config.n_labels())
+			# full_model = Classifier_Nano_BERT_pretraining(model, model_config.embedding_dimension, model_config.reduced_embedding_dimension, dataset_config.dict_size, 2)
 
-			checkpoint = f"{model.__class__.__name__}_49"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
+			checkpoint = f"{model.__class__.__name__}_32"   #CHANGE HERE THE CHECKPOINT TO USE <-----------------------
 			print(f"Loading checkpoint {checkpoint}")
 			resume(full_model, f"trained_models/checkpoints/{checkpoint}.pth")
 
@@ -128,8 +128,8 @@ for DATASET_NAME in ["qqp"]: #GLUE
 
 		########################################################################################
 		print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightMagenta']}Normal model initialization:{RESET}")
-		classifier = Classifier_first_token(model, model_config.embedding_dimension, dataset_config.n_labels())
-		# classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
+		# classifier = Classifier_first_token(model, model_config.embedding_dimension, dataset_config.n_labels())
+		classifier = Classifier_rms(model, model_config.embedding_dimension, dataset_config.n_labels())
 		classifier.to(device)
 		print(f"Model {model.__class__.__name__} initialized on {device}")
 

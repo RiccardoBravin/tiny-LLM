@@ -1,0 +1,45 @@
+ModelConfig(model_name='Classifier_first_token_NanoBERT_original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  2.7405
+Spearman correlation coefficient: 0.169
+('Model params: 269.989K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_NanoBERT_original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  2.8568
+Spearman correlation coefficient: 0.104
+('Model params: 269.989K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_NanoBERT_original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  2.6879
+Spearman correlation coefficient: 0.121
+('Model params: 269.989K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_NanoBERT_original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  2.6478
+Spearman correlation coefficient: 0.159
+('Model params: 269.989K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_NanoBERT_original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  2.9126
+Spearman correlation coefficient: 0.120
+('Model params: 269.989K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+

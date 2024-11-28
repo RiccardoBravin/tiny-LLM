@@ -1,0 +1,74 @@
+Model config for current run:
+ModelConfig(model_name='MAMBA_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=0, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.002)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  3.3818
+Accuracy: 0.282
+F1: 0.274
+Precision: 0.286
+Recall: 0.282
+MCC: -0.422
+Confusion matrix:
+ [[ 8 32]
+ [19 12]]
+('Model params: 220.098K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+average eval loss:  4.7242
+Accuracy: 0.239
+F1: 0.241
+Precision: 0.248
+Recall: 0.239
+MCC: -0.515
+Confusion matrix:
+ [[ 9 31]
+ [23  8]]
+('Model params: 220.098K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+average eval loss:  4.1750
+Accuracy: 0.127
+F1: 0.125
+Precision: 0.128
+Recall: 0.127
+MCC: -0.742
+Confusion matrix:
+ [[ 4 36]
+ [26  5]]
+('Model params: 220.098K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+average eval loss:  4.7844
+Accuracy: 0.141
+F1: 0.143
+Precision: 0.148
+Recall: 0.141
+MCC: -0.717
+Confusion matrix:
+ [[ 6 34]
+ [27  4]]
+('Model params: 220.098K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+average eval loss:  1.1213
+Accuracy: 0.211
+F1: 0.214
+Precision: 0.220
+Recall: 0.211
+MCC: -0.577
+Confusion matrix:
+ [[ 9 31]
+ [25  6]]
+('Model params: 220.098K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************
