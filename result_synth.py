@@ -7,7 +7,7 @@ import re
 # models = ["BERT_original", "Mamba", "Embedder_+_conv", "Embedder_only", "Nano_Bert_Efficient", "Nano_Bert_Efficient_mh"]
 models = ["BERT_efficient", "mlm_BERT_Efficient_50","MAMBA_noNANO", "mlm_Mamba_model_noNANO_30"]
 
-if True:
+if False:
     for model in models:
         print(f"Results for model: {model}")
 
@@ -100,7 +100,7 @@ else:
     
             # Stampa i risultati per ogni file
             print(f"File: {filename}")
-            print(f"Media Accuracy: {media_accuracy*100:.5f}")
-            print(f"Media MCC: {media_mcc*100:.5f}")
-            print(f"Media F1: {media_f1*100:.5f}")
+            print(f"Acc - F1 - MCC")
+            print(f"{media_accuracy*100:.5f}\t{media_f1*100:.5f}\t{media_mcc*100:.5f}")
+
             print("*******************************************")
