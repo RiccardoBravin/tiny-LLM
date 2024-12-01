@@ -75,10 +75,11 @@ for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb
 		# Embedder_conv_model,
 		# Nano_Bert_Efficient_mh
 		# Nano_Bert_Efficient_mh_augm
-		Mamba_model_noNANO
+		# Mamba_model_noNANO
 		# Nano_Bert_Differential_Efficient
 		# Nano_Bert_Differential_Skip
 		# NanoBERT_original
+		BERT_Efficient
 	]
 
 	configs = [
