@@ -438,20 +438,32 @@ def pretr_tokenizer(dataset:Dataset, dictionary_size:int):
 			)
 
 
+import multiprocessing as mp
+# parallel processing in batches of the tokenization
+def batch_tokenize_worker(args):
+	texts, text_pairs, tokenizer, max_length = args
+	tokenized_batch = tokenizer(text=texts, text_pair=text_pairs, truncation=True, padding='max_length', max_length=max_length)
+	return Dataset.from_dict(tokenized_batch)
+
+def batch_tokenize(texts, text_pairs, tokenizer, max_length, batch_size):
+	pool = mp.Pool(mp.cpu_count())
+	batches = [(texts[i:i + batch_size], text_pairs[i:i + batch_size], tokenizer, max_length) for i in range(0, len(texts), batch_size)]
+	tokenized_batches = pool.map(batch_tokenize_worker, batches)
+	pool.close()
+	pool.join()
+	return concatenate_datasets(tokenized_batches)
+
 def pretr_dataset_builder(dataset:Dataset, tokenizer:PreTrainedTokenizerFast, max_length:int):
 	#making the next sentence prediction dataset with the book corpus
 
-
 	#making the next sentence prediction dataset with the book corpus in a sorted way
-	train_data = tokenizer(dataset['text'][:-1], dataset['text'][1:], truncation=True, padding=True, max_length=max_length)
-	train_data = Dataset.from_dict(train_data)
+	train_data = batch_tokenize(dataset['text'][:-1], dataset['text'][1:], tokenizer, max_length, 1000)
 	print("\tSorted dataset created")
 
 	#making the next sentence prediction dataset with the book corpus in a random way
 	rand_train_data = dataset.shuffle()
-	tokenized_randomized = tokenizer(rand_train_data['text'], dataset['text'], truncation=True, padding=True, max_length=max_length)
+	tokenized_randomized = batch_tokenize(rand_train_data['text'], dataset['text'], tokenizer, max_length, 1000)
 	del rand_train_data
-	tokenized_randomized = Dataset.from_dict(tokenized_randomized)
 	print("\tRandomized dataset created")
 	
 

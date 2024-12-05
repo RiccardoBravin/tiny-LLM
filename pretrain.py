@@ -71,7 +71,7 @@ print(f"{TITLE}Loading dataset Book Corpus{RESET}")
 
 dataset = load_dataset("bookcorpus/bookcorpus", cache_dir="./datasets", trust_remote_code=True)
 if DEBUG:
-    train_data = dataset['train'].select(range(0, 50000))
+    train_data = dataset['train'].select(range(0, 1000000))
 else:
     train_data = dataset['train']
 del dataset
