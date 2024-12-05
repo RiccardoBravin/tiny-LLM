@@ -1,0 +1,85 @@
+ModelConfig(model_name='Classifier_rms_Mamba_model_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=None, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8858
+Accuracy: 0.592
+F1: 0.589
+Precision: 0.596
+Recall: 0.592
+MCC: 0.388
+Confusion matrix:
+ [[2443  625  411]
+ [1074 1494  555]
+ [ 825  515 1873]]
+('Model params: 220.163K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_rms_Mamba_model_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=None, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8404
+Accuracy: 0.621
+F1: 0.620
+Precision: 0.623
+Recall: 0.621
+MCC: 0.432
+Confusion matrix:
+ [[2435  665  379]
+ [ 916 1651  556]
+ [ 699  500 2014]]
+('Model params: 220.163K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_rms_Mamba_model_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=None, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8535
+Accuracy: 0.611
+F1: 0.610
+Precision: 0.621
+Recall: 0.611
+MCC: 0.418
+Confusion matrix:
+ [[2514  687  278]
+ [1027 1668  428]
+ [ 809  588 1816]]
+('Model params: 220.163K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_rms_Mamba_model_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=None, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8455
+Accuracy: 0.619
+F1: 0.618
+Precision: 0.620
+Recall: 0.619
+MCC: 0.428
+Confusion matrix:
+ [[2408  651  420]
+ [ 932 1610  581]
+ [ 699  453 2061]]
+('Model params: 220.163K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_rms_Mamba_model_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=None, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8411
+Accuracy: 0.618
+F1: 0.615
+Precision: 0.625
+Recall: 0.618
+MCC: 0.429
+Confusion matrix:
+ [[2566  574  339]
+ [1093 1551  479]
+ [ 787  476 1950]]
+('Model params: 220.163K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+

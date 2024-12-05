@@ -4,72 +4,72 @@ EPOCHS: 20
 
 *******************************************
 
-average eval loss:  0.7784
-Accuracy: 0.658
-F1: 0.659
-Precision: 0.665
-Recall: 0.658
-MCC: 0.489
+average eval loss:  0.7936
+Accuracy: 0.656
+F1: 0.658
+Precision: 0.668
+Recall: 0.656
+MCC: 0.488
 Confusion matrix:
- [[2363  751  365]
- [ 472 2146  505]
- [ 469  798 1946]]
+ [[2297  885  281]
+ [ 475 2197  457]
+ [ 487  796 1957]]
 ('Model params: 323.319K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
 
 *******************************************
 
-average eval loss:  0.8129
+average eval loss:  0.8207
+Accuracy: 0.640
+F1: 0.639
+Precision: 0.639
+Recall: 0.640
+MCC: 0.459
+Confusion matrix:
+ [[2487  566  410]
+ [ 725 1757  647]
+ [ 629  563 2048]]
+('Model params: 323.319K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
+
+*******************************************
+
+average eval loss:  0.7758
+Accuracy: 0.669
+F1: 0.668
+Precision: 0.668
+Recall: 0.669
+MCC: 0.503
+Confusion matrix:
+ [[2506  504  453]
+ [ 592 1869  668]
+ [ 480  555 2205]]
+('Model params: 323.319K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
+
+*******************************************
+
+average eval loss:  0.7960
 Accuracy: 0.661
-F1: 0.661
-Precision: 0.666
+F1: 0.663
+Precision: 0.676
 Recall: 0.661
-MCC: 0.492
+MCC: 0.497
 Confusion matrix:
- [[2419  718  342]
- [ 492 2104  527]
- [ 493  758 1962]]
+ [[2222  901  340]
+ [ 399 2279  451]
+ [ 396  847 1997]]
 ('Model params: 323.319K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
 
 *******************************************
 
-average eval loss:  0.7794
-Accuracy: 0.660
-F1: 0.659
-Precision: 0.660
-Recall: 0.660
-MCC: 0.489
+average eval loss:  0.7843
+Accuracy: 0.663
+F1: 0.661
+Precision: 0.662
+Recall: 0.663
+MCC: 0.494
 Confusion matrix:
- [[2533  568  378]
- [ 636 1912  575]
- [ 554  627 2032]]
-('Model params: 323.319K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
-
-*******************************************
-
-average eval loss:  0.7891
-Accuracy: 0.655
-F1: 0.656
-Precision: 0.665
-Recall: 0.655
-MCC: 0.486
-Confusion matrix:
- [[2325  837  317]
- [ 447 2211  465]
- [ 497  824 1892]]
-('Model params: 323.319K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
-
-*******************************************
-
-average eval loss:  0.7999
-Accuracy: 0.653
-F1: 0.654
-Precision: 0.665
-Recall: 0.653
-MCC: 0.485
-Confusion matrix:
- [[2273  815  391]
- [ 398 2245  480]
- [ 430  889 1894]]
+ [[2582  522  359]
+ [ 686 1768  675]
+ [ 567  502 2171]]
 ('Model params: 323.319K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
 
 *******************************************

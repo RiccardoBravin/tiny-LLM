@@ -1,0 +1,80 @@
+ModelConfig(model_name='Classifier_first_token_BERT_Efficient', embedding_dimension=84, reduced_embedding_dimension=None, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=3, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.6054
+Accuracy: 0.738
+F1: 0.747
+Precision: 0.781
+Recall: 0.738
+MCC: 0.472
+Confusion matrix:
+ [[489 197]
+ [ 65 249]]
+('Model params: 323.234K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_BERT_Efficient', embedding_dimension=84, reduced_embedding_dimension=None, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=3, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.5676
+Accuracy: 0.747
+F1: 0.755
+Precision: 0.780
+Recall: 0.747
+MCC: 0.476
+Confusion matrix:
+ [[505 181]
+ [ 72 242]]
+('Model params: 323.234K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_BERT_Efficient', embedding_dimension=84, reduced_embedding_dimension=None, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=3, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.6025
+Accuracy: 0.744
+F1: 0.752
+Precision: 0.782
+Recall: 0.744
+MCC: 0.478
+Confusion matrix:
+ [[497 189]
+ [ 67 247]]
+('Model params: 323.234K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_BERT_Efficient', embedding_dimension=84, reduced_embedding_dimension=None, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=3, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.5265
+Accuracy: 0.745
+F1: 0.754
+Precision: 0.787
+Recall: 0.745
+MCC: 0.487
+Confusion matrix:
+ [[493 193]
+ [ 62 252]]
+('Model params: 323.234K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_BERT_Efficient', embedding_dimension=84, reduced_embedding_dimension=None, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=3, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.5711
+Accuracy: 0.732
+F1: 0.742
+Precision: 0.788
+Recall: 0.732
+MCC: 0.480
+Confusion matrix:
+ [[472 214]
+ [ 54 260]]
+('Model params: 323.234K', 'Model buffers: 0.000K', 'Model size: 1.233MB')
+
+*******************************************
+
