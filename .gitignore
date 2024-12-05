@@ -1,0 +1,9 @@
+
+virtualenv
+
+
+#all datasets folder except for "cyberbullying_tweets.csv"
+datasets/*
+!datasets/cyberbullying_tweets.csv
+
+
