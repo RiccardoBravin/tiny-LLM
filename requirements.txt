@@ -1,0 +1,6 @@
+torch
+transformers
+tokenizers
+accelerate
+datasets
+scikit-learn
