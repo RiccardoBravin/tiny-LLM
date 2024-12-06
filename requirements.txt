@@ -4,3 +4,4 @@ tokenizers
 accelerate
 datasets
 scikit-learn
+matplotlib

@@ -7,7 +7,7 @@ from transformers import Trainer, TrainingArguments
 from lib.colors import RESET, ATTRIBUTES, FOREGROUND_COLORS
 from lib.Models.EmbBERT import EmbBERT
 from lib.Models.classifiers import PretrainingClassifier
-from lib.preprocessing import pretr_tokenizer, pretr_dataset_builder
+from lib.preprocessing import pretr_tokenizer, pretr_dataset_builder, MlmNspCollator
 from lib.utils import model_size, CustomPrinterCallback, CustomLoggerCallback
 from models_config import *
 
@@ -17,7 +17,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true" # Enables parallelism for tokenize
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-DEBUG = True
+DEBUG = False
 
 
 # MODEL CONFIGURATION
@@ -28,7 +28,7 @@ training_args = TrainingArguments(
     run_name=f"{config.model_type}_pretraining", 
     output_dir=f'./results/mlm_{config.model_type}',
 
-    dataloader_num_workers=4,           # number of dataloader workers (4 works well but might need to be adjusted)
+    dataloader_num_workers=2,           # number of dataloader workers (4 works well but might need to be adjusted)
     save_total_limit=5,                 # number of total save checkpoints
     overwrite_output_dir=True,	        # overwrite the content of the output directory
     eval_strategy="steps",              # when to evaluate the model
@@ -52,6 +52,8 @@ training_args = TrainingArguments(
     lr_scheduler_type="constant",       # learning rate scheduler type
 	weight_decay=0.05,                  # strength of weight decay
 
+    remove_unused_columns=False,
+
 )
 
 # PRINTING MODEL CONFIGURATION
@@ -71,23 +73,20 @@ print(f"{TITLE}Loading dataset Book Corpus{RESET}")
 
 dataset = load_dataset("bookcorpus/bookcorpus", cache_dir="./datasets", trust_remote_code=True)
 if DEBUG:
-    train_data = dataset['train'].select(range(0, 1000000))
+    train_data = dataset['train'].select(range(0, 100000))
 else:
-    train_data = dataset['train']
+    train_data = dataset['train'].select(range(0, 20000000))
 del dataset
 print(f"\tLoaded dataset of size: {len(train_data)}")
 
 print(f"{TITLE}Training/Loading tokenizer{RESET}")
-tokenizer = pretr_tokenizer(train_data, config.vocab_size)
+tokenizer = pretr_tokenizer(train_data, config.vocab_size, config.max_length)
 
 print(f"{TITLE}Preprocessing dataset{RESET}")
-train_data, eval_data = pretr_dataset_builder(train_data, tokenizer, config.max_length)
+train_data, eval_data = pretr_dataset_builder(train_data)
 
 
-
-# Masked language modeling collator
-from transformers import DataCollatorForLanguageModeling
-mlm_collator = DataCollatorForLanguageModeling(
+custom_collator = MlmNspCollator(
     tokenizer=tokenizer,
     mlm=True,
     mlm_probability=0.15
@@ -107,8 +106,8 @@ trainer = Trainer(
 
     train_dataset=train_data,    		    # training dataset
     eval_dataset=eval_data,                 # evaluation dataset
-    
-    data_collator=mlm_collator,             # data collator
+
+    data_collator=custom_collator,             # data collator
 
     callbacks=[CustomLoggerCallback, CustomPrinterCallback]       # custom callback
 )

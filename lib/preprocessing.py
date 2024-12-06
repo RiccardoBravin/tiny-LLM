@@ -4,7 +4,10 @@ from datasets import load_dataset, Dataset, concatenate_datasets
 from tokenizers import Tokenizer
 from tokenizers.processors import TemplateProcessing
 
-from transformers import PreTrainedTokenizerFast
+from transformers import DataCollatorForLanguageModeling, PreTrainedTokenizerFast
+from typing import List, Union, Any, Dict
+
+import torch
 
 import os, random
 
@@ -380,7 +383,7 @@ def make_tokenizer(tokenizer_type:str, dictionary_size:int, dataset_name:str, tr
 
 
 
-def pretr_tokenizer(dataset:Dataset, dictionary_size:int):
+def pretr_tokenizer(dataset:Dataset, dictionary_size:int, max_length:int):
 	
 	try:
 		tokenizer = Tokenizer.from_file(f"tokenizers/bpe_book_corpus_{dictionary_size}.json")
@@ -435,43 +438,42 @@ def pretr_tokenizer(dataset:Dataset, dictionary_size:int):
 					unk_token="[UNK]", 
 					pad_token="[PAD]", 
 					mask_token="[MASK]",
+					model_max_length=max_length
 			)
 
 
-import multiprocessing as mp
-# parallel processing in batches of the tokenization
-def batch_tokenize_worker(args):
-	texts, text_pairs, tokenizer, max_length = args
-	tokenized_batch = tokenizer(text=texts, text_pair=text_pairs, truncation=True, padding='max_length', max_length=max_length)
-	return Dataset.from_dict(tokenized_batch)
 
-def batch_tokenize(texts, text_pairs, tokenizer, max_length, batch_size):
-	pool = mp.Pool(mp.cpu_count())
-	batches = [(texts[i:i + batch_size], text_pairs[i:i + batch_size], tokenizer, max_length) for i in range(0, len(texts), batch_size)]
-	tokenized_batches = pool.map(batch_tokenize_worker, batches)
-	pool.close()
-	pool.join()
-	return concatenate_datasets(tokenized_batches)
+def pretr_dataset_builder(dataset:Dataset):
+	#modify the dataset to have a tet and a text_pair column for the next sentence prediction as well as a label_nsp column
+	import numpy as np
 
-def pretr_dataset_builder(dataset:Dataset, tokenizer:PreTrainedTokenizerFast, max_length:int):
-	#making the next sentence prediction dataset with the book corpus
 
-	#making the next sentence prediction dataset with the book corpus in a sorted way
-	train_data = batch_tokenize(dataset['text'][:-1], dataset['text'][1:], tokenizer, max_length, 1000)
-	print("\tSorted dataset created")
+	new_text = dataset['text'][:-1]
+	new_text_pair = dataset['text'][1:]
 
-	#making the next sentence prediction dataset with the book corpus in a random way
-	rand_train_data = dataset.shuffle()
-	tokenized_randomized = batch_tokenize(rand_train_data['text'], dataset['text'], tokenizer, max_length, 1000)
-	del rand_train_data
+	dataset_ordered = Dataset.from_dict({
+		"text": new_text,
+		"text_pair": new_text_pair,
+		"label_nsp": np.zeros(len(new_text)).tolist()
+	})
+	del new_text
+	print("\tOrdered dataset created")
+
+	dataset = dataset.shuffle()
+
+
+	new_text = dataset['text'][:-1]
+	dataset_random = Dataset.from_dict({
+		"text": new_text,
+		"text_pair": new_text_pair,
+		"label_nsp": np.ones(len(new_text)).tolist()
+	})
+
+	del new_text, new_text_pair, dataset
 	print("\tRandomized dataset created")
-	
-
-	nlp_labels = [0 for _ in range(len(train_data['input_ids']))] + [1 for _ in range(len(tokenized_randomized['input_ids']))]
-	print("\tLabels created")
 
 	#join the two datasets
-	train_data = concatenate_datasets([train_data, tokenized_randomized]).add_column("label_nsp", nlp_labels).shuffle()
+	train_data = concatenate_datasets([dataset_ordered, dataset_random]).shuffle()
 	print("\tDatasets joined")
 
 	# Splitting the dataset
@@ -480,5 +482,28 @@ def pretr_dataset_builder(dataset:Dataset, tokenizer:PreTrainedTokenizerFast, ma
 
 
 
+# Masked language modeling and NSP collator
+class MlmNspCollator(DataCollatorForLanguageModeling):
+    def torch_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]]) -> Dict[str, Any]:
+        # Handle dict or lists with proper padding and conversion to tensor.
+        text = [example["text"] for example in examples]
+        text_pair = [example["text_pair"] for example in examples]
+        nsp_labels = [example["label_nsp"] for example in examples]
+        batch = self.tokenizer(text=text, text_pair=text_pair, padding=True, truncation=True, return_tensors="pt")
+        batch.pop("token_type_ids")  # Not required for pretraining
+        batch["label_nsp"] = torch.tensor(nsp_labels, dtype=torch.long) 
 
+
+        # If special token mask has been preprocessed, pop it from the dict.
+        special_tokens_mask = batch.pop("special_tokens_mask", None)
+        if self.mlm:
+            batch["input_ids"], batch["labels"] = self.torch_mask_tokens(
+                batch["input_ids"], special_tokens_mask=special_tokens_mask
+            )
+        else:
+            labels = batch["input_ids"].clone()
+            if self.tokenizer.pad_token_id is not None:
+                labels[labels == self.tokenizer.pad_token_id] = -100
+            batch["labels"] = labels
+        return batch
 

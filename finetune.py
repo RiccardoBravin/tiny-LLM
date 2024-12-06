@@ -16,10 +16,10 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true" # Enables parallelism for tokenize
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-CHECKPOINT = None
+CHECKPOINT = 461000
 
 # MODEL CONFIGURATION
-config = NanoEmbedder_config
+config = EmbBERT_config
 
 # Training arguments
 training_args = TrainingArguments(
@@ -43,7 +43,7 @@ training_args = TrainingArguments(
 	per_device_train_batch_size=32,     # batch size per device during training
 	per_device_eval_batch_size=64,      # batch size for evaluation
     
-	learning_rate=5e-4,                 # learning rate
+	learning_rate=5e-5,                 # learning rate
     lr_scheduler_type="constant",       # learning rate scheduler type
 	weight_decay=0.05,                  # strength of weight decay
 
@@ -67,14 +67,14 @@ del aux
 
 # DATASETS SELECTION
 datasets = [
-    "cola", 
-    "mrpc", 
-    "qnli", 
-    "qqp", 
-    "rte", 
-    "sst2", 
-    "wnli", 
-    "stsb", 
+    # "cola", 
+    # "mrpc", 
+    # "qnli", 
+    # "qqp", 
+    # "rte", 
+    # "sst2", 
+    # "wnli", 
+    # "stsb", 
     "imdb", 
     "news", 
     "bull", 

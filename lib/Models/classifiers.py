@@ -120,6 +120,7 @@
 
 from transformers import PreTrainedModel
 from transformers.modeling_outputs import SequenceClassifierOutput, MaskedLMOutput
+import bitsandbytes as bnb
 from torch import nn
 import torch
 
@@ -234,6 +235,42 @@ class RMSClassifier(PreTrainedModel):
 	def change_internal_model(self, model):
 		self.model = model
 
+
+
+class SequenceClassifier8bit(PreTrainedModel):
+	def __init__(self, config):
+		super().__init__(config)
+		
+		# Instantiate a model class based on the config model type
+		model_class = globals()[config.model_type]
+		self.model = model_class(config)
+		
+		self.classifier = bnb.nn.Linear8bitLt(config.hidden_size, config.num_labels)
+		self.celoss = nn.CrossEntropyLoss()
+		self.mseloss = nn.MSELoss()
+		
+
+
+	def forward(self, input_ids, attention_mask, labels=None):
+		outputs = self.model(input_ids, attention_mask)
+		outputs = outputs[:,0]
+
+
+		# Classification head
+		logits = self.classifier(outputs)
+
+		loss = None
+		if labels is not None:
+			try:
+				loss = self.celoss(logits.view(-1, self.config.num_labels), labels.view(-1)) 
+			except:
+				loss = self.mseloss(logits.view(-1), labels.view(-1) )
+			
+		return SequenceClassifierOutput(loss=loss, logits=logits)
+	
+	#function to reinitialize the classifier layer weights
+	def change_internal_model(self, model):
+		self.model = model
 
 
 # class Classifier_rms(nn.Module):

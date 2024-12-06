@@ -5,7 +5,7 @@ from transformers import Trainer, TrainingArguments
 
 # IMPORTS CUSTOM MODULES
 from lib.colors import RESET, ATTRIBUTES, FOREGROUND_COLORS
-from lib.Models.classifiers import SequenceClassifier, PretrainingClassifier, RMSClassifier
+from lib.Models.classifiers import SequenceClassifier, PretrainingClassifier, RMSClassifier, SequenceClassifier8bit
 from lib.preprocessing import dataset_selector, make_tokenizer
 from lib.utils import model_size, compute_metrics, CustomPrinterCallback
 from models_config import *
@@ -16,14 +16,14 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true" # Enables parallelism for tokenize
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-CHECKPOINT = None
+CHECKPOINT = 255000
 
 # MODEL CONFIGURATION
-config = NanoEmbedder_config
+config = EmbBERT_config
 
 # Training arguments
 training_args = TrainingArguments(
-    run_name=f"{config.model_type}_finetuning", # name of the run
+    run_name=f"{config.model_type}_quantized", # name of the run
     
     output_dir='./results',             # output directory
     dataloader_num_workers=4,           # number of dataloader workers (4 works well but might need to be adjusted)
@@ -43,7 +43,8 @@ training_args = TrainingArguments(
 	per_device_train_batch_size=32,     # batch size per device during training
 	per_device_eval_batch_size=64,      # batch size for evaluation
     
-	learning_rate=5e-4,                 # learning rate
+    optim="adamw_bnb_8bit",                      # optimizer type
+	learning_rate=2e-5,                 # learning rate
     lr_scheduler_type="constant",       # learning rate scheduler type
 	weight_decay=0.05,                  # strength of weight decay
 
@@ -67,14 +68,14 @@ del aux
 
 # DATASETS SELECTION
 datasets = [
-    "cola", 
-    "mrpc", 
-    "qnli", 
-    "qqp", 
-    "rte", 
-    "sst2", 
-    "wnli", 
-    "stsb", 
+    # "cola", 
+    # "mrpc", 
+    # "qnli", 
+    # "qqp", 
+    # "rte", 
+    # "sst2", 
+    # "wnli", 
+    # "stsb", 
     "imdb", 
     "news", 
     "bull", 
@@ -130,26 +131,26 @@ for dataset in datasets:
         # TRAINING
         print(f"{TITLE}Initializing model{RESET}")
 
-        if CHECKPOINT:
-            print(f"{FOREGROUND_COLORS['BrightRed']}Loading model from checkpoint{RESET}")
-            pretr = PretrainingClassifier.from_pretrained(f"./results/mlm_{config.model_type}/checkpoint-{CHECKPOINT}", config=config)
-            
-            if config.model_type == "NanoEmbedder" or config.model_type == "NanoEmbedderConv":
-                classifier = RMSClassifier(config=config)
-                print(f"{FOREGROUND_COLORS['BrightRed']}Using RMS Classifier{RESET}")
-            else:
-                classifier = SequenceClassifier(config=config)
-                print(f"{FOREGROUND_COLORS['BrightRed']}Using Sequence Classifier{RESET}")
-            
-            
-            classifier.change_internal_model(pretr.model)
+        print(f"{FOREGROUND_COLORS['BrightRed']}Loading model from checkpoint{RESET}")
+        try:
+            pretr = PretrainingClassifier.from_pretrained(
+                        f"./results/mlm_{config.model_type}/checkpoint-{CHECKPOINT}", 
+                        config=config, 
+                        load_in_8bit=True)
+        except:
+            print(f"{FOREGROUND_COLORS['BrightRed']}FAILED TO LOAD CHECKPOINT, CHECK CHECKPOINT VARIABLE{RESET}")
+            exit()
+        if config.model_type == "NanoEmbedder" or config.model_type == "NanoEmbedderConv":
+            classifier = RMSClassifier(config=config)
+            print(f"{FOREGROUND_COLORS['BrightRed']}Using RMS Classifier{RESET}")
         else:
-            if config.model_type == "NanoEmbedder" or config.model_type == "NanoEmbedderConv" or config.model_type == "MAMBA":
-                classifier = RMSClassifier(config=config)
-                print(f"{FOREGROUND_COLORS['BrightRed']}Using RMS Classifier{RESET}")
-            else:
-                classifier = SequenceClassifier(config=config)
-                print(f"{FOREGROUND_COLORS['BrightRed']}Using Sequence Classifier{RESET}")
+            classifier = SequenceClassifier8bit(config=config)
+            print(f"{FOREGROUND_COLORS['BrightRed']}Using Sequence Classifier{RESET}")
+        
+        print(classifier)
+        
+        classifier.change_internal_model(pretr.model)
+
 
 
 

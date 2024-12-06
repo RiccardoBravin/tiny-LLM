@@ -1,83 +1,49 @@
-#File to plot the two losses and the accuracy of the model
-                                                                                 
-
 import matplotlib.pyplot as plt
-import numpy as np
-import torch
 
-#Read the file
-#FILE_NAME = "trained_models/logs/Nano_Bert_Efficient_SUPERLONG_train_log.txt"
-FILE_NAME = "trained_models/logs/Mamba_model_noNANO_train_log.txt"
-with open(FILE_NAME, 'r') as f:
-    lines = f.readlines()
+def read_loss_file(file_name):
+    """Reads a loss file and returns two lists: x values and y values."""
+    x_vals = []
+    y_vals = []
+    with open(file_name, 'r') as file:
+        for line in file:
+            try:
+                x, y = line.split(':')
+                x_vals.append(int(x.strip()))
+                y_vals.append(float(y.strip()))
+            except ValueError:
+                # If a line cannot be processed, print a message and skip it
+                print(f"Skipping invalid line: {line.strip()}")
+    return x_vals, y_vals
 
-#Extract the data
-steps = []
-mlm_losses = []
-cls_losses = []
-cls_accuracies = []
-cls_mccs = []
-
-min_loss = float('inf')
-checkpoints = []
-checkpoints_mlm = []
-checkpoints_nsp = []
-checkpoint = 0
-
-for line in lines:
-    if 'Step' in line:
-        step = int(line.split('/')[0].split(' ')[1])
-        steps.append(step)
-        mlm_loss = float(line.split('MLM Loss: ')[1].split(' ')[0])
-        mlm_losses.append(mlm_loss)
-        cls_loss = float(line.split('CLS Loss: ')[1].split(' ')[0])
-        cls_losses.append(cls_loss)
-        cls_accuracy = float(line.split('CLS Accuracy: ')[1].split(' ')[0])
-        cls_accuracies.append(cls_accuracy)
-        cls_mcc = float(line.split('CLS MCC: ')[1].split(' ')[0])
-        cls_mccs.append(cls_mcc)
-
-        if min_loss > cls_loss + mlm_loss:
-            checkpoints.append(step)
-            checkpoints_mlm.append(mlm_loss)
-            checkpoints_nsp.append(cls_loss)
-            min_loss = cls_loss + mlm_loss
-            print(f"At step {step} checkpoint {checkpoint} with loss MLM: {mlm_loss:.4f} CLS: {cls_loss:.4f} Total: {cls_loss + mlm_loss:.4f}")
-            checkpoint += 1
+def plot_losses(eval_loss_file, train_loss_file):
+    # Read the loss data from both files
+    eval_x, eval_y = read_loss_file(eval_loss_file)
+    train_x, train_y = read_loss_file(train_loss_file)
 
 
-#Plot the data in a graph
-#The actual data is plotted semitransparently, and the smoothed data is plotted in full color
-#The smoothed data is computed by averaging the data in a window of size WINDOW_SIZE
-WINDOW_SIZE = 50
+    train_x = train_x[:len(eval_x)]
+    train_y = train_y[:len(eval_y)]
 
-fig, ax = plt.subplots(3, 1, figsize=(10, 10))
+    # Create the plot
+    plt.figure(figsize=(10, 6))
+    plt.plot(eval_x, eval_y, label='Evaluation Loss', color='blue', linewidth=2)
+    plt.plot(train_x, train_y, label='Training Loss', color='red', linewidth=2)
 
-ax[0].plot(steps, mlm_losses, alpha=0.3, label='MLM Loss')
-ax[0].plot(steps[:-WINDOW_SIZE+1], np.convolve(mlm_losses, np.ones(WINDOW_SIZE)/WINDOW_SIZE, mode='valid'), label='Smoothed MLM Loss')
-ax[0].plot(checkpoints, checkpoints_mlm, 'ro', label='Checkpoints')
-ax[0].set_xlabel('Step')
-ax[0].set_ylabel('Loss')
-ax[0].legend()
+    # Add labels and title
+    plt.xlabel('Iterations')
+    plt.ylabel('Loss')
+    plt.title('Training and Evaluation Loss')
 
-ax[1].plot(steps, cls_losses, alpha=0.3, label='CLS Loss')
-ax[1].plot(steps[:-WINDOW_SIZE+1], np.convolve(cls_losses, np.ones(WINDOW_SIZE)/WINDOW_SIZE, mode='valid'), label='Smoothed CLS Loss')
-ax[1].plot(checkpoints, checkpoints_nsp, 'ro', label='Checkpoints')
-ax[1].set_xlabel('Step')
-ax[1].set_ylabel('Loss')
-ax[1].legend()
+    # Add legend
+    plt.legend()
 
-ax[2].plot(range(len(cls_accuracies)), cls_accuracies, alpha=0.3, label='CLS Accuracy')
-ax[2].plot(np.convolve(cls_accuracies, np.ones(WINDOW_SIZE)/WINDOW_SIZE, mode='valid'), label='Smoothed CLS Accuracy')
-ax[2].set_xlabel('Step')
-ax[2].set_ylabel('Accuracy')
-ax[2].legend()
+    # Display the plot
+    plt.show()
 
-#make title the name of the file after last '/' and before '_train_log.txt'
-plt.suptitle(FILE_NAME.split('/')[-1].split('_train_log.txt')[0])
+# Replace with the actual paths to your loss files
+origin = "./results/mlm_EmbBERT/"
+eval_loss_file = origin + 'eval_loss.txt'
+train_loss_file = origin + 'train_loss.txt'
 
-fig.tight_layout()
-plt.show()
-
-
-
+# Plot the loss values
+plot_losses(eval_loss_file, train_loss_file)
