@@ -5,7 +5,7 @@ from scipy.stats import spearmanr
 from transformers import EvalPrediction, TrainerCallback
 from tqdm import tqdm
 import torch
-
+import os
 
 # Print the model size
 def model_size(model):
@@ -39,8 +39,8 @@ def print_model_params(model):
 
 
 def compute_metrics(p: EvalPrediction):
-
     try:
+
         preds = p.predictions.argmax(-1)
         precision, recall, f1, _ = precision_recall_fscore_support(p.label_ids, preds, average='weighted', zero_division=0)
         mcc = matthews_corrcoef(p.label_ids, preds)
@@ -53,7 +53,7 @@ def compute_metrics(p: EvalPrediction):
             'recall': recall,
             'mcc': mcc,
         }
-    except:
+    except Exception as e:
 
         preds = p.predictions
         scc = spearmanr(p.label_ids, preds)[0]
@@ -75,7 +75,7 @@ class CustomPrinterCallback(TrainerCallback):
                 out_logs['loss'] = f"{logs['loss']:.6f}"
 
             if 'learning_rate' in logs:
-                out_logs['learning_rate'] = f"{logs['learning_rate']:.6f}"
+                out_logs['learning_rate'] = f"{logs['learning_rate']}"
 
 
             if 'eval_loss' in logs:
@@ -144,6 +144,19 @@ class CustomLoggerCallback(TrainerCallback):
                     f.write(output)
 
             
+
+def save_model_score(metrics:dict, output_dir:str, filename:str):
+
+
+    #if directory does not exist, create it
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    with open(output_dir+filename, "a") as f:
+        f.write("-------------------------------\n")
+        for key, value in metrics.items():
+            f.write(f"{key}: {value}\n")
+        f.write("\n\n")
 
 
 def make_score_mask(input_tensor):

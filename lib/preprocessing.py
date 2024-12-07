@@ -506,4 +506,3 @@ class MlmNspCollator(DataCollatorForLanguageModeling):
                 labels[labels == self.tokenizer.pad_token_id] = -100
             batch["labels"] = labels
         return batch
-

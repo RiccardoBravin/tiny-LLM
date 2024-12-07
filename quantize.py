@@ -1,13 +1,13 @@
 # IMPORTS THIRD PARTY MODULES
 from datasets import Dataset
-from transformers import Trainer, TrainingArguments
+from transformers import Trainer, TrainingArguments, BitsAndBytesConfig
 
 
 # IMPORTS CUSTOM MODULES
 from lib.colors import RESET, ATTRIBUTES, FOREGROUND_COLORS
-from lib.Models.classifiers import SequenceClassifier, PretrainingClassifier, RMSClassifier, SequenceClassifier8bit
+from lib.Models.classifiers import SequenceClassifier, RMSClassifier
 from lib.preprocessing import dataset_selector, make_tokenizer
-from lib.utils import model_size, compute_metrics, CustomPrinterCallback
+from lib.utils import model_size, compute_metrics, CustomPrinterCallback, save_model_score
 from models_config import *
 
 # ENVIRONMENT VARIABLES
@@ -16,7 +16,8 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true" # Enables parallelism for tokenize
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-CHECKPOINT = 255000
+TRAIN_ITERS = 1
+
 
 # MODEL CONFIGURATION
 config = EmbBERT_config
@@ -25,7 +26,8 @@ config = EmbBERT_config
 training_args = TrainingArguments(
     run_name=f"{config.model_type}_quantized", # name of the run
     
-    output_dir='./results',             # output directory
+    output_dir="./results/quantization", # output directory
+
     dataloader_num_workers=4,           # number of dataloader workers (4 works well but might need to be adjusted)
     save_total_limit=1,                 # number of total save checkpoints
     overwrite_output_dir=True,	        # overwrite the content of the output directory
@@ -43,11 +45,11 @@ training_args = TrainingArguments(
 	per_device_train_batch_size=32,     # batch size per device during training
 	per_device_eval_batch_size=64,      # batch size for evaluation
     
-    optim="adamw_bnb_8bit",                      # optimizer type
-	learning_rate=2e-5,                 # learning rate
+	learning_rate=5e-4,                 # learning rate
     lr_scheduler_type="constant",       # learning rate scheduler type
 	weight_decay=0.05,                  # strength of weight decay
 
+    label_names=["labels"]
 
 )
 
@@ -56,19 +58,10 @@ print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}Model configs{RES
 print(config)
 
 
-print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}Model checkup{RESET}")
-aux = SequenceClassifier(config=config)
-print(aux.model)
-
-print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}Model size{RESET}")
-print(model_size(aux.model))
-
-del aux
-
 
 # DATASETS SELECTION
 datasets = [
-    # "cola", 
+    "cola", 
     # "mrpc", 
     # "qnli", 
     # "qqp", 
@@ -76,15 +69,15 @@ datasets = [
     # "sst2", 
     # "wnli", 
     # "stsb", 
-    "imdb", 
-    "news", 
-    "bull", 
-    "limit", 
-    "nlu", 
-    "snips", 
-    "emotion_split", 
-    "mnli-m", 
-    "mnli-mm"
+    # "imdb", 
+    # "news", 
+    # "bull", 
+    # "limit", 
+    # "nlu", 
+    # "snips", 
+    # "emotion_split", 
+    # "mnli-m", 
+    # "mnli-mm"
 ]
 
 
@@ -126,51 +119,64 @@ for dataset in datasets:
     })
 
 
-    for count in range(1, 6):
+    
 
-        # TRAINING
-        print(f"{TITLE}Initializing model{RESET}")
+    # TRAINING
+    print(f"{TITLE}Initializing model{RESET}")
 
-        print(f"{FOREGROUND_COLORS['BrightRed']}Loading model from checkpoint{RESET}")
-        try:
-            pretr = PretrainingClassifier.from_pretrained(
-                        f"./results/mlm_{config.model_type}/checkpoint-{CHECKPOINT}", 
-                        config=config, 
-                        load_in_8bit=True)
-        except:
-            print(f"{FOREGROUND_COLORS['BrightRed']}FAILED TO LOAD CHECKPOINT, CHECK CHECKPOINT VARIABLE{RESET}")
-            exit()
+    q_conf = BitsAndBytesConfig(
+                        load_in_8bit=True,
+
+                    )
+
+    print(f"\tLoading model from checkpoint{RESET}")
+    try:
         if config.model_type == "NanoEmbedder" or config.model_type == "NanoEmbedderConv":
-            classifier = RMSClassifier(config=config)
             print(f"{FOREGROUND_COLORS['BrightRed']}Using RMS Classifier{RESET}")
+            classifier = RMSClassifier(config=config)
+        
         else:
-            classifier = SequenceClassifier8bit(config=config)
             print(f"{FOREGROUND_COLORS['BrightRed']}Using Sequence Classifier{RESET}")
-        
+            classifier = SequenceClassifier.from_pretrained(
+                                                    f"./results/finetuning/{config.model_type}/{dataset}",
+                                                    config=config,
+                                                    quantization_config = q_conf,
+                                            )
         print(classifier)
+        print(f"Model size: {classifier.get_memory_footprint()/1000}KB")
         
-        classifier.change_internal_model(pretr.model)
+    except:
+        print(f"{FOREGROUND_COLORS['BrightRed']}FAILED TO LOAD CHECKPOINT, CHECK CHECKPOINT VARIABLE{RESET}")
+        exit()
+    
+    
 
 
+    print(f"{TITLE}Training model{RESET}")
+
+    from peft import LoraConfig, get_peft_model
+    peft_config = LoraConfig(
+        target_modules="all-linear"
+    )
+    classifier = get_peft_model(classifier, peft_config)
+    classifier.print_trainable_parameters()
+    trainer = Trainer(
+        model=classifier,               		    # the instantiated 🤗 Transformers model to be trained
+        args=training_args,             		    # training arguments, defined above
+
+        train_dataset=train_dataset,      		    # training dataset
+        eval_dataset=test_dataset,                  # evaluation dataset
+
+        compute_metrics=compute_metrics,			# the callback that computes metrics of interest
+        callbacks=[CustomPrinterCallback]           # custom callback
+    )
+
+    trainer.train()
 
 
-
-        print(f"{TITLE}{FOREGROUND_COLORS['BrightMagenta']}Training iteration {count}")
-        trainer = Trainer(
-        	model=classifier,               		    # the instantiated 🤗 Transformers model to be trained
-        	args=training_args,             		    # training arguments, defined above
-
-            train_dataset=train_dataset,    		    # training dataset
-        	eval_dataset=validation_dataset,            # evaluation dataset
-
-        	compute_metrics=compute_metrics,			# the callback that computes metrics of interest
-            callbacks=[CustomPrinterCallback]                # custom callback
-        )
-
-        trainer.train()
-
-        print(f"{TITLE}Evaluating model{RESET}")
-        metrics = trainer.evaluate(test_dataset)
+    print(f"{TITLE}Evaluating model{RESET}")
+    metrics = trainer.evaluate(test_dataset)
+    save_model_score(metrics, f"./results/quantization/{config.model_type}/", f"{dataset}.txt")
 
 
 

@@ -7,7 +7,7 @@ from transformers import Trainer, TrainingArguments
 from lib.colors import RESET, ATTRIBUTES, FOREGROUND_COLORS
 from lib.Models.classifiers import SequenceClassifier, PretrainingClassifier, RMSClassifier
 from lib.preprocessing import dataset_selector, make_tokenizer
-from lib.utils import model_size, compute_metrics, CustomPrinterCallback
+from lib.utils import model_size, compute_metrics, CustomPrinterCallback, save_model_score
 from models_config import *
 
 # ENVIRONMENT VARIABLES
@@ -16,7 +16,8 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true" # Enables parallelism for tokenize
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-CHECKPOINT = 461000
+CHECKPOINT = 867000
+TRAIN_ITERS = 5
 
 # MODEL CONFIGURATION
 config = EmbBERT_config
@@ -39,7 +40,7 @@ training_args = TrainingArguments(
     load_best_model_at_end=True,        # load the best model when finished training 
     metric_for_best_model="mcc",        # use accuracy to evaluate the best model
     
-	num_train_epochs=20,                # total number of training epochs
+	num_train_epochs=10,                # total number of training epochs
 	per_device_train_batch_size=32,     # batch size per device during training
 	per_device_eval_batch_size=64,      # batch size for evaluation
     
@@ -67,14 +68,14 @@ del aux
 
 # DATASETS SELECTION
 datasets = [
-    # "cola", 
-    # "mrpc", 
-    # "qnli", 
-    # "qqp", 
-    # "rte", 
-    # "sst2", 
-    # "wnli", 
-    # "stsb", 
+    "cola", 
+    "mrpc", 
+    "qnli", 
+    "qqp", 
+    "rte", 
+    "sst2", 
+    "wnli", 
+    "stsb", 
     "imdb", 
     "news", 
     "bull", 
@@ -124,19 +125,20 @@ for dataset in datasets:
         'labels': test_data['label']
     })
 
-
-    for count in range(1, 6):
+    
+    best_metric = None
+    for count in range(1, TRAIN_ITERS + 1):
 
         # TRAINING
         print(f"{TITLE}Initializing model{RESET}")
 
         if CHECKPOINT:
-            print(f"{FOREGROUND_COLORS['BrightRed']}Loading model from checkpoint{RESET}")
-            pretr = PretrainingClassifier.from_pretrained(f"./results/mlm_{config.model_type}/checkpoint-{CHECKPOINT}", config=config)
+            print(f"\tLoading model from checkpoint")
+            pretr = PretrainingClassifier.from_pretrained(f"./results/pretraining/mlm_{config.model_type}/checkpoint-{CHECKPOINT}", config=config)
             
             if config.model_type == "NanoEmbedder" or config.model_type == "NanoEmbedderConv":
                 classifier = RMSClassifier(config=config)
-                print(f"{FOREGROUND_COLORS['BrightRed']}Using RMS Classifier{RESET}")
+                print(f"\tUsing RMS Classifier")
             else:
                 classifier = SequenceClassifier(config=config)
                 print(f"{FOREGROUND_COLORS['BrightRed']}Using Sequence Classifier{RESET}")
@@ -144,6 +146,7 @@ for dataset in datasets:
             
             classifier.change_internal_model(pretr.model)
         else:
+            print(f"{FOREGROUND_COLORS['BrightRed']}FAILED TO LOAD CHECKPOINT, CHECK CHECKPOINT VARIABLE{RESET}")
             if config.model_type == "NanoEmbedder" or config.model_type == "NanoEmbedderConv" or config.model_type == "MAMBA":
                 classifier = RMSClassifier(config=config)
                 print(f"{FOREGROUND_COLORS['BrightRed']}Using RMS Classifier{RESET}")
@@ -171,7 +174,11 @@ for dataset in datasets:
         print(f"{TITLE}Evaluating model{RESET}")
         metrics = trainer.evaluate(test_dataset)
 
+        save_model_score(metrics, f"./results/finetuning/{config.model_type}/", f"{dataset}.txt")
 
+        if best_metric is None or metrics["eval_" + training_args.metric_for_best_model] > best_metric:
+            best_metric = metrics["eval_" + training_args.metric_for_best_model]
+            trainer.save_model(f"./results/finetuning/{config.model_type}/{dataset}")
 
 
 
