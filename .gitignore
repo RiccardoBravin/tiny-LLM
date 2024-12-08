@@ -3,8 +3,6 @@ virtualenv
 
 __pycache__/
 
-results/
-
 
 #all datasets folder except for "cyberbullying_tweets.csv"
 datasets/*
@@ -12,9 +10,10 @@ datasets/*
 
 
 #all results folders except for .txt files in any subfolder
-results
+results/*
 !results/**/*.txt
 
 #all tokenizers except for bpe_book_corpus_*
 tokenizers/*
 !tokenizers/bpe_book_corpus_*
+
