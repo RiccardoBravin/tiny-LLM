@@ -6,7 +6,7 @@ from transformers import Trainer, TrainingArguments
 # IMPORTS CUSTOM MODULES
 from lib.colors import RESET, ATTRIBUTES, FOREGROUND_COLORS
 from lib.Models.classifiers import SequenceClassifier, PretrainingClassifier, RMSClassifier
-from lib.preprocessing import dataset_selector, make_tokenizer
+from lib.preprocessing import dataset_selector, make_tokenizer, load_pretr_tokenizer
 from lib.utils import model_size, compute_metrics, CustomPrinterCallback, save_model_score
 from models_config import *
 
@@ -44,7 +44,7 @@ training_args = TrainingArguments(
 	per_device_train_batch_size=32,     # batch size per device during training
 	per_device_eval_batch_size=64,      # batch size for evaluation
     
-	learning_rate=5e-5,                 # learning rate
+	learning_rate=8e-5,                 # learning rate
     lr_scheduler_type="constant",       # learning rate scheduler type
 	weight_decay=0.05,                  # strength of weight decay
 
@@ -101,7 +101,10 @@ for dataset in datasets:
         training_args.metric_for_best_model = "scc"
 
     print(f"{TITLE}Training/Loading tokenizer{RESET}")
-    tokenizer = make_tokenizer(tokenizer_type="bpe", dictionary_size=config.vocab_size, dataset_name=dataset, train_dataset=train_data)
+    if CHECKPOINT:
+        tokenizer = load_pretr_tokenizer(config.vocab_size, config.max_length)
+    else:
+        tokenizer = make_tokenizer(tokenizer_type="bpe", dictionary_size=config.vocab_size, dataset_name=dataset, train_dataset=train_data)
 
     print(f"{TITLE}Tokenizing dataset{RESET}")
     tokenized_train_data = tokenizer(train_data['text'], truncation=True, padding=True, max_length=config.max_length)
@@ -157,7 +160,7 @@ for dataset in datasets:
 
 
 
-        print(f"{TITLE}{FOREGROUND_COLORS['BrightMagenta']}Training iteration {count}")
+        print(f"{TITLE}{FOREGROUND_COLORS['BrightMagenta']}Training iteration {count} for dataset {dataset}{RESET}")
         trainer = Trainer(
         	model=classifier,               		    # the instantiated 🤗 Transformers model to be trained
         	args=training_args,             		    # training arguments, defined above
@@ -168,7 +171,7 @@ for dataset in datasets:
         	compute_metrics=compute_metrics,			# the callback that computes metrics of interest
             callbacks=[CustomPrinterCallback]                # custom callback
         )
-
+        print(f"{FOREGROUND_COLORS['BrightGreen']}")
         trainer.train()
 
         print(f"{TITLE}Evaluating model{RESET}")

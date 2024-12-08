@@ -1,5 +1,5 @@
 
-from lib.colors import FOREGROUND_COLORS
+from lib.colors import FOREGROUND_COLORS, RESET
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support, matthews_corrcoef
 from scipy.stats import spearmanr
 from transformers import EvalPrediction, TrainerCallback
@@ -105,13 +105,22 @@ class CustomPrinterCallback(TrainerCallback):
                 if is_eval:
                     output = f"{FOREGROUND_COLORS['BrightGreen']}[Eval {epoch}]\t"
                 else:
-                    output = f"{FOREGROUND_COLORS['White']}[Train {epoch}]\t"
+                    output = f"{FOREGROUND_COLORS['Green']}[Train {epoch}]\t"
 
                 output += ' '.join([f'{key}: {str(value).ljust(10)}' for key, value in out_logs.items()])
-                output += FOREGROUND_COLORS['BrightMagenta']
+                output += RESET
 
                 tqdm.write(output)
 
+    def on_epoch_begin(self, args, state, control, **kwargs):
+        if "finetuning" in args.run_name:
+            tqdm.write(f"{FOREGROUND_COLORS["BrightMagenta"]}")
+        elif "quantized" in args.run_name:
+            tqdm.write(f"{FOREGROUND_COLORS["BrightCyan"]}")
+        else:
+            tqdm.write(f"{FOREGROUND_COLORS["BrightYellow"]}")
+
+        return super().on_epoch_begin(args, state, control, **kwargs)
 
 class CustomLoggerCallback(TrainerCallback):
      def on_log(self, args, state, control, logs, **kwargs):

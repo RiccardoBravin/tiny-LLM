@@ -6,7 +6,7 @@ from transformers import Trainer, TrainingArguments, BitsAndBytesConfig
 # IMPORTS CUSTOM MODULES
 from lib.colors import RESET, ATTRIBUTES, FOREGROUND_COLORS
 from lib.Models.classifiers import SequenceClassifier, RMSClassifier
-from lib.preprocessing import dataset_selector, make_tokenizer
+from lib.preprocessing import dataset_selector, make_tokenizer, load_pretr_tokenizer
 from lib.utils import model_size, compute_metrics, CustomPrinterCallback, save_model_score
 from models_config import *
 
@@ -16,7 +16,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true" # Enables parallelism for tokenize
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-TRAIN_ITERS = 1
+TRAIN_ITERS = 5
 
 
 # MODEL CONFIGURATION
@@ -41,10 +41,11 @@ training_args = TrainingArguments(
     load_best_model_at_end=True,        # load the best model when finished training 
     metric_for_best_model="mcc",        # use accuracy to evaluate the best model
     
-	num_train_epochs=20,                # total number of training epochs
+	num_train_epochs=10,                # total number of training epochs
 	per_device_train_batch_size=32,     # batch size per device during training
 	per_device_eval_batch_size=64,      # batch size for evaluation
     
+    optim="adamw_bnb_8bit",
 	learning_rate=5e-4,                 # learning rate
     lr_scheduler_type="constant",       # learning rate scheduler type
 	weight_decay=0.05,                  # strength of weight decay
@@ -61,23 +62,23 @@ print(config)
 
 # DATASETS SELECTION
 datasets = [
-    "cola", 
+    # "cola", 
     # "mrpc", 
     # "qnli", 
     # "qqp", 
     # "rte", 
     # "sst2", 
-    # "wnli", 
-    # "stsb", 
-    # "imdb", 
-    # "news", 
-    # "bull", 
-    # "limit", 
-    # "nlu", 
-    # "snips", 
-    # "emotion_split", 
-    # "mnli-m", 
-    # "mnli-mm"
+    "wnli", 
+    "stsb", 
+    "imdb", 
+    "news", 
+    "bull", 
+    "limit", 
+    "nlu", 
+    "snips", 
+    "emotion_split", 
+    "mnli-m", 
+    "mnli-mm"
 ]
 
 
@@ -94,7 +95,9 @@ for dataset in datasets:
         training_args.metric_for_best_model = "scc"
 
     print(f"{TITLE}Training/Loading tokenizer{RESET}")
-    tokenizer = make_tokenizer(tokenizer_type="bpe", dictionary_size=config.vocab_size, dataset_name=dataset, train_dataset=train_data)
+    tokenizer = load_pretr_tokenizer(config.vocab_size, config.max_length)
+
+    #tokenizer = make_tokenizer(tokenizer_type="bpe", dictionary_size=config.vocab_size, dataset_name=dataset, train_dataset=train_data)
 
     print(f"{TITLE}Tokenizing dataset{RESET}")
     tokenized_train_data = tokenizer(train_data['text'], truncation=True, padding=True, max_length=config.max_length)
@@ -126,7 +129,6 @@ for dataset in datasets:
 
     q_conf = BitsAndBytesConfig(
                         load_in_8bit=True,
-
                     )
 
     print(f"\tLoading model from checkpoint{RESET}")
@@ -165,7 +167,7 @@ for dataset in datasets:
         args=training_args,             		    # training arguments, defined above
 
         train_dataset=train_dataset,      		    # training dataset
-        eval_dataset=test_dataset,                  # evaluation dataset
+        eval_dataset=validation_dataset,                  # evaluation dataset
 
         compute_metrics=compute_metrics,			# the callback that computes metrics of interest
         callbacks=[CustomPrinterCallback]           # custom callback

@@ -441,6 +441,18 @@ def pretr_tokenizer(dataset:Dataset, dictionary_size:int, max_length:int):
 					model_max_length=max_length
 			)
 
+def load_pretr_tokenizer(dictionary_size:int, max_length:int):
+	tokenizer = Tokenizer.from_file(f"tokenizers/bpe_book_corpus_{dictionary_size}.json")
+			
+	return PreTrainedTokenizerFast(
+					tokenizer_object = tokenizer,
+					cls_token="[CLS]",
+					sep_token="[SEP]",
+					unk_token="[UNK]",
+					pad_token="[PAD]",
+					mask_token="[MASK]",
+					model_max_length=max_length
+			)
 
 
 def pretr_dataset_builder(dataset:Dataset):
