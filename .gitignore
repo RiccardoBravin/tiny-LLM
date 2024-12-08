@@ -10,7 +10,11 @@ datasets/*
 
 
 #all results folders except for .txt files in any subfolder
-results/*
+
+
+results/checkpoint*
+results/**/checkpoint*
+results/finetuning/*/*/
 !results/**/*.txt
 
 #all tokenizers except for bpe_book_corpus_*
