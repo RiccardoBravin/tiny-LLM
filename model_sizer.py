@@ -1,54 +1,62 @@
-#COLORS
-from colors import ATTRIBUTES, FOREGROUND_COLORS, RESET
+from lib.Models.BERT import BERT_Config
+from lib.Models.mamba import MAMBA_Config
+from lib.Models.NanoEmbedder import NanoEmbedder_Config
+from lib.Models.NanoEmbedderConv import NanoEmbedderConv_Config
+from lib.Models.NanoBERT import NanoBERT_Config
+from lib.Models.BERTEfficient import BERTEfficient_Config
+from lib.Models.NanoBERTEfficient import NanoBERTEfficient_Config
+from lib.Models.EmbBERT import EmbBERT_Config
 
+from lib.Models.classifiers import SequenceClassifier
 
-#CUSTOM
-from lib.configs import DataConfig, ModelConfig
-from lib.utils import model_size, print_model_params, calculate_metrics, metrics_to_str
+from transformers import Trainer, TrainingArguments, BitsAndBytesConfig
 
-from lib.Models.final_classifiers import *
-from lib.Models.models import *
+from lib.utils import print_model_params
 
-
-dataset_config = DataConfig(
-					dataset_name="TEST",
-					dict_size=pow(2, 11),
-					tokenizer_type="bpe",
-					batch_size=128,
-					max_len=256,
-					labels=[0,1,2]
-				)
-
-
-model_config = ModelConfig( 
-                    model_name="model_name", 
-                    embedding_dimension=84,
-                    reduced_embedding_dimension=None,
-                    number_of_heads=2,
-		            forward_expansion=2,
-                    d_state=None,
-                    num_layers=3,
-                    max_length=dataset_config.max_len, 
-                    vocab_size=dataset_config.dict_size,
-                    learning_rate=1e-3,
-                )
+model_config = EmbBERT_Config(
+	vocab_size=pow(2,13),
+	max_length=512,
+	
+	hidden_size=128,
+	reduced_embedding=32,
+	forward_expansion=2,
+	kernel_size=32,
+	num_attention_heads=1,
+	num_hidden_layers=5,
+    
+	num_labels=2
+)
 		
 
-# model = BERT_original(model_config)
-# model = Embedder_model(model_config)
-# model = Embedder_conv_model(model_config)
-# model = Mamba_model(model_config)
-# model = Nano_Bert_Efficient(model_config)
-# model = Nano_Bert_Efficient_mh(model_config)
-# model = Embbert(model_config)
-# model = Mamba_model_noNANO(model_config)
-# model = Nano_Bert_Differential_Efficient(model_config)
-# model = Nano_Bert_Differential_Skip(model_config)
-# model = NanoBERT_original(model_config)
-model = BERT_Efficient(model_config)
+model = SequenceClassifier(model_config)
 
-#cls = Classifier_max(model, model_config.embedding_dimension, dataset_config.n_labels())
+print_model_params(model.model)
 
-print_model_params(model)
 
-# print(cls.state_dict())
+
+
+trainer = Trainer(
+            model=model
+    )
+
+trainer.save_model(f"./TESTING/")
+
+q_conf = BitsAndBytesConfig(
+                        load_in_8bit=True,
+                    )
+
+classifier = SequenceClassifier.from_pretrained(
+                                f"./TESTING/",
+                                config=model_config,
+                                quantization_config = q_conf,
+                            )
+
+
+from peft import LoraConfig, get_peft_model
+peft_config = LoraConfig(
+    target_modules="all-linear",
+)
+classifier = get_peft_model(classifier, peft_config)
+print(f"Model size: {classifier.get_memory_footprint()/1000}KB")
+classifier.print_trainable_parameters()
+

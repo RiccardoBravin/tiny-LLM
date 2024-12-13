@@ -149,10 +149,11 @@ class SequenceClassifier(PreTrainedModel):
 	def forward(self, input_ids, attention_mask, labels=None):
 		outputs = self.model(input_ids, attention_mask)
 		outputs = outputs[:,0]
-
+		# print(f"outputs: {outputs.dtype}")
 
 		# Classification head
 		logits = self.classifier(outputs)
+		# print(f"logits: {logits.dtype}")
 
 		loss = None
 		if labels is not None:

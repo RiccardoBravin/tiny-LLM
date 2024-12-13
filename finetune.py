@@ -1,7 +1,7 @@
 # IMPORTS THIRD PARTY MODULES
 from datasets import Dataset
 from transformers import Trainer, TrainingArguments
-
+import random
 
 # IMPORTS CUSTOM MODULES
 from lib.colors import RESET, ATTRIBUTES, FOREGROUND_COLORS
@@ -16,11 +16,12 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true" # Enables parallelism for tokenize
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-CHECKPOINT = 867000
-TRAIN_ITERS = 5
+CHECKPOINT = 570000
+TRAIN_ITERS = 1
 
 # MODEL CONFIGURATION
-config = EmbBERT_config
+# config = EmbBERT_config
+config = NanoBERTEfficient_config
 
 # Training arguments
 training_args = TrainingArguments(
@@ -44,7 +45,7 @@ training_args = TrainingArguments(
 	per_device_train_batch_size=32,     # batch size per device during training
 	per_device_eval_batch_size=64,      # batch size for evaluation
     
-	learning_rate=8e-5,                 # learning rate
+	learning_rate=1e-4,                 # learning rate
     lr_scheduler_type="constant",       # learning rate scheduler type
 	weight_decay=0.05,                  # strength of weight decay
 
@@ -70,8 +71,6 @@ del aux
 datasets = [
     "cola", 
     "mrpc", 
-    "qnli", 
-    "qqp", 
     "rte", 
     "sst2", 
     "wnli", 
@@ -83,6 +82,8 @@ datasets = [
     "nlu", 
     "snips", 
     "emotion_split", 
+    "qqp", 
+    "qnli", 
     "mnli-m", 
     "mnli-mm"
 ]
@@ -96,14 +97,20 @@ for dataset in datasets:
     if dataset != "stsb":
         config.num_labels = len(train_data.unique("label"))
         training_args.metric_for_best_model = "mcc"
+        training_args.greater_is_better = True
+        if dataset == "wnli":
+            training_args.greater_is_better = False
     else:
         config.num_labels = 1
         training_args.metric_for_best_model = "scc"
+        training_args.greater_is_better = True
 
     print(f"{TITLE}Training/Loading tokenizer{RESET}")
     if CHECKPOINT:
         tokenizer = load_pretr_tokenizer(config.vocab_size, config.max_length)
+        print(f"\tLoading tokenizer from checkpoint")
     else:
+        print(f"\tCreating new tokenizer/loading dataset's custom one")
         tokenizer = make_tokenizer(tokenizer_type="bpe", dictionary_size=config.vocab_size, dataset_name=dataset, train_dataset=train_data)
 
     print(f"{TITLE}Tokenizing dataset{RESET}")
@@ -116,7 +123,7 @@ for dataset in datasets:
     })
     
     # Splitting the dataset
-    validation_dataset = train_dataset.train_test_split(test_size=0.1)
+    validation_dataset = train_dataset.train_test_split(test_size=0.1).shuffle()
     train_dataset, validation_dataset = validation_dataset["train"], validation_dataset["test"]
 
 
@@ -131,7 +138,8 @@ for dataset in datasets:
     
     best_metric = None
     for count in range(1, TRAIN_ITERS + 1):
-
+        
+        training_args.seed = count * random.randint(1, 1000)
         # TRAINING
         print(f"{TITLE}Initializing model{RESET}")
 
@@ -179,8 +187,8 @@ for dataset in datasets:
 
         save_model_score(metrics, f"./results/finetuning/{config.model_type}/", f"{dataset}.txt")
 
-        if best_metric is None or metrics["eval_" + training_args.metric_for_best_model] > best_metric:
-            best_metric = metrics["eval_" + training_args.metric_for_best_model]
+        if best_metric is None or abs(metrics["eval_" + training_args.metric_for_best_model]) > best_metric:
+            best_metric = abs(metrics["eval_" + training_args.metric_for_best_model])
             trainer.save_model(f"./results/finetuning/{config.model_type}/{dataset}")
 
 

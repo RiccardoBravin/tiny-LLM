@@ -43,11 +43,11 @@ class NanoBERTEfficient(PreTrainedModel):
 						])
 		
 		self.feed_forward = nn.ModuleList([
-							nn.Sequential(
-								nn.Linear(config.hidden_size, int(config.hidden_size*config.forward_expansion)),
-								nn.SiLU(),
-								nn.Linear(int(config.hidden_size*config.forward_expansion), config.hidden_size),
-							) for _ in range(config.num_hidden_layers)
+							feed_forward(
+								hidden_size=config.hidden_size,
+								forward_expansion=config.forward_expansion
+							)
+							for _ in range(config.num_hidden_layers)
 						])
 
 	
@@ -60,4 +60,17 @@ class NanoBERTEfficient(PreTrainedModel):
 			x = attention(x, mask)
 			x = post_norm(x)
 			x = feed_forward(x) + x
+		return x
+	
+
+class feed_forward(nn.Module):
+	def __init__(self, hidden_size:int, forward_expansion:float):
+		super().__init__()
+		self.linear1 = nn.Linear(hidden_size, int(hidden_size*forward_expansion))
+		self.act = nn.SiLU()
+		self.linear2 = nn.Linear(int(hidden_size*forward_expansion), hidden_size)
+	def forward(self, x):
+		x = self.linear1(x)
+		x = self.act(x)
+		x = self.linear2(x)
 		return x

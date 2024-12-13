@@ -41,7 +41,7 @@ def plot_losses(eval_loss_file, train_loss_file):
     plt.show()
 
 # Replace with the actual paths to your loss files
-origin = "./results/mlm_EmbBERT/"
+origin = "./results/pretraining/mlm_NanoBERTEfficient/"
 eval_loss_file = origin + 'eval_loss.txt'
 train_loss_file = origin + 'train_loss.txt'
 

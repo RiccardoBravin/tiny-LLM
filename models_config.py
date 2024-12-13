@@ -107,3 +107,18 @@ EmbBERT_config = EmbBERT_Config(
     
 	num_labels=2
 )
+
+EmbBERT_BIG_config = EmbBERT_Config(
+    variation="BIG",
+	vocab_size=pow(2,13),
+	max_length=512,
+	
+	hidden_size=128,
+	reduced_embedding=32,
+	forward_expansion=2,
+	kernel_size=32,
+	num_attention_heads=1,
+	num_hidden_layers=5,
+    
+	num_labels=2
+)

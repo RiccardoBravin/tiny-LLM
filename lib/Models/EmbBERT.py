@@ -7,12 +7,13 @@ from lib.utils import make_score_mask
 
 class EmbBERT_Config(PretrainedConfig):
 	model_type = "EmbBERT"
-	def __init__(self, reduced_embedding:int=16,forward_expansion:float=1, kernel_size:int=32, max_length:int=256, **kwargs):
+	def __init__(self, reduced_embedding:int=16,forward_expansion:float=1, kernel_size:int=32, max_length:int=256, variation:str="", **kwargs):
 		super().__init__(**kwargs)
 		self.reduced_embedding = reduced_embedding
 		self.forward_expansion = forward_expansion
 		self.kernel_size = kernel_size
 		self.max_length = max_length
+		self.variation = variation
 		
 
 

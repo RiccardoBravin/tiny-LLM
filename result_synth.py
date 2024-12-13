@@ -9,10 +9,10 @@ def extract_metrics(file_path):
 
     metrics = {}
     patterns = {
-        'accuracy': r'eval_accuracy:\s*([\d.]+)',
-        'f1': r'eval_f1:\s*([\d.]+)',
-        'mcc': r'eval_mcc:\s*([\d.]+)',
-        'scc': r'eval_scc:\s*([\d.]+)'  # Assuming SCC might be in the file
+        'accuracy': r'eval_accuracy:\s*(-?[\d.]+)',
+        'f1': r'eval_f1:\s*(-?[\d.]+)',
+        'mcc': r'eval_mcc:\s*(-?[\d.]+)',
+        'scc': r'eval_scc:\s*(-?[\d.]+)'  # Assuming SCC might be in the file
     }
     for key, pattern in patterns.items():
         match = re.findall(pattern, content)
@@ -51,6 +51,8 @@ def process_results_for_model(model, results_dir, excel_output=False):
     for file_name in os.listdir(model_path):
         file_path = os.path.join(model_path, file_name)
         if os.path.isfile(file_path) and file_name.endswith('.txt'):
+            #remove .txt from filename
+            file_name = file_name[:-4]
             metrics = {'accuracy': [], 'f1': [], 'mcc': [], 'scc': []}
             file_metrics = extract_metrics(file_path)
             for key in metrics:
@@ -84,7 +86,8 @@ def process_results_for_model(model, results_dir, excel_output=False):
         print(f"Model: {model}\n")
         print(header)
         for row in rows:
-            print("\t".join(row))
+            print("\t".join(row).replace(".", ","))
+        print("\n\n")
     else:
         # Pretty printed output
         print(f"Model: {model}\n")
@@ -98,9 +101,10 @@ def process_results_for_model(model, results_dir, excel_output=False):
 
 
 
-EXCEL = False  # Set to True if you want to print the results in Excel format
+EXCEL = True  # Set to True if you want to print the results in Excel format
 
-models = ['EmbBERT']  # Replace with your model name
-results_dir = './results/finetuning'  # Root directory containing model folders
+models = ['EmbBERT', "NanoBERTEfficient"]  # Replace with your model name
+# results_dir = './results/finetuning'  # Root directory containing model folders
+results_dir = './results/quantization'  # Root directory containing model folders
 for model in models:
     process_results_for_model(model, results_dir, EXCEL)

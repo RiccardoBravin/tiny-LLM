@@ -1,12 +1,12 @@
 # IMPORTS THIRD PARTY MODULES
-from datasets import Dataset, load_dataset, concatenate_datasets
+from datasets import load_dataset
 from transformers import Trainer, TrainingArguments
 
 
 # IMPORTS CUSTOM MODULES
 from lib.colors import RESET, ATTRIBUTES, FOREGROUND_COLORS
 from lib.Models.EmbBERT import EmbBERT
-from lib.Models.classifiers import PretrainingClassifier
+from lib.Models.classifiers import PretrainingClassifier, SequenceClassifier
 from lib.preprocessing import pretr_tokenizer, pretr_dataset_builder, MlmNspCollator
 from lib.utils import model_size, CustomPrinterCallback, CustomLoggerCallback
 from models_config import *
@@ -17,30 +17,30 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true" # Enables parallelism for tokenize
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-DEBUG = True
+DEBUG = False
 
 
 # MODEL CONFIGURATION
-config = EmbBERT_config
+config = NanoBERTEfficient_config
 
 # Training arguments
 training_args = TrainingArguments(
     run_name=f"{config.model_type}_pretraining", 
-    output_dir=f'./results/pretraining/mlm_{config.model_type}',
+    output_dir=f'./results/pretraining/mlm_{config.model_type}_{config.variation}',
 
     dataloader_num_workers=2,           # number of dataloader workers (4 works well but might need to be adjusted)
     save_total_limit=5,                 # number of total save checkpoints
     overwrite_output_dir=True,	        # overwrite the content of the output directory
     eval_strategy="steps",              # when to evaluate the model
     logging_strategy="steps",           # log every epoch
-    logging_steps=1000,                 # log every 1000 steps
-    eval_steps=1000,                    # evaluate every 1000 steps
+    logging_steps=5000,                 # log every 1000 steps
+    eval_steps=5000,                    # evaluate every 1000 steps
     logging_dir=None,                   # directory for storing logs
     include_tokens_per_second=False,    # log tokens per second
     include_num_input_tokens_seen=False,# log number of input tokens seen
 
 	save_strategy="steps",               # checkpoint save strategy
-    save_steps=1000,                    # save checkpoint every 1000 steps
+    save_steps=5000,                    # save checkpoint every 1000 steps
     load_best_model_at_end=True,        # load the best model when finished training 
     metric_for_best_model="loss",       # use accuracy to evaluate the best model
     
@@ -61,10 +61,14 @@ print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}Model configs{RES
 print(config)
 
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}Model checkup{RESET}")
-print(EmbBERT(config))
+aux = SequenceClassifier(config=config)
+print(aux.model)
 
 print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}Model size{RESET}")
-print(model_size(EmbBERT(config)))
+print(model_size(aux.model))
+
+del aux
+
 
 
 
@@ -73,9 +77,9 @@ print(f"{TITLE}Loading dataset Book Corpus{RESET}")
 
 dataset = load_dataset("bookcorpus/bookcorpus", cache_dir="./datasets", trust_remote_code=True)
 if DEBUG:
-    train_data = dataset['train'].select(range(0, 100000))
+    train_data = dataset['train'].select(range(0, 2000000))
 else:
-    train_data = dataset['train']
+    train_data = dataset['train'].select(range(0, 20000000))
 del dataset
 print(f"\tLoaded dataset of size: {len(train_data)}")
 
@@ -95,7 +99,7 @@ custom_collator = MlmNspCollator(
 
 # TRAINING
 print(f"{TITLE}Initializing model{RESET}")
-model = EmbBERT(config)
+
 classifier = PretrainingClassifier(config=config)
 
 
@@ -112,7 +116,9 @@ trainer = Trainer(
     callbacks=[CustomLoggerCallback, CustomPrinterCallback]       # custom callback
 )
 
-trainer.train()
+# checpoint = "./results/pretraining/mlm_NanoBERTEfficient/checkpoint-305000"
+
+trainer.train()#resume_from_checkpoint=checpoint)
 
 
 

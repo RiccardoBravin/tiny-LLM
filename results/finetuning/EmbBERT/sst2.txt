@@ -1,26 +1,65 @@
 -------------------------------
-eval_loss: 0.8450276255607605
-eval_accuracy: 0.7844036697247706
-eval_f1: 0.7842298814106826
-eval_precision: 0.7847262381833875
-eval_recall: 0.7844036697247706
-eval_mcc: 0.5688210385819825
-eval_runtime: 0.4977
-eval_samples_per_second: 1752.156
-eval_steps_per_second: 28.131
+eval_loss: 0.6468269228935242
+eval_accuracy: 0.8096330275229358
+eval_f1: 0.8096240108518715
+eval_precision: 0.80962351500978
+eval_recall: 0.8096330275229358
+eval_mcc: 0.619112278715441
+eval_runtime: 0.1911
+eval_samples_per_second: 4564.061
+eval_steps_per_second: 73.276
 epoch: 10.0
 
 
 -------------------------------
-eval_loss: 0.8450276255607605
-eval_accuracy: 0.7844036697247706
-eval_f1: 0.7842298814106826
-eval_precision: 0.7847262381833875
-eval_recall: 0.7844036697247706
-eval_mcc: 0.5688210385819825
-eval_runtime: 0.4812
-eval_samples_per_second: 1812.194
-eval_steps_per_second: 29.095
+eval_loss: 0.8693866729736328
+eval_accuracy: 0.7981651376146789
+eval_f1: 0.7981725699197723
+eval_precision: 0.7985915601736583
+eval_recall: 0.7981651376146789
+eval_mcc: 0.5967397383145006
+eval_runtime: 0.1949
+eval_samples_per_second: 4473.831
+eval_steps_per_second: 71.828
+epoch: 10.0
+
+
+-------------------------------
+eval_loss: 0.8289123177528381
+eval_accuracy: 0.7970183486238532
+eval_f1: 0.7967081266188013
+eval_precision: 0.8002957846234451
+eval_recall: 0.7970183486238532
+eval_mcc: 0.5975383220849418
+eval_runtime: 0.196
+eval_samples_per_second: 4448.636
+eval_steps_per_second: 71.423
+epoch: 10.0
+
+
+-------------------------------
+eval_loss: 0.8494475483894348
+eval_accuracy: 0.7706422018348624
+eval_f1: 0.7701277322631591
+eval_precision: 0.7719721779632962
+eval_recall: 0.7706422018348624
+eval_mcc: 0.5421289299214128
+eval_runtime: 0.2011
+eval_samples_per_second: 4335.825
+eval_steps_per_second: 69.612
+epoch: 10.0
+
+
+-------------------------------
+eval_loss: 0.7930188179016113
+eval_accuracy: 0.7912844036697247
+eval_f1: 0.7910864355430283
+eval_precision: 0.7917234633492751
+eval_recall: 0.7912844036697247
+eval_mcc: 0.5826911672371063
+eval_runtime: 0.2085
+eval_samples_per_second: 4182.428
+eval_steps_per_second: 67.149
 epoch: 10.0
 
 

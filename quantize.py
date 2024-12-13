@@ -1,7 +1,7 @@
 # IMPORTS THIRD PARTY MODULES
 from datasets import Dataset
 from transformers import Trainer, TrainingArguments, BitsAndBytesConfig
-
+import random
 
 # IMPORTS CUSTOM MODULES
 from lib.colors import RESET, ATTRIBUTES, FOREGROUND_COLORS
@@ -14,13 +14,22 @@ from models_config import *
 import os   
 os.environ["TOKENIZERS_PARALLELISM"] = "true" # Enables parallelism for tokenizers
 
+
+# SUPPRESS WARNINGS
+import warnings
+# Suppress the specific warning
+warnings.filterwarnings("ignore", message="MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization")
+
+
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
 TRAIN_ITERS = 5
 
 
+
 # MODEL CONFIGURATION
-config = EmbBERT_config
+# config = EmbBERT_config
+config = NanoBERTEfficient_config
 
 # Training arguments
 training_args = TrainingArguments(
@@ -41,16 +50,17 @@ training_args = TrainingArguments(
     load_best_model_at_end=True,        # load the best model when finished training 
     metric_for_best_model="mcc",        # use accuracy to evaluate the best model
     
-	num_train_epochs=10,                # total number of training epochs
+	num_train_epochs=2,                # total number of training epochs
 	per_device_train_batch_size=32,     # batch size per device during training
 	per_device_eval_batch_size=64,      # batch size for evaluation
     
     optim="adamw_bnb_8bit",
-	learning_rate=5e-4,                 # learning rate
+	learning_rate=1e-4,                 # learning rate
     lr_scheduler_type="constant",       # learning rate scheduler type
 	weight_decay=0.05,                  # strength of weight decay
 
-    label_names=["labels"]
+    label_names=["labels"],
+    fp16=True,
 
 )
 
@@ -62,27 +72,29 @@ print(config)
 
 # DATASETS SELECTION
 datasets = [
-    # "cola", 
+    "cola", 
     # "mrpc", 
-    # "qnli", 
-    # "qqp", 
     # "rte", 
     # "sst2", 
-    "wnli", 
-    "stsb", 
-    "imdb", 
-    "news", 
-    "bull", 
-    "limit", 
-    "nlu", 
-    "snips", 
-    "emotion_split", 
-    "mnli-m", 
+    # "wnli", 
+    # "stsb", 
+    # "imdb", 
+    # "news", 
+    # "bull", 
+    # "limit", 
+    # "nlu", 
+    # "snips", 
+    # "emotion_split", 
+    "qqp", 
+    # "qnli", 
+    # "mnli-m", 
     "mnli-mm"
 ]
 
 
+
 for dataset in datasets:
+    training_args.seed = random.randint(0, 1000)
 
     print(f"{TITLE}Loading dataset {dataset}{RESET}")
     train_data, test_data = dataset_selector(dataset)
@@ -90,9 +102,13 @@ for dataset in datasets:
     if dataset != "stsb":
         config.num_labels = len(train_data.unique("label"))
         training_args.metric_for_best_model = "mcc"
+        training_args.greater_is_better = True
+        if dataset == "wnli":
+            training_args.greater_is_better = False
     else:
         config.num_labels = 1
         training_args.metric_for_best_model = "scc"
+        training_args.greater_is_better = True
 
     print(f"{TITLE}Training/Loading tokenizer{RESET}")
     tokenizer = load_pretr_tokenizer(config.vocab_size, config.max_length)
@@ -109,7 +125,7 @@ for dataset in datasets:
     })
     
     # Splitting the dataset
-    validation_dataset = train_dataset.train_test_split(test_size=0.1)
+    validation_dataset = train_dataset.train_test_split(test_size=0.1).shuffle()
     train_dataset, validation_dataset = validation_dataset["train"], validation_dataset["test"]
 
 
@@ -158,7 +174,7 @@ for dataset in datasets:
 
     from peft import LoraConfig, get_peft_model
     peft_config = LoraConfig(
-        target_modules="all-linear"
+        target_modules="all-linear",
     )
     classifier = get_peft_model(classifier, peft_config)
     classifier.print_trainable_parameters()
