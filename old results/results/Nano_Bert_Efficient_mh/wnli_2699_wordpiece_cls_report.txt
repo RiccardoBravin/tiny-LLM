@@ -1,0 +1,74 @@
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient_mh', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=3, max_length=256, forward_expansion=0.5, d_state=None, num_layers=4, vocab_size=2699, learning_rate=0.001)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  3.9047
+Accuracy: 0.183
+F1: 0.184
+Precision: 0.190
+Recall: 0.183
+MCC: -0.629
+Confusion matrix:
+ [[ 7 33]
+ [25  6]]
+('Model params: 164.306K', 'Model buffers: 0.000K', 'Model size: 0.627MB')
+
+*******************************************
+
+average eval loss:  4.4602
+Accuracy: 0.169
+F1: 0.167
+Precision: 0.166
+Recall: 0.169
+MCC: -0.696
+Confusion matrix:
+ [[11 29]
+ [30  1]]
+('Model params: 164.306K', 'Model buffers: 0.000K', 'Model size: 0.627MB')
+
+*******************************************
+
+average eval loss:  1.2410
+Accuracy: 0.225
+F1: 0.222
+Precision: 0.230
+Recall: 0.225
+MCC: -0.539
+Confusion matrix:
+ [[ 7 33]
+ [22  9]]
+('Model params: 164.306K', 'Model buffers: 0.000K', 'Model size: 0.627MB')
+
+*******************************************
+
+average eval loss:  3.7522
+Accuracy: 0.141
+F1: 0.141
+Precision: 0.145
+Recall: 0.141
+MCC: -0.714
+Confusion matrix:
+ [[ 5 35]
+ [26  5]]
+('Model params: 164.306K', 'Model buffers: 0.000K', 'Model size: 0.627MB')
+
+*******************************************
+
+average eval loss:  4.6889
+Accuracy: 0.141
+F1: 0.141
+Precision: 0.145
+Recall: 0.141
+MCC: -0.714
+Confusion matrix:
+ [[ 5 35]
+ [26  5]]
+('Model params: 164.306K', 'Model buffers: 0.000K', 'Model size: 0.627MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

@@ -1,0 +1,39 @@
+Model config for current run:
+ModelConfig(model_name='MAMBA_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=0, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.002)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  2.6811
+Spearman correlation coefficient: 0.101
+('Model params: 220.033K', 'Model buffers: 0.000K', 'Model size: 0.839MB')
+
+*******************************************
+
+average eval loss:  2.4359
+Spearman correlation coefficient: 0.034
+('Model params: 220.033K', 'Model buffers: 0.000K', 'Model size: 0.839MB')
+
+*******************************************
+
+average eval loss:  2.7232
+Spearman correlation coefficient: 0.022
+('Model params: 220.033K', 'Model buffers: 0.000K', 'Model size: 0.839MB')
+
+*******************************************
+
+average eval loss:  2.5970
+Spearman correlation coefficient: 0.036
+('Model params: 220.033K', 'Model buffers: 0.000K', 'Model size: 0.839MB')
+
+*******************************************
+
+average eval loss:  2.3509
+Spearman correlation coefficient: 0.036
+('Model params: 220.033K', 'Model buffers: 0.000K', 'Model size: 0.839MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

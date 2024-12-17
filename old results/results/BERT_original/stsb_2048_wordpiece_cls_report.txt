@@ -1,0 +1,39 @@
+Model config for current run:
+ModelConfig(model_name='BERT_original', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=1, d_state=None, num_layers=2, vocab_size=2048, learning_rate=0.001)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  2.9566
+Spearman correlation coefficient: 0.094
+('Model params: 334.081K', 'Model buffers: 0.000K', 'Model size: 1.274MB')
+
+*******************************************
+
+average eval loss:  2.6574
+Spearman correlation coefficient: 0.093
+('Model params: 334.081K', 'Model buffers: 0.000K', 'Model size: 1.274MB')
+
+*******************************************
+
+average eval loss:  2.5612
+Spearman correlation coefficient: 0.043
+('Model params: 334.081K', 'Model buffers: 0.000K', 'Model size: 1.274MB')
+
+*******************************************
+
+average eval loss:  2.4986
+Spearman correlation coefficient: 0.051
+('Model params: 334.081K', 'Model buffers: 0.000K', 'Model size: 1.274MB')
+
+*******************************************
+
+average eval loss:  2.7687
+Spearman correlation coefficient: 0.056
+('Model params: 334.081K', 'Model buffers: 0.000K', 'Model size: 1.274MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

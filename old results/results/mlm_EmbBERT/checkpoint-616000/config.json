@@ -1,0 +1,16 @@
+{
+  "architectures": [
+    "PretrainingClassifier"
+  ],
+  "forward_expansion": 1,
+  "hidden_size": 128,
+  "kernel_size": 32,
+  "max_length": 256,
+  "model_type": "EmbBERT",
+  "num_attention_heads": 1,
+  "num_hidden_layers": 4,
+  "reduced_embedding": 16,
+  "torch_dtype": "float32",
+  "transformers_version": "4.47.0",
+  "vocab_size": 8192
+}

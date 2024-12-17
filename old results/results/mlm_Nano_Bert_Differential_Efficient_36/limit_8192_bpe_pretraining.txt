@@ -1,0 +1,80 @@
+ModelConfig(model_name='Classifier_first_token_Nano_Bert_Differential_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.8, d_state=0, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.5092
+Accuracy: 0.770
+F1: 0.776
+Precision: 0.790
+Recall: 0.770
+MCC: 0.506
+Confusion matrix:
+ [[533 153]
+ [ 77 237]]
+('Model params: 312.594K', 'Model buffers: 0.000K', 'Model size: 1.192MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_Nano_Bert_Differential_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.8, d_state=0, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.5093
+Accuracy: 0.769
+F1: 0.774
+Precision: 0.786
+Recall: 0.769
+MCC: 0.497
+Confusion matrix:
+ [[538 148]
+ [ 83 231]]
+('Model params: 312.594K', 'Model buffers: 0.000K', 'Model size: 1.192MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_Nano_Bert_Differential_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.8, d_state=0, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.4828
+Accuracy: 0.752
+F1: 0.760
+Precision: 0.796
+Recall: 0.752
+MCC: 0.505
+Confusion matrix:
+ [[494 192]
+ [ 56 258]]
+('Model params: 312.594K', 'Model buffers: 0.000K', 'Model size: 1.192MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_Nano_Bert_Differential_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.8, d_state=0, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.5480
+Accuracy: 0.756
+F1: 0.763
+Precision: 0.785
+Recall: 0.756
+MCC: 0.489
+Confusion matrix:
+ [[515 171]
+ [ 73 241]]
+('Model params: 312.594K', 'Model buffers: 0.000K', 'Model size: 1.192MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_Nano_Bert_Differential_Efficient', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=0.8, d_state=0, num_layers=4, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.5268
+Accuracy: 0.773
+F1: 0.778
+Precision: 0.789
+Recall: 0.773
+MCC: 0.505
+Confusion matrix:
+ [[541 145]
+ [ 82 232]]
+('Model params: 312.594K', 'Model buffers: 0.000K', 'Model size: 1.192MB')
+
+*******************************************
+

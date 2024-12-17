@@ -1,0 +1,79 @@
+Model config for current run:
+ModelConfig(model_name='EmbBERT-Diff-Skip', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=0, max_length=256, forward_expansion=1, d_state=32, num_layers=4, vocab_size=8192, learning_rate=0.001)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  0.8581
+Accuracy: 0.625
+F1: 0.624
+Precision: 0.626
+Recall: 0.625
+MCC: 0.437
+Confusion matrix:
+ [[2383  740  340]
+ [ 855 1671  603]
+ [ 623  525 2092]]
+('Model params: 357.635K', 'Model buffers: 0.000K', 'Model size: 1.364MB')
+
+*******************************************
+
+average eval loss:  0.8255
+Accuracy: 0.633
+F1: 0.633
+Precision: 0.635
+Recall: 0.633
+MCC: 0.449
+Confusion matrix:
+ [[2351  740  372]
+ [ 705 1855  569]
+ [ 562  663 2015]]
+('Model params: 357.635K', 'Model buffers: 0.000K', 'Model size: 1.364MB')
+
+*******************************************
+
+average eval loss:  0.7300
+Accuracy: 0.684
+F1: 0.684
+Precision: 0.685
+Recall: 0.684
+MCC: 0.525
+Confusion matrix:
+ [[2517  613  333]
+ [ 503 2029  597]
+ [ 432  632 2176]]
+('Model params: 357.635K', 'Model buffers: 0.000K', 'Model size: 1.364MB')
+
+*******************************************
+
+average eval loss:  0.7711
+Accuracy: 0.669
+F1: 0.669
+Precision: 0.669
+Recall: 0.669
+MCC: 0.503
+Confusion matrix:
+ [[2481  620  362]
+ [ 576 1961  592]
+ [ 484  621 2135]]
+('Model params: 357.635K', 'Model buffers: 0.000K', 'Model size: 1.364MB')
+
+*******************************************
+
+average eval loss:  0.7549
+Accuracy: 0.678
+F1: 0.680
+Precision: 0.686
+Recall: 0.678
+MCC: 0.520
+Confusion matrix:
+ [[2377  725  361]
+ [ 445 2198  486]
+ [ 379  766 2095]]
+('Model params: 357.635K', 'Model buffers: 0.000K', 'Model size: 1.364MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

@@ -1,0 +1,58 @@
+Model config for current run:
+ModelConfig(model_name='Embedder_only', embedding_dimension=320, reduced_embedding_dimension=32, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=1, vocab_size=8192, learning_rate=0.002, pretraining_lr=None)
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.6880
+Accuracy: 0.795
+F1: 0.795
+Precision: 0.795
+Recall: 0.795
+MCC: 0.589
+Confusion matrix:
+ [[335  93]
+ [ 86 358]]
+('Model params: 292.418K', 'Model buffers: 0.000K', 'Model size: 1.115MB')
+
+*******************************************
+
+average eval loss:  0.7287
+Accuracy: 0.790
+F1: 0.790
+Precision: 0.790
+Recall: 0.790
+MCC: 0.580
+Confusion matrix:
+ [[336  92]
+ [ 91 353]]
+('Model params: 292.418K', 'Model buffers: 0.000K', 'Model size: 1.115MB')
+
+*******************************************
+
+average eval loss:  0.7609
+Accuracy: 0.782
+F1: 0.782
+Precision: 0.782
+Recall: 0.782
+MCC: 0.564
+Confusion matrix:
+ [[324 104]
+ [ 86 358]]
+('Model params: 292.418K', 'Model buffers: 0.000K', 'Model size: 1.115MB')
+
+*******************************************
+
+average eval loss:  0.7565
+Accuracy: 0.789
+F1: 0.789
+Precision: 0.789
+Recall: 0.789
+MCC: 0.578
+Confusion matrix:
+ [[330  98]
+ [ 86 358]]
+('Model params: 292.418K', 'Model buffers: 0.000K', 'Model size: 1.115MB')
+
+*******************************************
+

@@ -1,0 +1,85 @@
+ModelConfig(model_name='Classifier_first_token_New_idea2', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1.2, d_state=0, num_layers=3, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8136
+Accuracy: 0.649
+F1: 0.647
+Precision: 0.649
+Recall: 0.649
+MCC: 0.473
+Confusion matrix:
+ [[2553  567  359]
+ [ 780 1760  583]
+ [ 637  522 2054]]
+('Model params: 367.513K', 'Model buffers: 0.000K', 'Model size: 1.402MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_New_idea2', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1.2, d_state=0, num_layers=3, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8026
+Accuracy: 0.649
+F1: 0.649
+Precision: 0.650
+Recall: 0.649
+MCC: 0.473
+Confusion matrix:
+ [[2319  720  440]
+ [ 567 1909  647]
+ [ 497  575 2141]]
+('Model params: 367.513K', 'Model buffers: 0.000K', 'Model size: 1.402MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_New_idea2', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1.2, d_state=0, num_layers=3, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8030
+Accuracy: 0.652
+F1: 0.652
+Precision: 0.652
+Recall: 0.652
+MCC: 0.478
+Confusion matrix:
+ [[2433  636  410]
+ [ 647 1862  614]
+ [ 505  601 2107]]
+('Model params: 367.513K', 'Model buffers: 0.000K', 'Model size: 1.402MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_New_idea2', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1.2, d_state=0, num_layers=3, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.7907
+Accuracy: 0.649
+F1: 0.646
+Precision: 0.651
+Recall: 0.649
+MCC: 0.473
+Confusion matrix:
+ [[2628  509  342]
+ [ 860 1715  548]
+ [ 688  501 2024]]
+('Model params: 367.513K', 'Model buffers: 0.000K', 'Model size: 1.402MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_New_idea2', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1.2, d_state=0, num_layers=3, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.7965
+Accuracy: 0.650
+F1: 0.650
+Precision: 0.655
+Recall: 0.650
+MCC: 0.475
+Confusion matrix:
+ [[2470  716  293]
+ [ 673 1989  461]
+ [ 588  707 1918]]
+('Model params: 367.513K', 'Model buffers: 0.000K', 'Model size: 1.402MB')
+
+*******************************************
+

@@ -1,0 +1,16 @@
+ModelConfig(model_name='Nano_Bert_Efficient', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=1, max_length=256, forward_expansion=0.7, num_layers=4, vocab_size=8192, learning_rate=0.0005, pretraining_lr=0.0003)
+EPOCHS: 10
+
+average eval loss:  1.4166
+Accuracy: 0.507
+F1: 0.410
+Precision: 0.508
+Recall: 0.507
+MCC: 0.010
+Confusion matrix:
+ [[ 262 2440]
+ [ 252 2509]]
+('Model params: 366.054K', 'Model buffers: 0.000K', 'Model size: 1.396MB')
+
+*******************************************
+

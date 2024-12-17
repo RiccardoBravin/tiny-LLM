@@ -1,0 +1,84 @@
+Model config for current run:
+ModelConfig(model_name='MAMBA_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=0, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.002)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  0.2866
+Accuracy: 0.911
+F1: 0.911
+Precision: 0.912
+Recall: 0.911
+MCC: 0.882
+Confusion matrix:
+ [[1708   45   92   55]
+ [  21 1845   23   11]
+ [  39   27 1682  152]
+ [  37   30  142 1691]]
+('Model params: 220.228K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+average eval loss:  0.2611
+Accuracy: 0.912
+F1: 0.912
+Precision: 0.912
+Recall: 0.912
+MCC: 0.883
+Confusion matrix:
+ [[1750   46   55   49]
+ [  25 1854   14    7]
+ [  62   33 1631  174]
+ [  49   30  123 1698]]
+('Model params: 220.228K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+average eval loss:  0.2933
+Accuracy: 0.909
+F1: 0.909
+Precision: 0.909
+Recall: 0.909
+MCC: 0.879
+Confusion matrix:
+ [[1751   27   60   62]
+ [  33 1834   22   11]
+ [  73   28 1632  167]
+ [  44   15  148 1693]]
+('Model params: 220.228K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+average eval loss:  0.2899
+Accuracy: 0.911
+F1: 0.911
+Precision: 0.911
+Recall: 0.911
+MCC: 0.881
+Confusion matrix:
+ [[1734   37   68   61]
+ [  21 1843   20   16]
+ [  63   22 1654  161]
+ [  53   22  134 1691]]
+('Model params: 220.228K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+average eval loss:  0.2831
+Accuracy: 0.911
+F1: 0.911
+Precision: 0.912
+Recall: 0.911
+MCC: 0.882
+Confusion matrix:
+ [[1744   24   68   64]
+ [  42 1815   23   20]
+ [  65   11 1673  151]
+ [  49   18  139 1694]]
+('Model params: 220.228K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

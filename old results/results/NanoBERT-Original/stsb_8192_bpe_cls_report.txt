@@ -1,0 +1,39 @@
+Model config for current run:
+ModelConfig(model_name='NanoBERT-Original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.001)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  3.0258
+Spearman correlation coefficient: 0.090
+('Model params: 269.989K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+average eval loss:  2.5080
+Spearman correlation coefficient: 0.039
+('Model params: 269.989K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+average eval loss:  2.5136
+Spearman correlation coefficient: 0.040
+('Model params: 269.989K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+average eval loss:  2.4210
+Spearman correlation coefficient: 0.030
+('Model params: 269.989K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+average eval loss:  2.3963
+Spearman correlation coefficient: 0.037
+('Model params: 269.989K', 'Model buffers: 0.000K', 'Model size: 1.030MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

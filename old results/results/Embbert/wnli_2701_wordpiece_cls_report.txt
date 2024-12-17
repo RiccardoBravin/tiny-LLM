@@ -1,0 +1,61 @@
+Model config for current run:
+ModelConfig(model_name='Embbert', embedding_dimension=128, reduced_embedding_dimension=16, number_of_heads=None, max_length=256, forward_expansion=1, num_layers=3, vocab_size=2701, learning_rate=0.0009, pretraining_lr=None)
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.6923
+Accuracy: 0.493
+F1: 0.447
+Precision: 0.447
+Recall: 0.493
+MCC: -0.108
+Confusion matrix:
+ [[30 10]
+ [26  5]]
+('Model params: 257.106K', 'Model buffers: 0.000K', 'Model size: 0.981MB')
+
+*******************************************
+
+average eval loss:  0.6917
+Accuracy: 0.507
+F1: 0.500
+Precision: 0.498
+Recall: 0.507
+MCC: -0.021
+Confusion matrix:
+ [[25 15]
+ [20 11]]
+('Model params: 257.106K', 'Model buffers: 0.000K', 'Model size: 0.981MB')
+
+*******************************************
+
+average eval loss:  0.6926
+Accuracy: 0.549
+F1: 0.550
+Precision: 0.565
+Recall: 0.549
+MCC: 0.113
+Confusion matrix:
+ [[20 20]
+ [12 19]]
+('Model params: 257.106K', 'Model buffers: 0.000K', 'Model size: 0.981MB')
+
+*******************************************
+
+average eval loss:  0.6928
+Accuracy: 0.535
+F1: 0.536
+Precision: 0.537
+Recall: 0.535
+MCC: 0.059
+Confusion matrix:
+ [[23 17]
+ [16 15]]
+('Model params: 257.106K', 'Model buffers: 0.000K', 'Model size: 0.981MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

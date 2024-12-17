@@ -1,0 +1,39 @@
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient_long', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=1, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.001)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  2.6491
+Spearman correlation coefficient: 0.093
+('Model params: 388.993K', 'Model buffers: 0.000K', 'Model size: 1.484MB')
+
+*******************************************
+
+average eval loss:  2.7633
+Spearman correlation coefficient: 0.110
+('Model params: 388.993K', 'Model buffers: 0.000K', 'Model size: 1.484MB')
+
+*******************************************
+
+average eval loss:  2.7683
+Spearman correlation coefficient: 0.116
+('Model params: 388.993K', 'Model buffers: 0.000K', 'Model size: 1.484MB')
+
+*******************************************
+
+average eval loss:  2.9351
+Spearman correlation coefficient: 0.164
+('Model params: 388.993K', 'Model buffers: 0.000K', 'Model size: 1.484MB')
+
+*******************************************
+
+average eval loss:  3.0808
+Spearman correlation coefficient: 0.202
+('Model params: 388.993K', 'Model buffers: 0.000K', 'Model size: 1.484MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

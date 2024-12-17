@@ -1,0 +1,94 @@
+Model config for current run:
+ModelConfig(model_name='BERT_original', embedding_dimension=80, reduced_embedding_dimension=None, number_of_heads=2, max_length=256, forward_expansion=2, num_layers=2, vocab_size=2048, learning_rate=0.001, pretraining_lr=None)
+EPOCHS: 30
+
+*******************************************
+
+average eval loss:  0.7864
+Accuracy: 0.654
+F1: 0.653
+Precision: 0.654
+Recall: 0.654
+MCC: 0.481
+Confusion matrix:
+ [[2563  535  365]
+ [ 743 1813  573]
+ [ 592  592 2056]]
+('Model params: 288.963K', 'Model buffers: 0.000K', 'Model size: 1.102MB')
+
+*******************************************
+
+average eval loss:  0.7878
+Accuracy: 0.659
+F1: 0.658
+Precision: 0.658
+Recall: 0.659
+MCC: 0.488
+Confusion matrix:
+ [[2451  550  462]
+ [ 648 1802  679]
+ [ 494  517 2229]]
+('Model params: 288.963K', 'Model buffers: 0.000K', 'Model size: 1.102MB')
+
+*******************************************
+
+
+average eval loss:  0.8363
+Accuracy: 0.630
+F1: 0.630
+Precision: 0.632
+Recall: 0.630
+MCC: 0.445
+Confusion matrix:
+ [[2316  740  407]
+ [ 663 1880  586]
+ [ 545  698 1997]]
+('Model params: 288.963K', 'Model buffers: 0.000K', 'Model size: 1.102MB')
+
+*******************************************
+
+average eval loss:  0.8370
+Accuracy: 0.632
+F1: 0.631
+Precision: 0.640
+Recall: 0.632
+MCC: 0.449
+Confusion matrix:
+ [[2496  703  264]
+ [ 808 1898  423]
+ [ 711  713 1816]]
+('Model params: 288.963K', 'Model buffers: 0.000K', 'Model size: 1.102MB')
+
+*******************************************
+
+average eval loss:  0.8373
+Accuracy: 0.623
+F1: 0.622
+Precision: 0.628
+Recall: 0.623
+MCC: 0.436
+Confusion matrix:
+ [[2495  645  323]
+ [ 823 1813  493]
+ [ 709  711 1820]]
+('Model params: 288.963K', 'Model buffers: 0.000K', 'Model size: 1.102MB')
+
+*******************************************
+
+average eval loss:  0.8465
+Accuracy: 0.621
+F1: 0.620
+Precision: 0.623
+Recall: 0.621
+MCC: 0.432
+Confusion matrix:
+ [[2465  660  338]
+ [ 840 1734  555]
+ [ 685  648 1907]]
+('Model params: 288.963K', 'Model buffers: 0.000K', 'Model size: 1.102MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

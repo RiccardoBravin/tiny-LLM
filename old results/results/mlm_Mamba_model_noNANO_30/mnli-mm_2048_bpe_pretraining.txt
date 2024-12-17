@@ -1,0 +1,68 @@
+ModelConfig(model_name='Classifier_rms_Mamba_model_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=None, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8397
+Accuracy: 0.621
+F1: 0.620
+Precision: 0.627
+Recall: 0.621
+MCC: 0.432
+Confusion matrix:
+ [[2456  708  299]
+ [ 958 1693  478]
+ [ 735  548 1957]]
+('Model params: 220.163K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_rms_Mamba_model_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=None, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8550
+Accuracy: 0.607
+F1: 0.606
+Precision: 0.616
+Recall: 0.607
+MCC: 0.411
+Confusion matrix:
+ [[2435  748  280]
+ [1019 1662  448]
+ [ 778  593 1869]]
+('Model params: 220.163K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_rms_Mamba_model_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=None, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8653
+Accuracy: 0.604
+F1: 0.605
+Precision: 0.613
+Recall: 0.604
+MCC: 0.406
+Confusion matrix:
+ [[2269  893  301]
+ [ 970 1729  430]
+ [ 672  629 1939]]
+('Model params: 220.163K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_rms_Mamba_model_noNANO', embedding_dimension=64, reduced_embedding_dimension=None, number_of_heads=None, max_length=256, forward_expansion=1, d_state=6, num_layers=5, vocab_size=2048, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.8424
+Accuracy: 0.619
+F1: 0.618
+Precision: 0.628
+Recall: 0.619
+MCC: 0.431
+Confusion matrix:
+ [[2522  654  287]
+ [1071 1603  455]
+ [ 798  477 1965]]
+('Model params: 220.163K', 'Model buffers: 0.000K', 'Model size: 0.840MB')
+
+*******************************************
+

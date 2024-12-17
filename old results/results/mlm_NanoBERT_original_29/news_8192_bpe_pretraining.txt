@@ -1,0 +1,90 @@
+ModelConfig(model_name='Classifier_first_token_NanoBERT_original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.2800
+Accuracy: 0.907
+F1: 0.908
+Precision: 0.908
+Recall: 0.907
+MCC: 0.877
+Confusion matrix:
+ [[1744   21   76   59]
+ [  36 1813   32   19]
+ [  58   13 1645  184]
+ [  57   14  135 1694]]
+('Model params: 270.262K', 'Model buffers: 0.000K', 'Model size: 1.031MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_NanoBERT_original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.2751
+Accuracy: 0.907
+F1: 0.907
+Precision: 0.907
+Recall: 0.907
+MCC: 0.876
+Confusion matrix:
+ [[1706   54   71   69]
+ [  25 1852   13   10]
+ [  59   33 1641  167]
+ [  43   30  133 1694]]
+('Model params: 270.262K', 'Model buffers: 0.000K', 'Model size: 1.031MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_NanoBERT_original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.2766
+Accuracy: 0.902
+F1: 0.901
+Precision: 0.902
+Recall: 0.902
+MCC: 0.869
+Confusion matrix:
+ [[1715   38   87   60]
+ [  37 1829   20   14]
+ [  56   25 1602  217]
+ [  57   26  111 1706]]
+('Model params: 270.262K', 'Model buffers: 0.000K', 'Model size: 1.031MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_NanoBERT_original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.2796
+Accuracy: 0.908
+F1: 0.908
+Precision: 0.908
+Recall: 0.908
+MCC: 0.878
+Confusion matrix:
+ [[1753   42   56   49]
+ [  27 1842   18   13]
+ [  79   25 1598  198]
+ [  59   31  101 1709]]
+('Model params: 270.262K', 'Model buffers: 0.000K', 'Model size: 1.031MB')
+
+*******************************************
+
+ModelConfig(model_name='Classifier_first_token_NanoBERT_original', embedding_dimension=90, reduced_embedding_dimension=16, number_of_heads=2, max_length=256, forward_expansion=2, d_state=None, num_layers=2, vocab_size=8192, learning_rate=0.0003)
+Trained for 10 epochs
+
+average eval loss:  0.2799
+Accuracy: 0.908
+F1: 0.907
+Precision: 0.908
+Recall: 0.908
+MCC: 0.877
+Confusion matrix:
+ [[1732   41   61   66]
+ [  21 1848   16   15]
+ [  74   25 1602  199]
+ [  47   23  114 1716]]
+('Model params: 270.262K', 'Model buffers: 0.000K', 'Model size: 1.031MB')
+
+*******************************************
+

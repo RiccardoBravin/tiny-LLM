@@ -1,0 +1,39 @@
+Model config for current run:
+ModelConfig(model_name='EmbBERT-Diff', embedding_dimension=96, reduced_embedding_dimension=16, number_of_heads=1, max_length=256, forward_expansion=0.8, d_state=None, num_layers=4, vocab_size=8192, learning_rate=0.001)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  2.9602
+Spearman correlation coefficient: 0.090
+('Model params: 312.497K', 'Model buffers: 0.000K', 'Model size: 1.192MB')
+
+*******************************************
+
+average eval loss:  2.7455
+Spearman correlation coefficient: 0.078
+('Model params: 312.497K', 'Model buffers: 0.000K', 'Model size: 1.192MB')
+
+*******************************************
+
+average eval loss:  3.2967
+Spearman correlation coefficient: 0.151
+('Model params: 312.497K', 'Model buffers: 0.000K', 'Model size: 1.192MB')
+
+*******************************************
+
+average eval loss:  2.8872
+Spearman correlation coefficient: 0.036
+('Model params: 312.497K', 'Model buffers: 0.000K', 'Model size: 1.192MB')
+
+*******************************************
+
+average eval loss:  3.1169
+Spearman correlation coefficient: 0.180
+('Model params: 312.497K', 'Model buffers: 0.000K', 'Model size: 1.192MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************

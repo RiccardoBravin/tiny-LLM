@@ -1,0 +1,84 @@
+Model config for current run:
+ModelConfig(model_name='Nano_Bert_Efficient_long', embedding_dimension=64, reduced_embedding_dimension=16, number_of_heads=1, max_length=256, forward_expansion=2, d_state=None, num_layers=10, vocab_size=8192, learning_rate=0.001)
+EPOCHS: 20
+
+*******************************************
+
+average eval loss:  0.2933
+Accuracy: 0.911
+F1: 0.910
+Precision: 0.910
+Recall: 0.911
+MCC: 0.881
+Confusion matrix:
+ [[1765   31   51   53]
+ [  27 1835   21   17]
+ [  87   27 1623  163]
+ [  61   14  128 1697]]
+('Model params: 389.188K', 'Model buffers: 0.000K', 'Model size: 1.485MB')
+
+*******************************************
+
+average eval loss:  0.3023
+Accuracy: 0.906
+F1: 0.906
+Precision: 0.906
+Recall: 0.906
+MCC: 0.875
+Confusion matrix:
+ [[1728   46   74   52]
+ [  33 1831   28    8]
+ [  77   19 1652  152]
+ [  56   26  140 1678]]
+('Model params: 389.188K', 'Model buffers: 0.000K', 'Model size: 1.485MB')
+
+*******************************************
+
+average eval loss:  0.2811
+Accuracy: 0.908
+F1: 0.908
+Precision: 0.908
+Recall: 0.908
+MCC: 0.878
+Confusion matrix:
+ [[1739   36   60   65]
+ [  37 1835   16   12]
+ [  76   28 1615  181]
+ [  56   27  104 1713]]
+('Model params: 389.188K', 'Model buffers: 0.000K', 'Model size: 1.485MB')
+
+*******************************************
+
+average eval loss:  0.2808
+Accuracy: 0.912
+F1: 0.912
+Precision: 0.912
+Recall: 0.912
+MCC: 0.883
+Confusion matrix:
+ [[1729   44   64   63]
+ [  23 1843   16   18]
+ [  71   23 1640  166]
+ [  43   17  118 1722]]
+('Model params: 389.188K', 'Model buffers: 0.000K', 'Model size: 1.485MB')
+
+*******************************************
+
+average eval loss:  0.2710
+Accuracy: 0.911
+F1: 0.911
+Precision: 0.911
+Recall: 0.911
+MCC: 0.881
+Confusion matrix:
+ [[1745   28   71   56]
+ [  31 1821   35   13]
+ [  69   10 1642  179]
+ [  56   15  113 1716]]
+('Model params: 389.188K', 'Model buffers: 0.000K', 'Model size: 1.485MB')
+
+*******************************************
+
+**************************************************
+==================================================
+**************************************************
