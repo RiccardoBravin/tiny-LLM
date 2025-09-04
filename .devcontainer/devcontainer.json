@@ -1,0 +1,109 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+    "name": "EmbBERT Dev Container",
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "image": "python:3.12-bullseye",
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+    // Use 'postCreateCommand' to run commands after the container is created.
+    "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
+    "postStartCommand": "bash .devcontainer/postStartCommand.sh",
+    // Configure tool-specific properties.
+    // "customizations": {},
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    // "remoteUser": "root",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "tamasfe.even-better-toml",
+                "njpwerner.autodocstring",
+                "mhutchie.git-graph",
+                "eamodio.gitlens",
+                "charliermarsh.ruff",
+                "ms-azuretools.vscode-docker",
+                "matangover.mypy",
+                "Gruntfuggly.todo-tree",
+                "pflannery.vscode-versionlens",
+                "redhat.vscode-yaml",
+                "ryanluker.vscode-coverage-gutters",
+                "timonwong.shellcheck",
+                "exiasr.hadolint"
+            ],
+            "settings": {
+                "files.insertFinalNewline": true,
+                "editor.formatOnSave": true,
+                "files.trimTrailingWhitespace": true,
+                "python.defaultInterpreterPath": "./.venv/bin/python",
+                "python.formatting.provider": "black",
+                "python.formatting.blackArgs": [
+                    "--no-color"
+                ],
+                "python.linting.mypyEnabled": false,
+                "mypy.runUsingActiveInterpreter": true,
+                "python.testing.pytestArgs": [
+                    "tests"
+                ],
+                "python.testing.unittestEnabled": false,
+                "python.testing.pytestEnabled": true,
+                "python.testing.autoTestDiscoverOnSaveEnabled": true,
+                "python.analysis.autoImportCompletions": true,
+                "python.analysis.indexing": true,
+                "python.linting.flake8Enabled": false,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": "always"
+                },
+                "autoDocstring.customTemplatePath": ".vscode/autodocstring.mustache",
+                "ruff.path": [
+                    "./.venv/bin/ruff"
+                ]
+            },
+            "git.branchProtection": [
+                "main",
+                "master"
+            ]
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers-extra/features/poetry:2": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/sshd:1": {
+            "version": "latest"
+        },
+        "ghcr.io/dhoeric/features/hadolint:1": {},
+        "ghcr.io/devcontainers/features/git:1": {
+            "version": "latest"
+        },
+        // uncomment if using CUDA (machine learning w/ nVidia GPU)
+        // note that host system sets drivers. For windows use WSL2 and the Cuda toolkit.
+        // The latest version of CUDA may not be compatible with what you're using
+        // CUDA 11.7 is a good starting point
+        "ghcr.io/devcontainers/features/nvidia-cuda:2": {
+            "cudaVersion": "13.0",
+            "installCudnn": true,
+            "installToolkit": true
+        },
+
+        "ghcr.io/devcontainers/features/common-utils:2": {}
+    },
+    // mount the .venv directory as a named volume for performance reasons
+    "mounts": [
+        "source=${localWorkspaceFolderBasename}-venv,target=${containerWorkspaceFolder}/.venv,type=volume"
+    ],
+    // uncomment if you need the GPU for machine learning applications
+    "hostRequirements": {
+        "gpu": "optional"
+    },
+    "runArgs": [
+        "--gpus",
+        "all",
+        "--ipc=host",
+        "--ulimit",
+        "memlock=-1",
+        "--ulimit",
+        "stack=67108864"
+    ]
+}

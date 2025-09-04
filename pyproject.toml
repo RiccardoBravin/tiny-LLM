@@ -1,0 +1,41 @@
+[project]
+name = "EmbBERT"
+version = "0.1.0"
+description = ""
+authors = [{ name = "Your Name", email = "you@example.com" }]
+readme = "README.md"
+requires-python = "^3.12, <3.14"
+dependencies = [
+    "accelerate (==0.32.1)",
+    "datasets (==2.20.0)",
+    "scikit-learn (==1.5.0)",
+    "matplotlib (>=3.9.1)",
+    "torchvision (>=0.23.0,<0.24.0)",
+    "bitsandbytes (>=0.47.0,<0.48.0)",
+    "transformers (>=4.56.0,<5.0.0)",
+    "torch (>=2.8.0,<3.0.0)",
+    "tokenizers (>=0.22.0,<0.23.0)",
+    "peft (>=0.17.1,<0.18.0)"
+]
+
+[tool.ruff]
+# hard limit, error here
+line-length = 120
+
+[tool.black]
+# soft limit, wrap just before 100 chars
+line-length = 98
+
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.17.1"
+ruff = "^0.12.11"
+black = "^25.1.0"
+pytest = "^8.4.1"
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

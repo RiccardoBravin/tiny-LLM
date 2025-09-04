@@ -12,7 +12,7 @@ from lib.utils import model_size, CustomPrinterCallback, CustomLoggerCallback
 from models_config import *
 
 # ENVIRONMENT VARIABLES
-import os   
+import os
 os.environ["TOKENIZERS_PARALLELISM"] = "true" # Enables parallelism for tokenizers
 
 # CUSTOM CONSTANTS
@@ -21,12 +21,12 @@ DEBUG = False
 
 
 # MODEL CONFIGURATION
-config = NanoBERTEfficient_config
+config = EmbBERT_BIG_config
 
 # Training arguments
 training_args = TrainingArguments(
-    run_name=f"{config.model_type}_pretraining", 
-    output_dir=f'./results/pretraining/mlm_{config.model_type}_{config.variation}',
+    run_name=f"{config.model_type}_pretraining",
+    output_dir=f'./results/pretraining/mlm_{config.model_type}',
 
     dataloader_num_workers=2,           # number of dataloader workers (4 works well but might need to be adjusted)
     save_total_limit=5,                 # number of total save checkpoints
@@ -41,13 +41,13 @@ training_args = TrainingArguments(
 
 	save_strategy="steps",               # checkpoint save strategy
     save_steps=5000,                    # save checkpoint every 1000 steps
-    load_best_model_at_end=True,        # load the best model when finished training 
+    load_best_model_at_end=True,        # load the best model when finished training
     metric_for_best_model="loss",       # use accuracy to evaluate the best model
-    
+
 	num_train_epochs=1,                # total number of training epochs
 	per_device_train_batch_size=32,     # batch size per device during training
 	per_device_eval_batch_size=64,      # batch size for evaluation
-    
+
 	learning_rate=2e-4,                 # learning rate
     lr_scheduler_type="constant",       # learning rate scheduler type
 	weight_decay=0.05,                  # strength of weight decay
@@ -75,7 +75,7 @@ del aux
 
 print(f"{TITLE}Loading dataset Book Corpus{RESET}")
 
-dataset = load_dataset("bookcorpus/bookcorpus", cache_dir="./datasets", trust_remote_code=True)
+dataset = load_dataset("SamuelYang/bookcorpus", cache_dir="./datasets", trust_remote_code=True)
 if DEBUG:
     train_data = dataset['train'].select(range(0, 2000000))
 else:

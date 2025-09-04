@@ -14,19 +14,19 @@ from transformers import Trainer, TrainingArguments, BitsAndBytesConfig
 from lib.utils import print_model_params
 
 model_config = EmbBERT_Config(
-	vocab_size=pow(2,13),
-	max_length=512,
-	
+	vocab_size=pow(2,12),
+	max_length=256,
+
 	hidden_size=128,
-	reduced_embedding=32,
-	forward_expansion=2,
-	kernel_size=32,
+	reduced_embedding=16,
+	forward_expansion=1,
+	kernel_size=16,
 	num_attention_heads=1,
-	num_hidden_layers=5,
-    
+	num_hidden_layers=2,
+
 	num_labels=2
 )
-		
+
 
 model = SequenceClassifier(model_config)
 

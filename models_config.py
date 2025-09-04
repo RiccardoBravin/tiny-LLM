@@ -18,7 +18,7 @@ BERT_config = BERT_Config(
 	forward_expansion=2,
 	num_attention_heads=2,
 	num_hidden_layers=2,
-    
+
 	num_labels=2
 )
 
@@ -31,14 +31,14 @@ MAMBA_config = MAMBA_Config(
     kernel_size=4,
     d_state=6,
 	num_hidden_layers=5,
-	
+
 	num_labels=2
 )
 
 NanoEmbedder_config = NanoEmbedder_Config(
 	vocab_size=pow(2,13),
 	max_length=256,
-	
+
 	hidden_size=320,
 	reduced_embedding=32,
 
@@ -48,7 +48,7 @@ NanoEmbedder_config = NanoEmbedder_Config(
 NanoEmbedderConv_config = NanoEmbedderConv_Config(
     vocab_size=pow(2,13),
 	max_length=256,
-	
+
 	hidden_size=320,
 	reduced_embedding=32,
 	kernel_size=16,
@@ -59,66 +59,66 @@ NanoEmbedderConv_config = NanoEmbedderConv_Config(
 NanoBERT_config = NanoBERT_Config(
 	vocab_size=pow(2,13),
 	max_length=256,
-	
+
 	hidden_size=90,
 	reduced_embedding=16,
 	forward_expansion=2,
 	num_attention_heads=2,
 	num_hidden_layers=2,
-	
+
 	num_labels=2
 )
 
 BERTEfficient_config = BERTEfficient_Config(
 	vocab_size=pow(2,11),
 	max_length=256,
-	
+
 	hidden_size=84,
 	forward_expansion=2,
 	num_attention_heads=2,
 	num_hidden_layers=3,
-	
+
 	num_labels=2
 )
 
 NanoBERTEfficient_config = NanoBERTEfficient_Config(
 	vocab_size=pow(2,13),
 	max_length=256,
-	
+
 	hidden_size=128,
 	reduced_embedding=16,
 	forward_expansion=0.7,
 	num_attention_heads=1,
 	num_hidden_layers=4,
-	
+
 	num_labels=2
 )
 
 EmbBERT_config = EmbBERT_Config(
 	vocab_size=pow(2,13),
 	max_length=256,
-	
+
 	hidden_size=128,
 	reduced_embedding=16,
 	forward_expansion=1,
 	kernel_size=32,
 	num_attention_heads=1,
 	num_hidden_layers=4,
-    
+
 	num_labels=2
 )
 
 EmbBERT_BIG_config = EmbBERT_Config(
     variation="BIG",
-	vocab_size=pow(2,13),
+	vocab_size=pow(2,15),
 	max_length=512,
-	
-	hidden_size=128,
+
+	hidden_size=256,
 	reduced_embedding=32,
 	forward_expansion=2,
 	kernel_size=32,
 	num_attention_heads=1,
 	num_hidden_layers=5,
-    
+
 	num_labels=2
 )
