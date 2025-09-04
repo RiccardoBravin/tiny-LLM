@@ -79,7 +79,8 @@ dataset = load_dataset("SamuelYang/bookcorpus", cache_dir="./datasets", trust_re
 if DEBUG:
     train_data = dataset['train'].select(range(0, 2000000))
 else:
-    train_data = dataset['train'].select(range(0, 20000000))
+    train_data = dataset['train']
+    
 del dataset
 print(f"\tLoaded dataset of size: {len(train_data)}")
 

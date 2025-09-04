@@ -302,7 +302,7 @@ def dataset_selector(name:str, reduced:bool=False):
 def make_tokenizer(tokenizer_type:str, dictionary_size:int, dataset_name:str, train_dataset:Dataset):
 	try:
 		tokenizer = Tokenizer.from_file(f"tokenizers/{tokenizer_type}_{dataset_name}_{dictionary_size}.json")
-			
+
 		assert(tokenizer.get_vocab_size() == dictionary_size)
 		print(f"Tokenizer loaded with vocab size: {tokenizer.get_vocab_size()}")
 	except:
@@ -369,11 +369,11 @@ def make_tokenizer(tokenizer_type:str, dictionary_size:int, dataset_name:str, tr
 	)
 
 	return PreTrainedTokenizerFast(
-								tokenizer_object = tokenizer, 
-								cls_token="[CLS]", 
-								sep_token="[SEP]", 
-								unk_token="[UNK]", 
-								pad_token="[PAD]", 
+								tokenizer_object = tokenizer,
+								cls_token="[CLS]",
+								sep_token="[SEP]",
+								unk_token="[UNK]",
+								pad_token="[PAD]",
 								mask_token="[MASK]"
 							)
 
@@ -384,10 +384,10 @@ def make_tokenizer(tokenizer_type:str, dictionary_size:int, dataset_name:str, tr
 
 
 def pretr_tokenizer(dataset:Dataset, dictionary_size:int, max_length:int):
-	
+
 	try:
 		tokenizer = Tokenizer.from_file(f"tokenizers/bpe_book_corpus_{dictionary_size}.json")
-			
+
 		assert(tokenizer.get_vocab_size() == dictionary_size)
 		print(f"\tFound tokenizer with {tokenizer.get_vocab_size()}")
 
@@ -408,11 +408,11 @@ def pretr_tokenizer(dataset:Dataset, dictionary_size:int, max_length:int):
 
 
 		special_tokens = ["[PAD]", "[UNK]", "[CLS]", "[MASK]", "[SEP]"]
-		trainer = BpeTrainer(special_tokens=special_tokens, vocab_size=dictionary_size, show_progress=True)   
+		trainer = BpeTrainer(special_tokens=special_tokens, vocab_size=dictionary_size, show_progress=True)
 
 		tokenizer.train_from_iterator(dataset['text'], trainer=trainer)
 
-		
+
 		tokenizer.post_processor = TemplateProcessing(
 			pair="[CLS] $A [SEP] $B:1 [SEP]:1",
 			special_tokens=[
@@ -430,20 +430,20 @@ def pretr_tokenizer(dataset:Dataset, dictionary_size:int, max_length:int):
 		tokenizer.save(f"tokenizers/bpe_book_corpus_{tokenizer.get_vocab_size()}.json")
 
 
-		
+
 	return 	PreTrainedTokenizerFast(
-					tokenizer_object = tokenizer, 
-					cls_token="[CLS]", 
-					sep_token="[SEP]", 
-					unk_token="[UNK]", 
-					pad_token="[PAD]", 
+					tokenizer_object = tokenizer,
+					cls_token="[CLS]",
+					sep_token="[SEP]",
+					unk_token="[UNK]",
+					pad_token="[PAD]",
 					mask_token="[MASK]",
 					model_max_length=max_length
 			)
 
 def load_pretr_tokenizer(dictionary_size:int, max_length:int):
 	tokenizer = Tokenizer.from_file(f"tokenizers/bpe_book_corpus_{dictionary_size}.json")
-			
+
 	return PreTrainedTokenizerFast(
 					tokenizer_object = tokenizer,
 					cls_token="[CLS]",
@@ -455,42 +455,39 @@ def load_pretr_tokenizer(dictionary_size:int, max_length:int):
 			)
 
 
-def pretr_dataset_builder(dataset:Dataset):
-	#modify the dataset to have a tet and a text_pair column for the next sentence prediction as well as a label_nsp column
-	import numpy as np
+def pretr_dataset_builder(dataset, batch_size=10000):
+    import numpy as np
 
+    # Helper function for ordered pairs
+    def create_ordered_pairs(batch):
+        text = batch['text']
+        return {
+            "text": text[:-1],
+            "text_pair": text[1:],
+            "label_nsp": [0] * (len(text) - 1)
+        }
 
-	new_text = dataset['text'][:-1]
-	new_text_pair = dataset['text'][1:]
+    # Helper function for random pairs
+    def create_random_pairs(batch):
+        text = batch['text']
+        shuffled = text.copy()
+        np.random.shuffle(shuffled)
+        return {
+            "text": text[:-1],
+            "text_pair": shuffled[1:],
+            "label_nsp": [1] * (len(text) - 1)
+        }
 
-	dataset_ordered = Dataset.from_dict({
-		"text": new_text,
-		"text_pair": new_text_pair,
-		"label_nsp": np.zeros(len(new_text)).tolist()
-	})
-	del new_text
-	print("\tOrdered dataset created")
+    # Process ordered and random pairs in batches
+    ordered = dataset.map(create_ordered_pairs, batched=True, batch_size=batch_size, remove_columns=dataset.column_names)
+    random = dataset.map(create_random_pairs, batched=True, batch_size=batch_size, remove_columns=dataset.column_names)
 
-	dataset = dataset.shuffle()
+    # Concatenate and shuffle
+    train_data = concatenate_datasets([ordered, random]).shuffle()
 
-
-	new_text = dataset['text'][:-1]
-	dataset_random = Dataset.from_dict({
-		"text": new_text,
-		"text_pair": new_text_pair,
-		"label_nsp": np.ones(len(new_text)).tolist()
-	})
-
-	del new_text, new_text_pair, dataset
-	print("\tRandomized dataset created")
-
-	#join the two datasets
-	train_data = concatenate_datasets([dataset_ordered, dataset_random]).shuffle()
-	print("\tDatasets joined")
-
-	# Splitting the dataset
-	eval_data = train_data.train_test_split(test_size=1000)
-	return eval_data["train"], eval_data["test"]
+    # Split for evaluation
+    eval_split = train_data.train_test_split(test_size=1000)
+    return eval_split["train"], eval_split["test"]
 
 
 
@@ -503,7 +500,7 @@ class MlmNspCollator(DataCollatorForLanguageModeling):
         nsp_labels = [example["label_nsp"] for example in examples]
         batch = self.tokenizer(text=text, text_pair=text_pair, padding=True, truncation=True, return_tensors="pt")
         batch.pop("token_type_ids")  # Not required for pretraining
-        batch["label_nsp"] = torch.tensor(nsp_labels, dtype=torch.long) 
+        batch["label_nsp"] = torch.tensor(nsp_labels, dtype=torch.long)
 
 
         # If special token mask has been preprocessed, pop it from the dict.
