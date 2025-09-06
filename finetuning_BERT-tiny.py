@@ -8,10 +8,10 @@ epochs_training = 3
 # for DATASET_NAME in ["news", "bull", "limit", "nlu", "snips", "imdb", "emotion_split"]: #extra
 # for DATASET_NAME in ["cola", "mrpc", "qnli", "qqp", "rte", "sst2", "wnli", "stsb",  "mnli-m", "mnli-mm"]: #GLUE
 for DATASET_NAME in ["mnli-m", "mnli-mm"]: #GLUE
-    #missing  = "stsb"  and "qnli" 
+    #missing  = "stsb"  and "qnli"
 # for DATASET_NAME in ["snips", "imdb", "emotion_split"]: #extra
-    print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightYellow"]}Loading dataset {DATASET_NAME} {RESET}")
-        
+    print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}Loading dataset {DATASET_NAME} {RESET}")
+
     dataset_name = DATASET_NAME
 
 
@@ -69,16 +69,16 @@ for DATASET_NAME in ["mnli-m", "mnli-mm"]: #GLUE
         except:
 
             spe_corr = spearman_correlation(torch.tensor(labels), torch.tensor(logits))
-			
+
             return {
                 "spearman_correlation": spe_corr
             }
 
     for times in range(5):
-        print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS["BrightCyan"]}Training step: {times} {RESET}")
+        print(f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightCyan']}Training step: {times} {RESET}")
         from transformers import AutoModelForSequenceClassification
         model = AutoModelForSequenceClassification.from_pretrained("prajjwal1/bert-tiny", num_labels=len(num_labels))
-        
+
         print(utils.model_size(model))
 
 

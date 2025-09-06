@@ -14,17 +14,17 @@ def model_size(model):
 	for param in model.parameters():
 		param_size += param.nelement() * param.element_size()
 		param_count += param.nelement()
-	buffer_size = 0 
+	buffer_size = 0
 	for buffer in model.buffers():
 		buffer_size += buffer.nelement() * buffer.element_size()
-		
+
 	size_all_mb = (param_size + buffer_size) / 1024**2
 
 	if param_count < 1024*1024:
 		out_string = "Model params: {:.3f}K".format(param_count/1e3), "Model buffers: {:.3f}K".format(buffer_size/1e3), "Model size: {:.3f}MB".format(size_all_mb)
 	else:
 		out_string = "Model params: {:.3f}M".format(param_count/1e6), "Model buffers: {:.3f}K".format(buffer_size/1e3), "Model size: {:.3f}MB".format(size_all_mb)
-	
+
 	return out_string
 
 def print_model_params(model):
@@ -45,7 +45,7 @@ def compute_metrics(p: EvalPrediction):
         precision, recall, f1, _ = precision_recall_fscore_support(p.label_ids, preds, average='weighted', zero_division=0)
         mcc = matthews_corrcoef(p.label_ids, preds)
         acc = accuracy_score(p.label_ids, preds)
-        
+
         return {
             'accuracy': acc,
             'f1': f1,
@@ -84,7 +84,7 @@ class CustomPrinterCallback(TrainerCallback):
 
             if 'eval_mlm_loss' in logs:
                 out_logs['eval_mlm_loss'] = f"{logs['eval_mlm_loss']:.6f}"
-            
+
             if 'eval_nsp_loss' in logs:
                 out_logs['eval_nsp_loss'] = f"{logs['eval_nsp_loss']:.6f}"
 
@@ -100,7 +100,7 @@ class CustomPrinterCallback(TrainerCallback):
             if 'eval_scc' in logs:
                 out_logs['eval_scc'] = f"{logs['eval_scc']*100:.2f}"
 
-            
+
             if out_logs:
                 if is_eval:
                     output = f"{FOREGROUND_COLORS['BrightGreen']}[Eval {epoch}]\t"
@@ -114,17 +114,17 @@ class CustomPrinterCallback(TrainerCallback):
 
     def on_epoch_begin(self, args, state, control, **kwargs):
         if "finetuning" in args.run_name:
-            tqdm.write(f"{FOREGROUND_COLORS["BrightMagenta"]}")
+            tqdm.write(f"{FOREGROUND_COLORS['BrightMagenta']}")
         elif "quantized" in args.run_name:
-            tqdm.write(f"{FOREGROUND_COLORS["BrightCyan"]}")
+            tqdm.write(f"{FOREGROUND_COLORS['BrightCyan']}")
         else:
-            tqdm.write(f"{FOREGROUND_COLORS["BrightYellow"]}")
+            tqdm.write(f"{FOREGROUND_COLORS['BrightYellow']}")
 
         return super().on_epoch_begin(args, state, control, **kwargs)
 
 class CustomLoggerCallback(TrainerCallback):
      def on_log(self, args, state, control, logs, **kwargs):
-        
+
         if state.is_world_process_zero:
 
             step = int(state.global_step)
@@ -133,14 +133,14 @@ class CustomLoggerCallback(TrainerCallback):
             lr = None
             eval_loss = None
 
-            
+
             if 'loss' in logs:
                 train_loss = logs['loss']
 
             if 'eval_loss' in logs:
                 eval_loss = logs['eval_loss']
 
-    
+
             if eval_loss:
                 output = f"{step}: {eval_loss}\n"
                 #write to file ./results/{args.output_dir}/eval_loss.txt
@@ -152,7 +152,7 @@ class CustomLoggerCallback(TrainerCallback):
                 with open(f"{args.output_dir}/train_loss.txt", "a") as f:
                     f.write(output)
 
-            
+
 
 def save_model_score(metrics:dict, output_dir:str, filename:str):
 

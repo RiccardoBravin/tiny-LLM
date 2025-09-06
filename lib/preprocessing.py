@@ -345,7 +345,7 @@ def make_tokenizer(tokenizer_type:str, dictionary_size:int, dataset_name:str, tr
 		try:
 			assert(tokenizer.get_vocab_size() == dict_size)
 		except:
-			print(f"{FOREGROUND_COLORS["BrightRed"]}DICTIONARY SIZE TOO BIG FOR DATASET, RESORTING TO LOWER SIZE{RESET}")
+			print(f"{FOREGROUND_COLORS['BrightRed']}DICTIONARY SIZE TOO BIG FOR DATASET, RESORTING TO LOWER SIZE{RESET}")
 			dict_size = tokenizer.get_vocab_size()
 
 		#save the tokenizer
