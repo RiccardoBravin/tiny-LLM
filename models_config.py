@@ -110,15 +110,30 @@ EmbBERT_config = EmbBERT_Config(
 
 EmbBERT_BIG_config = EmbBERT_Config(
     variation="BIG",
-	vocab_size=pow(2,15),
-	max_length=512,
+	vocab_size=pow(2,14),
+	max_length=1024,
 
-	hidden_size=256,
+	hidden_size=512,
 	reduced_embedding=32,
 	forward_expansion=2,
-	kernel_size=32,
+	kernel_size=64,
 	num_attention_heads=1,
-	num_hidden_layers=5,
+	num_hidden_layers=6,
+
+	num_labels=2
+)
+
+EmbBERT_Tiny_config = EmbBERT_Config(
+    variation="Tiny",
+	vocab_size=pow(2,11),
+	max_length=256,
+
+	hidden_size=128,
+	reduced_embedding=16,
+	forward_expansion=1,
+	kernel_size=16,
+	num_attention_heads=1,
+	num_hidden_layers=2,
 
 	num_labels=2
 )
