@@ -26,7 +26,7 @@ config = EmbBERT_BIG_config
 # Training arguments
 training_args = TrainingArguments(
     run_name=f"{config.model_type}_pretraining",
-    output_dir=f'./results/pretraining/mlm_{config.model_type}',
+    output_dir=f'./results/pretraining/mlm_{config.model_type}_BIG',
 
     dataloader_num_workers=2,           # number of dataloader workers (4 works well but might need to be adjusted)
     save_total_limit=5,                 # number of total save checkpoints
@@ -80,7 +80,7 @@ if DEBUG:
     train_data = dataset['train'].select(range(0, 2000000))
 else:
     train_data = dataset['train']
-    
+
 del dataset
 print(f"\tLoaded dataset of size: {len(train_data)}")
 
