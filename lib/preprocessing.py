@@ -1,3 +1,4 @@
+import csv
 import json
 import os
 import random
@@ -29,7 +30,6 @@ def dataset_selector(name: str, reduced: bool = False):
         test_data = dataset["test"]
 
     elif name == "bull":
-        import csv
 
         data_dict = {}
         text = []
@@ -123,31 +123,39 @@ def dataset_selector(name: str, reduced: bool = False):
         # train_data = train_data.remove_columns(["id", "motion", "motion_entities"])
         # test_data = test_data.remove_columns(["id", "motion", "motion_entities"])
 
-    elif (
-        name == "nlu"
-    ):  # https://huggingface.co/datasets/xingkunliuxtracta/nlu_evaluation_data
-        dataset = load_dataset(
-            "xingkunliuxtracta/nlu_evaluation_data",
-            cache_dir="./datasets",
-            trust_remote_code=True,
-        )
+    elif name == "nlu":
+        # Download the dataset if not present
+        dataset_path = "./datasets/NLU-Data-Home-Domain-Annotated-All.csv"
+        url = "https://raw.githubusercontent.com/xliuhw/NLU-Evaluation-Data/refs/heads/master/AnnotatedData/NLU-Data-Home-Domain-Annotated-All.csv"
+        if not os.path.exists(dataset_path):
+            print(f"Downloading NLU dataset from {url}...")
+            response = requests.get(url)
+            response.raise_for_status()
+            os.makedirs("./datasets", exist_ok=True)
+            with open(dataset_path, "wb") as f:
+                f.write(response.content)
+            print(f"Saved to {dataset_path}")
 
-        train_data = dataset["train"]
+        # Load the CSV file
+        text = []
+        label = []
+        with open(dataset_path, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f, delimiter=";")
+            for row in reader:
+                # Use 'question' as text and 'scenario' as label
+                text.append(row["question"])
+                label.append(row["scenario"])
 
-        unique_labels = train_data.unique("scenario")
-        label_to_id = {label: idx for idx, label in enumerate(unique_labels)}
+        # Map each label to an integer
+        unique_labels = sorted(set(label))
+        label_to_id = {lbl: idx for idx, lbl in enumerate(unique_labels)}
         print(f"Label to ID mapping: {label_to_id}")
 
-        # mapping the labels to integers
-        train_data = train_data.map(
-            lambda sample: {"label": label_to_id[sample["scenario"]]}, batched=False
-        )
+        label = [label_to_id[lbl] for lbl in label]
 
-        # cleanup useless columns
-        train_data = train_data.remove_columns("scenario")
-
-        # split the data into train and test
-        dataset = train_data.train_test_split(test_size=0.1)
+        dataset_dict = {"text": text, "label": label}
+        dataset = Dataset.from_dict(dataset_dict)
+        dataset = dataset.train_test_split(test_size=0.1)
 
         train_data = dataset["train"]
         test_data = dataset["test"]
