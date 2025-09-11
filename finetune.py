@@ -27,16 +27,16 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true"  # Enables parallelism for tokeniz
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-CHECKPOINT = 600000
-TRAIN_ITERS = 2
+CHECKPOINT = 635000
+TRAIN_ITERS = 5
 
 # MODEL CONFIGURATION
 # config = EmbBERT_config
-config = EmbBERT_Tiny_config
+config = EmbBERT_BIG_config
 
 # Training arguments
 training_args = TrainingArguments(
-    run_name=f"{config.model_type}_tiny_finetuning",  # name of the run
+    run_name=f"{config.model_type}_BIG_finetuning",  # name of the run
     output_dir="./results",  # output directory
     dataloader_num_workers=4,  # number of dataloader workers (4 works well but might need to be adjusted)
     save_total_limit=1,  # number of total save checkpoints
@@ -123,8 +123,29 @@ for dataset in datasets:
         )
 
     print(f"{TITLE}Tokenizing dataset{RESET}")
-    tokenized_train_data = tokenizer(
-        train_data["text"], truncation=True, padding=True, max_length=config.max_length
+
+    def tokenize_batch(batch, tokenizer, max_length):
+        return tokenizer(
+            batch["text"],
+            truncation=True,
+            padding="max_length",
+            max_length=max_length,
+        )
+
+    # tokenized_train_data = tokenizer(
+    #     train_data["text"], truncation=True, padding=True, max_length=config.max_length
+    # )
+
+    tokenized_train_data = train_data.map(
+        lambda batch: tokenize_batch(batch, tokenizer, config.max_length),
+        batched=True,
+        batch_size=1000,  # adjust batch size to fit your RAM
+    )
+
+    tokenized_test_data = test_data.map(
+        lambda batch: tokenize_batch(batch, tokenizer, 256),
+        batched=True,
+        batch_size=1000,
     )
 
     train_dataset = Dataset.from_dict(
@@ -142,9 +163,9 @@ for dataset in datasets:
         validation_dataset["test"],
     )
 
-    tokenized_test_data = tokenizer(
-        test_data["text"], truncation=True, padding=True, max_length=256
-    )
+    # tokenized_test_data = tokenizer(
+    #     test_data["text"], truncation=True, padding=True, max_length=256
+    # )
 
     test_dataset = Dataset.from_dict(
         {
@@ -153,6 +174,8 @@ for dataset in datasets:
             "labels": test_data["label"],
         }
     )
+
+    del tokenized_train_data, tokenized_test_data
 
     best_metric = None
     for count in range(1, TRAIN_ITERS + 1):
@@ -163,7 +186,7 @@ for dataset in datasets:
         if CHECKPOINT:
             print(f"\tLoading model from checkpoint")
             pretr = PretrainingClassifier.from_pretrained(
-                f"./results/pretraining/mlm_{config.model_type}_tiny/checkpoint-{CHECKPOINT}",
+                f"./results/pretraining/mlm_{config.model_type}_BIG/checkpoint-{CHECKPOINT}",
                 config=config,
             )
 
@@ -215,7 +238,7 @@ for dataset in datasets:
         metrics = trainer.evaluate(test_dataset)
 
         save_model_score(
-            metrics, f"./results/finetuning/{config.model_type}_tiny/", f"{dataset}.txt"
+            metrics, f"./results/finetuning/{config.model_type}_BIG/", f"{dataset}.txt"
         )
 
         if (
@@ -224,5 +247,5 @@ for dataset in datasets:
         ):
             best_metric = abs(metrics["eval_" + training_args.metric_for_best_model])
             trainer.save_model(
-                f"./results/finetuning/{config.model_type}_tiny/{dataset}"
+                f"./results/finetuning/{config.model_type}_BIG/{dataset}"
             )
