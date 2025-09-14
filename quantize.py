@@ -121,25 +121,43 @@ for dataset in datasets:
     #tokenizer = make_tokenizer(tokenizer_type="bpe", dictionary_size=config.vocab_size, dataset_name=dataset, train_dataset=train_data)
 
     print(f"{TITLE}Tokenizing dataset{RESET}")
-    tokenized_train_data = tokenizer(train_data['text'], truncation=True, padding=True, max_length=config.max_length)
+
+    def tokenize_batch(batch, tokenizer, max_length):
+        return tokenizer(
+            batch["text"],  # make sure your dataset has a "text" column!
+            truncation=True,
+            padding="max_length",
+            max_length=max_length,
+        )
+
+    # Tokenize train data
+    tokenized_train_data = train_data.map(
+        lambda batch: tokenize_batch(batch, tokenizer, config.max_length),
+        batched=True,
+        batch_size=1000,  # adjust based on RAM
+    )
 
     train_dataset = Dataset.from_dict({
-        'input_ids': tokenized_train_data['input_ids'],
-        'attention_mask': tokenized_train_data['attention_mask'],
-        'labels': train_data['label']
+        "input_ids": tokenized_train_data["input_ids"],
+        "attention_mask": tokenized_train_data["attention_mask"],
+        "labels": train_data["label"],
     })
 
     # Splitting the dataset
     validation_dataset = train_dataset.train_test_split(test_size=0.1).shuffle()
     train_dataset, validation_dataset = validation_dataset["train"], validation_dataset["test"]
 
-
-    tokenized_test_data = tokenizer(test_data['text'], truncation=True, padding=True, max_length=256)
+    # Tokenize test data
+    tokenized_test_data = test_data.map(
+        lambda batch: tokenize_batch(batch, tokenizer, 256),
+        batched=True,
+        batch_size=1000,
+    )
 
     test_dataset = Dataset.from_dict({
-        'input_ids': tokenized_test_data['input_ids'],
-        'attention_mask': tokenized_test_data['attention_mask'],
-        'labels': test_data['label']
+        "input_ids": tokenized_test_data["input_ids"],
+        "attention_mask": tokenized_test_data["attention_mask"],
+        "labels": test_data["label"],
     })
 
 
