@@ -11,7 +11,7 @@ from lib.utils import model_size, compute_metrics, CustomPrinterCallback, save_m
 from models_config import *
 
 # ENVIRONMENT VARIABLES
-import os   
+import os
 os.environ["TOKENIZERS_PARALLELISM"] = "true" # Enables parallelism for tokenizers
 
 
@@ -29,12 +29,12 @@ TRAIN_ITERS = 5
 
 # MODEL CONFIGURATION
 # config = EmbBERT_config
-config = NanoBERTEfficient_config
+config = EmbBERT_Tiny_config
 
 # Training arguments
 training_args = TrainingArguments(
-    run_name=f"{config.model_type}_quantized", # name of the run
-    
+    run_name=f"{config.model_type}_tiny_quantized", # name of the run
+
     output_dir="./results/quantization", # output directory
 
     dataloader_num_workers=4,           # number of dataloader workers (4 works well but might need to be adjusted)
@@ -47,13 +47,13 @@ training_args = TrainingArguments(
     include_num_input_tokens_seen=False,# log number of input tokens seen
 
 	save_strategy="epoch",              # checkpoint save strategy
-    load_best_model_at_end=True,        # load the best model when finished training 
+    load_best_model_at_end=True,        # load the best model when finished training
     metric_for_best_model="mcc",        # use accuracy to evaluate the best model
-    
+
 	num_train_epochs=2,                # total number of training epochs
 	per_device_train_batch_size=32,     # batch size per device during training
 	per_device_eval_batch_size=64,      # batch size for evaluation
-    
+
     optim="adamw_bnb_8bit",
 	learning_rate=1e-4,                 # learning rate
     lr_scheduler_type="constant",       # learning rate scheduler type
@@ -61,6 +61,11 @@ training_args = TrainingArguments(
 
     label_names=["labels"],
     fp16=True,
+
+    dataloader_pin_memory=True,
+    dataloader_persistent_workers=True,
+    eval_delay=4,
+    torch_compile=True,
 
 )
 
@@ -72,22 +77,22 @@ print(config)
 
 # DATASETS SELECTION
 datasets = [
-    "cola", 
-    # "mrpc", 
-    # "rte", 
-    # "sst2", 
-    # "wnli", 
-    # "stsb", 
-    # "imdb", 
-    # "news", 
-    # "bull", 
-    # "limit", 
-    # "nlu", 
-    # "snips", 
-    # "emotion_split", 
-    "qqp", 
-    # "qnli", 
-    # "mnli-m", 
+    "cola",
+    "mrpc",
+    "rte",
+    "sst2",
+    "wnli",
+    "stsb",
+    "imdb",
+    "news",
+    "bull",
+    "limit",
+    "nlu",
+    "snips",
+    "emotion_split",
+    "qqp",
+    "qnli",
+    "mnli-m",
     "mnli-mm"
 ]
 
@@ -123,7 +128,7 @@ for dataset in datasets:
         'attention_mask': tokenized_train_data['attention_mask'],
         'labels': train_data['label']
     })
-    
+
     # Splitting the dataset
     validation_dataset = train_dataset.train_test_split(test_size=0.1).shuffle()
     train_dataset, validation_dataset = validation_dataset["train"], validation_dataset["test"]
@@ -138,7 +143,7 @@ for dataset in datasets:
     })
 
 
-    
+
 
     # TRAINING
     print(f"{TITLE}Initializing model{RESET}")
@@ -152,22 +157,22 @@ for dataset in datasets:
         if config.model_type == "NanoEmbedder" or config.model_type == "NanoEmbedderConv":
             print(f"{FOREGROUND_COLORS['BrightRed']}Using RMS Classifier{RESET}")
             classifier = RMSClassifier(config=config)
-        
+
         else:
             print(f"{FOREGROUND_COLORS['BrightRed']}Using Sequence Classifier{RESET}")
             classifier = SequenceClassifier.from_pretrained(
-                                                    f"./results/finetuning/{config.model_type}/{dataset}",
+                                                    f"./results/finetuning/{config.model_type}_tiny/{dataset}",
                                                     config=config,
                                                     quantization_config = q_conf,
                                             )
         print(classifier)
         print(f"Model size: {classifier.get_memory_footprint()/1000}KB")
-        
+
     except:
         print(f"{FOREGROUND_COLORS['BrightRed']}FAILED TO LOAD CHECKPOINT, CHECK CHECKPOINT VARIABLE{RESET}")
         exit()
-    
-    
+
+
 
 
     print(f"{TITLE}Training model{RESET}")
@@ -194,7 +199,7 @@ for dataset in datasets:
 
     print(f"{TITLE}Evaluating model{RESET}")
     metrics = trainer.evaluate(test_dataset)
-    save_model_score(metrics, f"./results/quantization/{config.model_type}/", f"{dataset}.txt")
+    save_model_score(metrics, f"./results/quantization/{config.model_type}_tiny/", f"{dataset}.txt")
 
 
 
