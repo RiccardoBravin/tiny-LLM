@@ -21,12 +21,12 @@ DEBUG = False
 
 
 # MODEL CONFIGURATION
-config = EmbBERT_BIG_config
+config = EmbBERT_Nano_config
 
 # Training arguments
 training_args = TrainingArguments(
-    run_name=f"{config.model_type}_pretraining",
-    output_dir=f'./results/pretraining/mlm_{config.model_type}_BIG',
+    run_name=f"{config.model_type}_nano_pretraining",
+    output_dir=f'./results/pretraining/mlm_{config.model_type}_Nano',
 
     dataloader_num_workers=2,           # number of dataloader workers (4 works well but might need to be adjusted)
     save_total_limit=5,                 # number of total save checkpoints
@@ -53,6 +53,10 @@ training_args = TrainingArguments(
 	weight_decay=0.05,                  # strength of weight decay
 
     remove_unused_columns=False,
+
+    dataloader_pin_memory=True,
+    dataloader_persistent_workers=True,
+    torch_compile=True,
 
 )
 

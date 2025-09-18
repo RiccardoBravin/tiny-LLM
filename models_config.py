@@ -137,3 +137,18 @@ EmbBERT_Tiny_config = EmbBERT_Config(
 
 	num_labels=2
 )
+
+EmbBERT_Nano_config = EmbBERT_Config(
+    variation="Nano",
+	vocab_size=pow(2,11),
+	max_length=256,
+
+	hidden_size=64,
+	reduced_embedding=16,
+	forward_expansion=1,
+	kernel_size=8,
+	num_attention_heads=1,
+	num_hidden_layers=2,
+
+	num_labels=2
+)
