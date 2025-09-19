@@ -27,18 +27,18 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true"  # Enables parallelism for tokeniz
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-CHECKPOINT = 635000
-TRAIN_ITERS = 5
+CHECKPOINT = 550000
+TRAIN_ITERS = 3
 
 # MODEL CONFIGURATION
 # config = EmbBERT_config
-config = EmbBERT_BIG_config
+config = EmbBERT_Nano_config
 
 # Training arguments
 training_args = TrainingArguments(
-    run_name=f"{config.model_type}_BIG_finetuning",  # name of the run
+    run_name=f"{config.model_type}_Nano_finetuning",  # name of the run
     output_dir="./results",  # output directory
-    dataloader_num_workers=4,  # number of dataloader workers (4 works well but might need to be adjusted)
+    dataloader_num_workers=6,  # number of dataloader workers (4 works well but might need to be adjusted)
     save_total_limit=1,  # number of total save checkpoints
     overwrite_output_dir=True,  # overwrite the content of the output directory
     eval_strategy="epoch",  # when to evaluate the model
@@ -49,12 +49,16 @@ training_args = TrainingArguments(
     save_strategy="epoch",  # checkpoint save strategy
     load_best_model_at_end=True,  # load the best model when finished training
     metric_for_best_model="mcc",  # use accuracy to evaluate the best model
-    num_train_epochs=10,  # total number of training epochs
+    num_train_epochs=2,  # total number of training epochs
     per_device_train_batch_size=32,  # batch size per device during training
     per_device_eval_batch_size=64,  # batch size for evaluation
     learning_rate=1e-4,  # learning rate
     lr_scheduler_type="constant",  # learning rate scheduler type
     weight_decay=0.05,  # strength of weight decay
+    dataloader_pin_memory=True,
+    dataloader_persistent_workers=True,
+    eval_delay=8,
+    torch_compile=True,
 )
 
 # PRINTING MODEL CONFIGURATION
@@ -143,37 +147,20 @@ for dataset in datasets:
     )
 
     tokenized_test_data = test_data.map(
-        lambda batch: tokenize_batch(batch, tokenizer, 256),
+        lambda batch: tokenize_batch(batch, tokenizer, config.max_length),
         batched=True,
         batch_size=1000,
     )
 
-    train_dataset = Dataset.from_dict(
-        {
-            "input_ids": tokenized_train_data["input_ids"],
-            "attention_mask": tokenized_train_data["attention_mask"],
-            "labels": train_data["label"],
-        }
-    )
 
-    # Splitting the dataset
-    validation_dataset = train_dataset.train_test_split(test_size=0.1).shuffle()
-    train_dataset, validation_dataset = (
-        validation_dataset["train"],
-        validation_dataset["test"],
-    )
+    tokenized_train_data = tokenized_train_data.add_column("labels", train_data["label"])
+    tokenized_test_data = tokenized_test_data.add_column("labels", test_data["label"])
 
-    # tokenized_test_data = tokenizer(
-    #     test_data["text"], truncation=True, padding=True, max_length=256
-    # )
+    # Split training into train/validation
+    split_dataset = tokenized_train_data.train_test_split(test_size=0.1, shuffle=True)
+    train_dataset, validation_dataset = split_dataset["train"], split_dataset["test"]
 
-    test_dataset = Dataset.from_dict(
-        {
-            "input_ids": tokenized_test_data["input_ids"],
-            "attention_mask": tokenized_test_data["attention_mask"],
-            "labels": test_data["label"],
-        }
-    )
+    test_dataset = tokenized_test_data
 
     del tokenized_train_data, tokenized_test_data
 
@@ -186,7 +173,7 @@ for dataset in datasets:
         if CHECKPOINT:
             print(f"\tLoading model from checkpoint")
             pretr = PretrainingClassifier.from_pretrained(
-                f"./results/pretraining/mlm_{config.model_type}_BIG/checkpoint-{CHECKPOINT}",
+                f"./results/pretraining/mlm_{config.model_type}_Nano/checkpoint-{CHECKPOINT}",
                 config=config,
             )
 
@@ -238,7 +225,7 @@ for dataset in datasets:
         metrics = trainer.evaluate(test_dataset)
 
         save_model_score(
-            metrics, f"./results/finetuning/{config.model_type}_BIG/", f"{dataset}.txt"
+            metrics, f"./results/finetuning/{config.model_type}_Nano/", f"{dataset}.txt"
         )
 
         if (
@@ -247,5 +234,5 @@ for dataset in datasets:
         ):
             best_metric = abs(metrics["eval_" + training_args.metric_for_best_model])
             trainer.save_model(
-                f"./results/finetuning/{config.model_type}_BIG/{dataset}"
+                f"./results/finetuning/{config.model_type}_Nano/{dataset}"
             )
