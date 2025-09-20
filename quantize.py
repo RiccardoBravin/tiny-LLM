@@ -23,17 +23,17 @@ warnings.filterwarnings("ignore", message="MatMul8bitLt: inputs will be cast fro
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-TRAIN_ITERS = 5
+TRAIN_ITERS = 1
 
 
 
 # MODEL CONFIGURATION
 # config = EmbBERT_config
-config = EmbBERT_Tiny_config
+config = EmbBERT_Nano_config
 
 # Training arguments
 training_args = TrainingArguments(
-    run_name=f"{config.model_type}_tiny_quantized", # name of the run
+    run_name=f"{config.model_type}_Nano_quantized", # name of the run
 
     output_dir="./results/quantization", # output directory
 
@@ -82,12 +82,12 @@ datasets = [
     "rte",
     "sst2",
     "wnli",
-    "stsb",
+    # "stsb",
     "imdb",
     "news",
     "bull",
     "limit",
-    "nlu",
+    # "nlu",
     "snips",
     "emotion_split",
     "qqp",
@@ -137,16 +137,6 @@ for dataset in datasets:
         batch_size=1000,  # adjust based on RAM
     )
 
-    train_dataset = Dataset.from_dict({
-        "input_ids": tokenized_train_data["input_ids"],
-        "attention_mask": tokenized_train_data["attention_mask"],
-        "labels": train_data["label"],
-    })
-
-    # Splitting the dataset
-    validation_dataset = train_dataset.train_test_split(test_size=0.1).shuffle()
-    train_dataset, validation_dataset = validation_dataset["train"], validation_dataset["test"]
-
     # Tokenize test data
     tokenized_test_data = test_data.map(
         lambda batch: tokenize_batch(batch, tokenizer, 256),
@@ -154,12 +144,17 @@ for dataset in datasets:
         batch_size=1000,
     )
 
-    test_dataset = Dataset.from_dict({
-        "input_ids": tokenized_test_data["input_ids"],
-        "attention_mask": tokenized_test_data["attention_mask"],
-        "labels": test_data["label"],
-    })
 
+    tokenized_train_data = tokenized_train_data.add_column("labels", train_data["label"])
+    tokenized_test_data = tokenized_test_data.add_column("labels", test_data["label"])
+
+    # Split training into train/validation
+    split_dataset = tokenized_train_data.train_test_split(test_size=0.1, shuffle=True)
+    train_dataset, validation_dataset = split_dataset["train"], split_dataset["test"]
+
+    test_dataset = tokenized_test_data
+
+    del tokenized_train_data, tokenized_test_data
 
 
 
@@ -179,7 +174,7 @@ for dataset in datasets:
         else:
             print(f"{FOREGROUND_COLORS['BrightRed']}Using Sequence Classifier{RESET}")
             classifier = SequenceClassifier.from_pretrained(
-                                                    f"./results/finetuning/{config.model_type}_tiny/{dataset}",
+                                                    f"./results/finetuning/{config.model_type}_Nano/{dataset}",
                                                     config=config,
                                                     quantization_config = q_conf,
                                             )
@@ -217,7 +212,7 @@ for dataset in datasets:
 
     print(f"{TITLE}Evaluating model{RESET}")
     metrics = trainer.evaluate(test_dataset)
-    save_model_score(metrics, f"./results/quantization/{config.model_type}_tiny/", f"{dataset}.txt")
+    save_model_score(metrics, f"./results/quantization/{config.model_type}_Nano/", f"{dataset}.txt")
 
 
 
