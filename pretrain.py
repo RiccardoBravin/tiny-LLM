@@ -21,12 +21,12 @@ DEBUG = False
 
 
 # MODEL CONFIGURATION
-config = EmbBERT_Nano_config
+config = EmbBERT_Med_config
 
 # Training arguments
 training_args = TrainingArguments(
-    run_name=f"{config.model_type}_nano_pretraining",
-    output_dir=f'./results/pretraining/mlm_{config.model_type}_Nano',
+    run_name=f"{config.model_type}_Med_pretraining",
+    output_dir=f'./results/pretraining/mlm_{config.model_type}_Med',
 
     dataloader_num_workers=2,           # number of dataloader workers (4 works well but might need to be adjusted)
     save_total_limit=5,                 # number of total save checkpoints

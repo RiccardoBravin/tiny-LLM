@@ -29,11 +29,11 @@ TRAIN_ITERS = 1
 
 # MODEL CONFIGURATION
 # config = EmbBERT_config
-config = EmbBERT_Nano_config
+config = EmbBERT_Med_config
 
 # Training arguments
 training_args = TrainingArguments(
-    run_name=f"{config.model_type}_Nano_quantized", # name of the run
+    run_name=f"{config.model_type}_Med_quantized", # name of the run
 
     output_dir="./results/quantization", # output directory
 
@@ -174,7 +174,7 @@ for dataset in datasets:
         else:
             print(f"{FOREGROUND_COLORS['BrightRed']}Using Sequence Classifier{RESET}")
             classifier = SequenceClassifier.from_pretrained(
-                                                    f"./results/finetuning/{config.model_type}_Nano/{dataset}",
+                                                    f"./results/finetuning/{config.model_type}_Med/{dataset}",
                                                     config=config,
                                                     quantization_config = q_conf,
                                             )
@@ -212,7 +212,7 @@ for dataset in datasets:
 
     print(f"{TITLE}Evaluating model{RESET}")
     metrics = trainer.evaluate(test_dataset)
-    save_model_score(metrics, f"./results/quantization/{config.model_type}_Nano/", f"{dataset}.txt")
+    save_model_score(metrics, f"./results/quantization/{config.model_type}_Med/", f"{dataset}.txt")
 
 
 

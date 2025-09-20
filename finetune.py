@@ -32,11 +32,11 @@ TRAIN_ITERS = 3
 
 # MODEL CONFIGURATION
 # config = EmbBERT_config
-config = EmbBERT_Nano_config
+config = EmbBERT_Med_config
 
 # Training arguments
 training_args = TrainingArguments(
-    run_name=f"{config.model_type}_Nano_finetuning",  # name of the run
+    run_name=f"{config.model_type}_Med_finetuning",  # name of the run
     output_dir="./results",  # output directory
     dataloader_num_workers=6,  # number of dataloader workers (4 works well but might need to be adjusted)
     save_total_limit=1,  # number of total save checkpoints
@@ -173,7 +173,7 @@ for dataset in datasets:
         if CHECKPOINT:
             print(f"\tLoading model from checkpoint")
             pretr = PretrainingClassifier.from_pretrained(
-                f"./results/pretraining/mlm_{config.model_type}_Nano/checkpoint-{CHECKPOINT}",
+                f"./results/pretraining/mlm_{config.model_type}_Med/checkpoint-{CHECKPOINT}",
                 config=config,
             )
 
@@ -225,7 +225,7 @@ for dataset in datasets:
         metrics = trainer.evaluate(test_dataset)
 
         save_model_score(
-            metrics, f"./results/finetuning/{config.model_type}_Nano/", f"{dataset}.txt"
+            metrics, f"./results/finetuning/{config.model_type}_Med/", f"{dataset}.txt"
         )
 
         if (
@@ -234,5 +234,5 @@ for dataset in datasets:
         ):
             best_metric = abs(metrics["eval_" + training_args.metric_for_best_model])
             trainer.save_model(
-                f"./results/finetuning/{config.model_type}_Nano/{dataset}"
+                f"./results/finetuning/{config.model_type}_Med/{dataset}"
             )

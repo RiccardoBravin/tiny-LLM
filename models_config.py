@@ -152,3 +152,18 @@ EmbBERT_Nano_config = EmbBERT_Config(
 
 	num_labels=2
 )
+
+EmbBERT_Med_config = EmbBERT_Config(
+    variation="Medium",
+	vocab_size=pow(2,13),
+	max_length=256,
+
+	hidden_size=256,
+	reduced_embedding=32,
+	forward_expansion=2,
+	kernel_size=64,
+	num_attention_heads=1,
+	num_hidden_layers=6,
+
+	num_labels=2
+)
