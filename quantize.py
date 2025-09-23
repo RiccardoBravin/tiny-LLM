@@ -23,7 +23,7 @@ warnings.filterwarnings("ignore", message="MatMul8bitLt: inputs will be cast fro
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-TRAIN_ITERS = 1
+TRAIN_ITERS = 2
 
 
 
@@ -82,18 +82,18 @@ datasets = [
     "rte",
     "sst2",
     "wnli",
-    # "stsb",
+#    "stsb",
     "imdb",
     "news",
     "bull",
     "limit",
-    # "nlu",
+#    "nlu",
     "snips",
     "emotion_split",
     "qqp",
     "qnli",
     "mnli-m",
-    "mnli-mm"
+    "mnli-mm",
 ]
 
 
