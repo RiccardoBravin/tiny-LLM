@@ -1,0 +1,18 @@
+-------------------------------
+eval_loss: 1.2519046068191528
+eval_scc: 0.6902667746792823
+eval_runtime: 3.3938
+eval_samples_per_second: 441.981
+eval_steps_per_second: 7.072
+epoch: 10.0
+
+
+-------------------------------
+eval_loss: 1.3711596727371216
+eval_scc: 0.6748246928618858
+eval_runtime: 3.3797
+eval_samples_per_second: 443.828
+eval_steps_per_second: 7.101
+epoch: 10.0
+
+

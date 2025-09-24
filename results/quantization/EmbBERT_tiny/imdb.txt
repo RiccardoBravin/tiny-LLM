@@ -1,0 +1,13 @@
+-------------------------------
+eval_loss: 0.4198000133037567
+eval_accuracy: 0.81956
+eval_f1: 0.8193970235851185
+eval_precision: 0.8207176645344967
+eval_recall: 0.81956
+eval_mcc: 0.6402766179664654
+eval_runtime: 14.484
+eval_samples_per_second: 1726.038
+eval_steps_per_second: 26.995
+epoch: 2.0
+
+

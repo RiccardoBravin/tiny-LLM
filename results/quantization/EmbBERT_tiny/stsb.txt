@@ -1,0 +1,9 @@
+-------------------------------
+eval_loss: 2.3154022693634033
+eval_scc: 0.31382894952950074
+eval_runtime: 1.0544
+eval_samples_per_second: 1422.664
+eval_steps_per_second: 22.763
+epoch: 2.0
+
+
