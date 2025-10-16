@@ -1,0 +1,39 @@
+-------------------------------
+eval_loss: 0.5941730737686157
+eval_accuracy: 0.686436024162548
+eval_f1: 0.6861431168690555
+eval_precision: 0.6876770603651732
+eval_recall: 0.686436024162548
+eval_mcc: 0.3742853324587173
+eval_runtime: 3.229
+eval_samples_per_second: 1691.836
+eval_steps_per_second: 26.633
+epoch: 2.0
+
+
+-------------------------------
+eval_loss: 0.5891723036766052
+eval_accuracy: 0.6875343218012081
+eval_f1: 0.6872133322881917
+eval_precision: 0.6888727180212371
+eval_recall: 0.6875343218012081
+eval_mcc: 0.37658832598453335
+eval_runtime: 4.3739
+eval_samples_per_second: 1249.0
+eval_steps_per_second: 19.662
+epoch: 2.0
+
+
+-------------------------------
+eval_loss: 0.591849684715271
+eval_accuracy: 0.6847885777045579
+eval_f1: 0.6843812190804386
+eval_precision: 0.6863685630515278
+eval_recall: 0.6847885777045579
+eval_mcc: 0.37136548885203585
+eval_runtime: 4.0156
+eval_samples_per_second: 1360.459
+eval_steps_per_second: 21.417
+epoch: 2.0
+
+
