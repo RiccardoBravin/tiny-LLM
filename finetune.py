@@ -27,7 +27,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true"  # Enables parallelism for tokeniz
 
 # CUSTOM CONSTANTS
 TITLE = f"{ATTRIBUTES['Bold']}{FOREGROUND_COLORS['BrightYellow']}"
-CHECKPOINT = 550000
+CHECKPOINT = 515000
 TRAIN_ITERS = 3
 
 # MODEL CONFIGURATION
@@ -49,7 +49,7 @@ training_args = TrainingArguments(
     save_strategy="epoch",  # checkpoint save strategy
     load_best_model_at_end=True,  # load the best model when finished training
     metric_for_best_model="mcc",  # use accuracy to evaluate the best model
-    num_train_epochs=2,  # total number of training epochs
+    num_train_epochs=10,  # total number of training epochs
     per_device_train_batch_size=32,  # batch size per device during training
     per_device_eval_batch_size=64,  # batch size for evaluation
     learning_rate=1e-4,  # learning rate
@@ -58,7 +58,7 @@ training_args = TrainingArguments(
     dataloader_pin_memory=True,
     dataloader_persistent_workers=True,
     eval_delay=8,
-    torch_compile=True,
+    # torch_compile=True,
 )
 
 # PRINTING MODEL CONFIGURATION
@@ -78,23 +78,23 @@ del aux
 
 # DATASETS SELECTION
 datasets = [
-    "cola",
-    "mrpc",
-    "rte",
-    "sst2",
-    "wnli",
-#    "stsb",
-    "imdb",
-    "news",
-    "bull",
-    "limit",
-#    "nlu",
-    "snips",
-    "emotion_split",
-    "qqp",
-    "qnli",
-    "mnli-m",
-    "mnli-mm",
+    # "cola",
+    # "mrpc",
+    # "rte",
+    # "sst2",
+    # "wnli",
+   "stsb",
+    # "imdb",
+    # "news",
+    # "bull",
+    # "limit",
+   "nlu",
+    # "snips",
+    # "emotion_split",
+    # "qqp",
+    # "qnli",
+    # "mnli-m",
+    # "mnli-mm",
 ]
 
 

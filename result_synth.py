@@ -57,7 +57,7 @@ def process_results_for_model(model, results_dir, excel_output=False):
             file_metrics = extract_metrics(file_path)
             for key in metrics:
                 metrics[key].extend(file_metrics.get(key, []))
-            
+
             averages, cis = calculate_averages_and_cis(metrics)
 
             # Convert values to percentages
@@ -92,7 +92,7 @@ def process_results_for_model(model, results_dir, excel_output=False):
         # Pretty printed output
         print(f"Model: {model}\n")
         print(f"{'Dataset':<20} {'Acc':<10} {'F1':<10} {'MCC':<10} {'SCC':<10}")
-        print(f"{'':<20} {'CI Acc':<10} {'CI F1':<10} {'CI MCC':<10} {'CI SCC':<10}")
+        print(f"{' ':<20} {'CI Acc':<10} {'CI F1':<10} {'CI MCC':<10} {'CI SCC':<10}")
         print("-" * 80)
         for row in rows:
             print(f"{row[0]:<20} {row[1]:<10} {row[2]:<10} {row[3]:<10} {row[4]:<10}")
@@ -103,8 +103,9 @@ def process_results_for_model(model, results_dir, excel_output=False):
 
 EXCEL = True  # Set to True if you want to print the results in Excel format
 
-models = ['EmbBERT', "NanoBERTEfficient"]  # Replace with your model name
-# results_dir = './results/finetuning'  # Root directory containing model folders
-results_dir = './results/quantization'  # Root directory containing model folders
+models = ['EmbBERT']  # Replace with your model name
+results_dir = './results/finetuning'  # Root directory containing model folders
+# results_dir = './results/quantization'  # Root directory containing model folders
 for model in models:
     process_results_for_model(model, results_dir, EXCEL)
+

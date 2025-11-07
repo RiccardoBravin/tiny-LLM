@@ -187,3 +187,24 @@ def make_score_mask(input_tensor):
         output_tensor[i, :sentence_len, :] = input_tensor[i]
 
     return output_tensor
+
+
+# def make_score_mask(input_tensor):
+#     """
+#     Args:
+#         input_tensor: the input tensor of shape (batch_size, max_len)
+#     Returns:
+#         Tensor of shape (batch_size, max_len, max_len)
+#     """
+#     batch_size, max_len = input_tensor.shape
+#     # Compute sentence lengths (number of non-zero tokens per batch)
+#     sentence_lens = (input_tensor != 0).sum(dim=1)
+#     # Create an index tensor for rows
+#     row_idx = torch.arange(max_len, device=input_tensor.device).unsqueeze(0).expand(batch_size, max_len)
+#     # Mask: True for rows < sentence_len for each batch
+#     mask = row_idx < sentence_lens.unsqueeze(1)
+#     # Expand input_tensor for broadcasting
+#     input_expanded = input_tensor.unsqueeze(1).expand(batch_size, max_len, max_len)
+#     # Zero out rows where mask is False
+#     output_tensor = torch.where(mask.unsqueeze(2), input_expanded, torch.zeros_like(input_expanded))
+#     return output_tensor

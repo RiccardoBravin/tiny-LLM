@@ -43,7 +43,7 @@ def aggregate_metrics(metrics, key, reverse=False):
     if not vals:
         return None, None
     arr = np.array(vals)
-    return arr.mean(), arr.std()
+    return arr.mean()*100, arr.std()*100
 
 def main(results_dir):
     glue_scores = []

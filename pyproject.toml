@@ -15,7 +15,8 @@ dependencies = [
     "torch (>=2.8.0,<3.0.0)",
     "tokenizers (>=0.22.0,<0.23.0)",
     "peft (>=0.17.1,<0.18.0)",
-    "accelerate (>=1.10.1,<2.0.0)"
+    "accelerate (>=1.10.1,<2.0.0)",
+    "scalene (>=1.5.54,<2.0.0)"
 ]
 
 [tool.ruff]

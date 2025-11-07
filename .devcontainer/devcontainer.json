@@ -20,7 +20,6 @@
                 "tamasfe.even-better-toml",
                 "njpwerner.autodocstring",
                 "mhutchie.git-graph",
-                "eamodio.gitlens",
                 "charliermarsh.ruff",
                 "ms-azuretools.vscode-docker",
                 "matangover.mypy",

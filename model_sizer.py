@@ -11,22 +11,25 @@ from lib.Models.classifiers import SequenceClassifier
 
 from transformers import Trainer, TrainingArguments, BitsAndBytesConfig
 
+from models_config import *
+
 from lib.utils import print_model_params
 
 model_config = EmbBERT_Config(
-	vocab_size=pow(2,12),
-	max_length=256,
+	vocab_size=pow(2,13),
+	max_length=512,
 
-	hidden_size=128,
+	hidden_size=256,
 	reduced_embedding=16,
-	forward_expansion=1,
-	kernel_size=16,
+	forward_expansion=2,
+	kernel_size=32,
 	num_attention_heads=1,
-	num_hidden_layers=2,
+	num_hidden_layers=6,
 
 	num_labels=2
 )
 
+model_config = EmbBERT_Med_config
 
 model = SequenceClassifier(model_config)
 
