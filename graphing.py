@@ -19,19 +19,44 @@ bert_tiny_name = "BERT-Tiny"
 bert_tiny_size = 20.0  # MB
 bert_tiny_score = 63.16
 
+# Baseline NanoBERT (2MB)
+nano_bert_name = "NanoBERT"
+nano_bert_size = 1.97  # MB
+nano_bert_score = 57.5
+
+
 plt.figure(figsize=(8, 6))
 
-plt.rcParams.update({
-    'font.size': 16,
-    'axes.titlesize': 18,
-    'axes.labelsize': 18,
-    'xtick.labelsize': 12,
-    'ytick.labelsize': 12,
-    'legend.fontsize': 16
-})
+plt.rcParams.update(
+    {
+        "font.size": 16,
+        "axes.titlesize": 18,
+        "axes.labelsize": 18,
+        "xtick.labelsize": 12,
+        "ytick.labelsize": 12,
+        "legend.fontsize": 16,
+    }
+)
 
-plt.errorbar(sizes_mb, glue_scores, yerr=glue_errors, fmt='none', ecolor='teal', capsize=5, elinewidth=2)
-plt.semilogx(sizes_mb, glue_scores, marker="o", color="teal", linestyle="--", label="EmbBERT", markersize=10, linewidth=2)
+plt.errorbar(
+    sizes_mb,
+    glue_scores,
+    yerr=glue_errors,
+    fmt="none",
+    ecolor="teal",
+    capsize=5,
+    elinewidth=2,
+)
+plt.semilogx(
+    sizes_mb,
+    glue_scores,
+    marker="o",
+    color="teal",
+    linestyle="--",
+    label="EmbBERT",
+    markersize=10,
+    linewidth=2,
+)
 
 # Annotate points
 for i, v in enumerate(glue_scores):
@@ -39,20 +64,54 @@ for i, v in enumerate(glue_scores):
     plt.text(sizes_mb[i], v + y_offset, f"{v:.2f}%", ha="center", color="black")
 
 # Add BERT-Tiny as a star
-plt.plot(bert_tiny_size, bert_tiny_score, marker="*", color="gold", markersize=15, label="BERT-Tiny")
-plt.text(bert_tiny_size, bert_tiny_score-1, f"{bert_tiny_score:.2f}%", ha="center", color="black")
+plt.plot(
+    bert_tiny_size,
+    bert_tiny_score,
+    marker="*",
+    color="gold",
+    markersize=15,
+    label="BERT-Tiny",
+)
+plt.text(
+    bert_tiny_size,
+    bert_tiny_score - 1,
+    f"{bert_tiny_score:.2f}%",
+    ha="center",
+    color="black",
+)
 
-plt.xticks(sizes_mb + [bert_tiny_size], models + [bert_tiny_name], rotation=20)
+# Add NanoBERT as a square
+plt.plot(
+    nano_bert_size,
+    nano_bert_score,
+    marker="s",
+    color="crimson",
+    markersize=12,
+    label="NanoBERT",
+)
+plt.text(
+    nano_bert_size,
+    nano_bert_score + 1,
+    f"{nano_bert_score:.2f}%",
+    ha="center",
+    color="black",
+)
+
+plt.xticks(
+    sizes_mb + [bert_tiny_size],
+    models + [bert_tiny_name],
+    rotation=20,
+)
 plt.xlabel("Model Size (MB) [log scale]", fontsize=14)
 plt.ylabel("GLUE Score (%)", fontsize=14)
 plt.title("GLUE Score vs Model Size (semilog)")
 plt.legend(loc="lower right")
-plt.grid(True, which='both', linestyle='--', linewidth=0.7)
+plt.grid(True, which="both", linestyle="--", linewidth=0.7)
 plt.tight_layout()
 
 # Add left/right/top/bottom clearance
-x_min = min(sizes_mb + [bert_tiny_size]) * 0.7
-x_max = max(sizes_mb + [bert_tiny_size]) * 1.4
+x_min = min(sizes_mb + [bert_tiny_size, nano_bert_size]) * 0.7
+x_max = max(sizes_mb + [bert_tiny_size, nano_bert_size]) * 1.4
 y_min = min(glue_scores + [bert_tiny_score]) - 2
 y_max = max(glue_scores + [bert_tiny_score]) + 1
 plt.xlim(x_min, x_max)

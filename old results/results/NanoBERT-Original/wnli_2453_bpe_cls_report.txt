@@ -9,7 +9,7 @@ Accuracy: 0.155
 F1: 0.156
 Precision: 0.162
 Recall: 0.155
-MCC: -0.686
+MCC: 0.686
 Confusion matrix:
  [[ 6 34]
  [26  5]]
@@ -22,7 +22,7 @@ Accuracy: 0.113
 F1: 0.115
 Precision: 0.120
 Recall: 0.113
-MCC: -0.774
+MCC: 0.774
 Confusion matrix:
  [[ 5 35]
  [28  3]]
@@ -35,7 +35,7 @@ Accuracy: 0.183
 F1: 0.186
 Precision: 0.192
 Recall: 0.183
-MCC: -0.634
+MCC: 0.634
 Confusion matrix:
  [[ 8 32]
  [26  5]]
@@ -48,7 +48,7 @@ Accuracy: 0.113
 F1: 0.113
 Precision: 0.116
 Recall: 0.113
-MCC: -0.771
+MCC: 0.771
 Confusion matrix:
  [[ 4 36]
  [27  4]]
@@ -61,7 +61,7 @@ Accuracy: 0.155
 F1: 0.158
 Precision: 0.163
 Recall: 0.155
-MCC: -0.691
+MCC: 0.691
 Confusion matrix:
  [[ 7 33]
  [27  4]]
